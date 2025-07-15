@@ -1,0 +1,29 @@
+{
+  "total_examples": 77,
+  "rust_examples": 69,
+  "complete_examples": 63,
+  "crypto_examples": 61,
+  "embedded_examples": 31,
+  "syntax_valid_examples": 41,
+  "total_sections": 161,
+  "main_sections": 39,
+  "cross_references": 62,
+  "broken_links": 3,
+  "redundancy_score": 0.26083383790329556,
+  "coverage_score": 1.0,
+  "flow_score": 1.0,
+  "embedded_targets_covered": [
+    "ARM Cortex-M",
+    "ARM Cortex-R5",
+    "thumbv7em-none-eabihf",
+    "armv7r-none-eabihf"
+  ],
+  "learning_progression_valid": true,
+  "requirements_met": 20,
+  "requirements_total": 20,
+  "overall_grade": "A+ (Excellent)",
+  "ready_for_production": true,
+  "recommendations": [
+    "Fix 3 broken cross-references"
+  ]
+}

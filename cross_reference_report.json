@@ -1,0 +1,739 @@
+{
+  "summary": {
+    "total_anchors": 158,
+    "total_links": 70,
+    "valid_links": 67,
+    "broken_links_count": 3,
+    "orphaned_anchors_count": 86,
+    "link_success_rate": 0.9571428571428572
+  },
+  "broken_links": [
+    {
+      "source_line": 74,
+      "source_section": "[3. Core Language Concepts](#core-language-concepts)",
+      "target_anchor": "memory-model-differences",
+      "link_text": "3.4 Memory Model Differences",
+      "link_type": "internal",
+      "full_match": "[3.4 Memory Model Differences](#memory-model-differences)"
+    },
+    {
+      "source_line": 75,
+      "source_section": "[3. Core Language Concepts](#core-language-concepts)",
+      "target_anchor": "safety-guarantees-for-crypto",
+      "link_text": "3.5 Safety Guarantees for Crypto",
+      "link_type": "internal",
+      "full_match": "[3.5 Safety Guarantees for Crypto](#safety-guarantees-for-crypto)"
+    },
+    {
+      "source_line": 870,
+      "source_section": "Learning Path",
+      "target_anchor": "safety-guarantees-for-crypto",
+      "link_text": "Safety Guarantees",
+      "link_type": "internal",
+      "full_match": "[Safety Guarantees](#safety-guarantees-for-crypto)"
+    }
+  ],
+  "orphaned_anchors": [
+    {
+      "id": "document-usage-modes",
+      "title": "Document Usage Modes",
+      "line_number": 22,
+      "section_level": 3,
+      "parent_section": "\ud83d\udccb Table of Contents"
+    },
+    {
+      "id": "navigation-features",
+      "title": "Navigation Features",
+      "line_number": 7200,
+      "section_level": 3,
+      "parent_section": "Conclusion"
+    },
+    {
+      "id": "1-quick-referencequick-reference",
+      "title": "[1. Quick Reference](#quick-reference)",
+      "line_number": 51,
+      "section_level": 3,
+      "parent_section": "\ud83d\udccb Table of Contents"
+    },
+    {
+      "id": "2-environment-setupenvironment-setup",
+      "title": "[2. Environment Setup](#environment-setup)",
+      "line_number": 60,
+      "section_level": 3,
+      "parent_section": "\ud83d\udccb Table of Contents"
+    },
+    {
+      "id": "3-core-language-conceptscore-language-concepts",
+      "title": "[3. Core Language Concepts](#core-language-concepts)",
+      "line_number": 70,
+      "section_level": 3,
+      "parent_section": "\ud83d\udccb Table of Contents"
+    },
+    {
+      "id": "4-embedded-specific-patternsembedded-specific-patterns",
+      "title": "[4. Embedded-Specific Patterns](#embedded-specific-patterns)",
+      "line_number": 77,
+      "section_level": 3,
+      "parent_section": "\ud83d\udccb Table of Contents"
+    },
+    {
+      "id": "5-cryptography-implementationcryptography-implementation",
+      "title": "[5. Cryptography Implementation](#cryptography-implementation)",
+      "line_number": 84,
+      "section_level": 3,
+      "parent_section": "\ud83d\udccb Table of Contents"
+    },
+    {
+      "id": "6-migration-and-integrationmigration-and-integration",
+      "title": "[6. Migration and Integration](#migration-and-integration)",
+      "line_number": 91,
+      "section_level": 3,
+      "parent_section": "\ud83d\udccb Table of Contents"
+    },
+    {
+      "id": "basic-declarations-and-types",
+      "title": "Basic Declarations and Types",
+      "line_number": 131,
+      "section_level": 4,
+      "parent_section": "1.1 C-to-Rust Syntax Mapping"
+    },
+    {
+      "id": "functions-and-control-flow",
+      "title": "Functions and Control Flow",
+      "line_number": 146,
+      "section_level": 4,
+      "parent_section": "1.1 C-to-Rust Syntax Mapping"
+    },
+    {
+      "id": "result-type-usage",
+      "title": "Result Type Usage",
+      "line_number": 192,
+      "section_level": 4,
+      "parent_section": "1.4 Error Handling Patterns"
+    },
+    {
+      "id": "secure-key-management-example",
+      "title": "Secure Key Management Example",
+      "line_number": 229,
+      "section_level": 4,
+      "parent_section": "1.5 Crypto-Specific Quick Reference"
+    },
+    {
+      "id": "embedded-specific-quick-reference",
+      "title": "1.6 Embedded-Specific Quick Reference",
+      "line_number": 255,
+      "section_level": 3,
+      "parent_section": "1. Quick Reference"
+    },
+    {
+      "id": "hardware-and-system-programming",
+      "title": "Hardware and System Programming",
+      "line_number": 257,
+      "section_level": 4,
+      "parent_section": "1.6 Embedded-Specific Quick Reference"
+    },
+    {
+      "id": "memory-management-and-collections",
+      "title": "Memory Management and Collections",
+      "line_number": 272,
+      "section_level": 4,
+      "parent_section": "1.6 Embedded-Specific Quick Reference"
+    },
+    {
+      "id": "crypto-hardware-integration",
+      "title": "Crypto Hardware Integration",
+      "line_number": 282,
+      "section_level": 4,
+      "parent_section": "1.6 Embedded-Specific Quick Reference"
+    },
+    {
+      "id": "no-std-complete-template",
+      "title": "No-std Complete Template",
+      "line_number": 291,
+      "section_level": 4,
+      "parent_section": "1.6 Embedded-Specific Quick Reference"
+    },
+    {
+      "id": "xilinx-specific-patterns",
+      "title": "Xilinx-Specific Patterns",
+      "line_number": 356,
+      "section_level": 4,
+      "parent_section": "1.6 Embedded-Specific Quick Reference"
+    },
+    {
+      "id": "memory-management-gotchas",
+      "title": "\u26a0\ufe0f Memory Management Gotchas",
+      "line_number": 367,
+      "section_level": 4,
+      "parent_section": "1.7 Critical Differences and Gotchas"
+    },
+    {
+      "id": "crypto-specific-gotchas",
+      "title": "\u26a0\ufe0f Crypto-Specific Gotchas",
+      "line_number": 405,
+      "section_level": 4,
+      "parent_section": "1.7 Critical Differences and Gotchas"
+    },
+    {
+      "id": "embedded-specific-gotchas",
+      "title": "\u26a0\ufe0f Embedded-Specific Gotchas",
+      "line_number": 463,
+      "section_level": 4,
+      "parent_section": "1.7 Critical Differences and Gotchas"
+    },
+    {
+      "id": "common-migration-pitfalls",
+      "title": "\u26a0\ufe0f Common Migration Pitfalls",
+      "line_number": 553,
+      "section_level": 4,
+      "parent_section": "1.7 Critical Differences and Gotchas"
+    },
+    {
+      "id": "quick-setup-checklist",
+      "title": "Quick Setup Checklist",
+      "line_number": 637,
+      "section_level": 3,
+      "parent_section": "2. Environment Setup"
+    },
+    {
+      "id": "step-by-step-setup-verification",
+      "title": "Step-by-Step Setup Verification",
+      "line_number": 802,
+      "section_level": 4,
+      "parent_section": "2.5 Verification and Testing"
+    },
+    {
+      "id": "minimal-verification-application",
+      "title": "Minimal Verification Application",
+      "line_number": 825,
+      "section_level": 4,
+      "parent_section": "5. Test crypto compilation"
+    },
+    {
+      "id": "learning-path",
+      "title": "Learning Path",
+      "line_number": 866,
+      "section_level": 3,
+      "parent_section": "3. Core Language Concepts"
+    },
+    {
+      "id": "key-differences-from-c",
+      "title": "Key Differences from C",
+      "line_number": 872,
+      "section_level": 3,
+      "parent_section": "3. Core Language Concepts"
+    },
+    {
+      "id": "quick-reference-links",
+      "title": "Quick Reference Links",
+      "line_number": 878,
+      "section_level": 3,
+      "parent_section": "3. Core Language Concepts"
+    },
+    {
+      "id": "the-three-rules-of-ownership",
+      "title": "The Three Rules of Ownership",
+      "line_number": 892,
+      "section_level": 4,
+      "parent_section": "3.1 Ownership and Memory Management"
+    },
+    {
+      "id": "ownership-in-embedded-crypto-context",
+      "title": "Ownership in Embedded Crypto Context",
+      "line_number": 907,
+      "section_level": 4,
+      "parent_section": "3.1 Ownership and Memory Management"
+    },
+    {
+      "id": "borrowing-rules-for-crypto-operations",
+      "title": "Borrowing Rules for Crypto Operations",
+      "line_number": 954,
+      "section_level": 4,
+      "parent_section": "3.1 Ownership and Memory Management"
+    },
+    {
+      "id": "memory-management-patterns-for-embedded",
+      "title": "Memory Management Patterns for Embedded",
+      "line_number": 1010,
+      "section_level": 4,
+      "parent_section": "3.1 Ownership and Memory Management"
+    },
+    {
+      "id": "comprehensive-crypto-error-types",
+      "title": "Comprehensive Crypto Error Types",
+      "line_number": 1064,
+      "section_level": 4,
+      "parent_section": "3.2 Error Handling Without Exceptions"
+    },
+    {
+      "id": "error-propagation-in-crypto-pipelines",
+      "title": "Error Propagation in Crypto Pipelines",
+      "line_number": 1112,
+      "section_level": 4,
+      "parent_section": "3.2 Error Handling Without Exceptions"
+    },
+    {
+      "id": "option-types-for-safe-nullable-crypto-state",
+      "title": "Option Types for Safe Nullable Crypto State",
+      "line_number": 1185,
+      "section_level": 4,
+      "parent_section": "3.2 Error Handling Without Exceptions"
+    },
+    {
+      "id": "error-recovery-patterns-for-embedded-crypto",
+      "title": "Error Recovery Patterns for Embedded Crypto",
+      "line_number": 1224,
+      "section_level": 4,
+      "parent_section": "3.2 Error Handling Without Exceptions"
+    },
+    {
+      "id": "type-safe-protocol-state-machines",
+      "title": "Type-Safe Protocol State Machines",
+      "line_number": 3901,
+      "section_level": 4,
+      "parent_section": "5.1 Secure Coding Patterns"
+    },
+    {
+      "id": "const-generics-for-compile-time-crypto-parameters",
+      "title": "Const Generics for Compile-Time Crypto Parameters",
+      "line_number": 1379,
+      "section_level": 4,
+      "parent_section": "3.3 Type System Advantages for Security"
+    },
+    {
+      "id": "newtype-pattern-for-domain-specific-security",
+      "title": "Newtype Pattern for Domain-Specific Security",
+      "line_number": 1469,
+      "section_level": 4,
+      "parent_section": "3.3 Type System Advantages for Security"
+    },
+    {
+      "id": "complete-no-std-project-template",
+      "title": "Complete No-std Project Template",
+      "line_number": 1563,
+      "section_level": 4,
+      "parent_section": "4.1 No-std Programming Essentials"
+    },
+    {
+      "id": "no-std-memory-management-patterns",
+      "title": "No-std Memory Management Patterns",
+      "line_number": 1643,
+      "section_level": 4,
+      "parent_section": "4.1 No-std Programming Essentials"
+    },
+    {
+      "id": "no-std-error-handling-and-result-types",
+      "title": "No-std Error Handling and Result Types",
+      "line_number": 1788,
+      "section_level": 4,
+      "parent_section": "4.1 No-std Programming Essentials"
+    },
+    {
+      "id": "peripheral-access-crate-pac-usage",
+      "title": "Peripheral Access Crate (PAC) Usage",
+      "line_number": 1848,
+      "section_level": 4,
+      "parent_section": "4.2 Hardware Abstraction Patterns"
+    },
+    {
+      "id": "hardware-abstraction-layer-hal-patterns",
+      "title": "Hardware Abstraction Layer (HAL) Patterns",
+      "line_number": 1963,
+      "section_level": 4,
+      "parent_section": "4.2 Hardware Abstraction Patterns"
+    },
+    {
+      "id": "cross-platform-hardware-abstraction",
+      "title": "Cross-Platform Hardware Abstraction",
+      "line_number": 2178,
+      "section_level": 4,
+      "parent_section": "4.2 Hardware Abstraction Patterns"
+    },
+    {
+      "id": "safe-interrupt-handling-fundamentals",
+      "title": "Safe Interrupt Handling Fundamentals",
+      "line_number": 2257,
+      "section_level": 4,
+      "parent_section": "4.3 Interrupt Handling"
+    },
+    {
+      "id": "rtic-framework-for-real-time-crypto",
+      "title": "RTIC Framework for Real-Time Crypto",
+      "line_number": 2446,
+      "section_level": 4,
+      "parent_section": "4.3 Interrupt Handling"
+    },
+    {
+      "id": "interrupt-priority-and-timing-considerations",
+      "title": "Interrupt Priority and Timing Considerations",
+      "line_number": 2721,
+      "section_level": 4,
+      "parent_section": "4.3 Interrupt Handling"
+    },
+    {
+      "id": "advanced-static-memory-pool-management",
+      "title": "Advanced Static Memory Pool Management",
+      "line_number": 2794,
+      "section_level": 4,
+      "parent_section": "4.4 Static Memory Management"
+    },
+    {
+      "id": "compile-time-memory-layout-with-security-features",
+      "title": "Compile-Time Memory Layout with Security Features",
+      "line_number": 2945,
+      "section_level": 4,
+      "parent_section": "4.4 Static Memory Management"
+    },
+    {
+      "id": "memory-layout-optimization-for-crypto-performance",
+      "title": "Memory Layout Optimization for Crypto Performance",
+      "line_number": 3181,
+      "section_level": 4,
+      "parent_section": "4.4 Static Memory Management"
+    },
+    {
+      "id": "advanced-dma-safe-memory-management",
+      "title": "Advanced DMA-Safe Memory Management",
+      "line_number": 3279,
+      "section_level": 4,
+      "parent_section": "4.5 DMA and Hardware Integration"
+    },
+    {
+      "id": "memory-safety-advantages-for-cryptography",
+      "title": "Memory Safety Advantages for Cryptography",
+      "line_number": 3766,
+      "section_level": 4,
+      "parent_section": "5.1 Secure Coding Patterns"
+    },
+    {
+      "id": "automatic-key-zeroization-patterns",
+      "title": "Automatic Key Zeroization Patterns",
+      "line_number": 4518,
+      "section_level": 4,
+      "parent_section": "5.3 Key Management and Zeroization"
+    },
+    {
+      "id": "rust-specific-security-advantages",
+      "title": "Rust-Specific Security Advantages",
+      "line_number": 4046,
+      "section_level": 4,
+      "parent_section": "5.1 Secure Coding Patterns"
+    },
+    {
+      "id": "understanding-side-channel-vulnerabilities",
+      "title": "Understanding Side-Channel Vulnerabilities",
+      "line_number": 4149,
+      "section_level": 4,
+      "parent_section": "5.2 Constant-Time Implementations"
+    },
+    {
+      "id": "using-the-subtle-crate-for-constant-time-operations",
+      "title": "Using the `subtle` Crate for Constant-Time Operations",
+      "line_number": 4181,
+      "section_level": 4,
+      "parent_section": "5.2 Constant-Time Implementations"
+    },
+    {
+      "id": "advanced-constant-time-patterns",
+      "title": "Advanced Constant-Time Patterns",
+      "line_number": 4259,
+      "section_level": 4,
+      "parent_section": "5.2 Constant-Time Implementations"
+    },
+    {
+      "id": "manual-constant-time-implementations",
+      "title": "Manual Constant-Time Implementations",
+      "line_number": 4377,
+      "section_level": 4,
+      "parent_section": "5.2 Constant-Time Implementations"
+    },
+    {
+      "id": "embedded-specific-constant-time-considerations",
+      "title": "Embedded-Specific Constant-Time Considerations",
+      "line_number": 4425,
+      "section_level": 4,
+      "parent_section": "5.2 Constant-Time Implementations"
+    },
+    {
+      "id": "hierarchical-key-derivation-with-automatic-cleanup",
+      "title": "Hierarchical Key Derivation with Automatic Cleanup",
+      "line_number": 4580,
+      "section_level": 4,
+      "parent_section": "5.3 Key Management and Zeroization"
+    },
+    {
+      "id": "secure-random-number-generation-with-hardware-integration",
+      "title": "Secure Random Number Generation with Hardware Integration",
+      "line_number": 4687,
+      "section_level": 4,
+      "parent_section": "5.3 Key Management and Zeroization"
+    },
+    {
+      "id": "key-lifecycle-management",
+      "title": "Key Lifecycle Management",
+      "line_number": 4845,
+      "section_level": 4,
+      "parent_section": "5.3 Key Management and Zeroization"
+    },
+    {
+      "id": "generic-hardware-abstraction",
+      "title": "Generic Hardware Abstraction",
+      "line_number": 4994,
+      "section_level": 4,
+      "parent_section": "5.4 Hardware Crypto Acceleration"
+    },
+    {
+      "id": "power-analysis-protection",
+      "title": "Power Analysis Protection",
+      "line_number": 5079,
+      "section_level": 4,
+      "parent_section": "5.5 Side-Channel Mitigations"
+    },
+    {
+      "id": "step-1-assessment-and-planning",
+      "title": "Step 1: Assessment and Planning",
+      "line_number": 5144,
+      "section_level": 4,
+      "parent_section": "6.1 Incremental Migration Strategies"
+    },
+    {
+      "id": "step-2-module-by-module-migration",
+      "title": "Step 2: Module-by-Module Migration",
+      "line_number": 5169,
+      "section_level": 4,
+      "parent_section": "6.1 Incremental Migration Strategies"
+    },
+    {
+      "id": "step-3-protocol-level-migration",
+      "title": "Step 3: Protocol-Level Migration",
+      "line_number": 5283,
+      "section_level": 4,
+      "parent_section": "6.1 Incremental Migration Strategies"
+    },
+    {
+      "id": "step-4-application-integration-migration",
+      "title": "Step 4: Application Integration Migration",
+      "line_number": 5421,
+      "section_level": 4,
+      "parent_section": "6.1 Incremental Migration Strategies"
+    },
+    {
+      "id": "step-5-hardware-abstraction-layer-migration",
+      "title": "Step 5: Hardware Abstraction Layer Migration",
+      "line_number": 5525,
+      "section_level": 4,
+      "parent_section": "6.1 Incremental Migration Strategies"
+    },
+    {
+      "id": "migration-validation-checklist",
+      "title": "Migration Validation Checklist",
+      "line_number": 5596,
+      "section_level": 4,
+      "parent_section": "6.1 Incremental Migration Strategies"
+    },
+    {
+      "id": "safe-ffi-wrapper-patterns",
+      "title": "Safe FFI Wrapper Patterns",
+      "line_number": 5625,
+      "section_level": 4,
+      "parent_section": "6.2 FFI Integration with C Libraries"
+    },
+    {
+      "id": "integration-with-mbedtls",
+      "title": "Integration with mbedTLS",
+      "line_number": 5877,
+      "section_level": 4,
+      "parent_section": "6.2 FFI Integration with C Libraries"
+    },
+    {
+      "id": "hardware-crypto-library-integration",
+      "title": "Hardware Crypto Library Integration",
+      "line_number": 6049,
+      "section_level": 4,
+      "parent_section": "6.2 FFI Integration with C Libraries"
+    },
+    {
+      "id": "build-system-integration",
+      "title": "Build System Integration",
+      "line_number": 6184,
+      "section_level": 4,
+      "parent_section": "6.2 FFI Integration with C Libraries"
+    },
+    {
+      "id": "usage-examples-and-best-practices",
+      "title": "Usage Examples and Best Practices",
+      "line_number": 6296,
+      "section_level": 4,
+      "parent_section": "Link to crypto libraries based on features"
+    },
+    {
+      "id": "test-vector-validation-framework",
+      "title": "Test Vector Validation Framework",
+      "line_number": 6378,
+      "section_level": 4,
+      "parent_section": "6.3 Testing and Validation"
+    },
+    {
+      "id": "property-based-testing-for-crypto",
+      "title": "Property-Based Testing for Crypto",
+      "line_number": 6530,
+      "section_level": 4,
+      "parent_section": "6.3 Testing and Validation"
+    },
+    {
+      "id": "automated-testing-framework",
+      "title": "Automated Testing Framework",
+      "line_number": 6650,
+      "section_level": 4,
+      "parent_section": "6.3 Testing and Validation"
+    },
+    {
+      "id": "hardware-in-the-loop-testing",
+      "title": "Hardware-in-the-Loop Testing",
+      "line_number": 6751,
+      "section_level": 4,
+      "parent_section": "6.3 Testing and Validation"
+    },
+    {
+      "id": "test-data-management",
+      "title": "Test Data Management",
+      "line_number": 6840,
+      "section_level": 4,
+      "parent_section": "6.3 Testing and Validation"
+    },
+    {
+      "id": "automated-regression-testing",
+      "title": "Automated Regression Testing",
+      "line_number": 6942,
+      "section_level": 4,
+      "parent_section": "6.3 Testing and Validation"
+    },
+    {
+      "id": "rtt-debugging-for-crypto",
+      "title": "RTT Debugging for Crypto",
+      "line_number": 7066,
+      "section_level": 4,
+      "parent_section": "6.4 Debugging and Tooling"
+    },
+    {
+      "id": "benchmarking-and-profiling",
+      "title": "Benchmarking and Profiling",
+      "line_number": 7128,
+      "section_level": 4,
+      "parent_section": "6.5 Performance Considerations"
+    },
+    {
+      "id": "key-benefits-of-this-structure",
+      "title": "Key Benefits of This Structure",
+      "line_number": 7191,
+      "section_level": 3,
+      "parent_section": "Conclusion"
+    },
+    {
+      "id": "next-steps",
+      "title": "Next Steps",
+      "line_number": 7207,
+      "section_level": 3,
+      "parent_section": "Conclusion"
+    }
+  ],
+  "link_statistics": {
+    "total_links": 70,
+    "internal_links": 62,
+    "cross_references": 6,
+    "navigation_links": 2,
+    "direct_links": 0,
+    "unique_targets": 40,
+    "sections_with_links": 14
+  },
+  "section_connectivity": {
+    "\ud83d\ude80 Quick Start Navigation": [
+      "1. Quick Reference",
+      "2. Environment Setup",
+      "3. Core Language Concepts",
+      "4. Embedded-Specific Patterns",
+      "Advanced DMA-Safe Memory Management"
+    ],
+    "Document Usage Modes": [
+      "2. Environment Setup",
+      "3. Core Language Concepts",
+      "4. Embedded-Specific Patterns",
+      "Advanced DMA-Safe Memory Management"
+    ],
+    "[1. Quick Reference](#quick-reference)": [
+      "1. Quick Reference",
+      "1.1 C-to-Rust Syntax Mapping",
+      "1.2 Memory and Pointer Patterns",
+      "1.3 Control Flow and Functions",
+      "1.4 Error Handling Patterns",
+      "1.5 Crypto-Specific Quick Reference",
+      "4. Embedded-Specific Patterns",
+      "1.7 Critical Differences and Gotchas"
+    ],
+    "[2. Environment Setup](#environment-setup)": [
+      "2. Environment Setup",
+      "2.1 Rust Installation and Toolchain",
+      "2.2 Target Configuration",
+      "2.2.1 Xilinx Ultrascale+ (Cortex-R5)",
+      "2.2.2 ARM Cortex-M Series",
+      "2.2.3 Other Embedded Targets",
+      "2.3 Project Structure and Dependencies",
+      "2.4 Build Configuration",
+      "2.5 Verification and Testing"
+    ],
+    "[3. Core Language Concepts](#core-language-concepts)": [
+      "3. Core Language Concepts",
+      "3.1 Ownership and Memory Management",
+      "3.2 Error Handling Without Exceptions",
+      "3.3 Type System Advantages for Security"
+    ],
+    "[4. Embedded-Specific Patterns](#embedded-specific-patterns)": [
+      "4. Embedded-Specific Patterns",
+      "4.1 No-std Programming Essentials",
+      "4.2 Hardware Abstraction Patterns",
+      "4.3 Interrupt Handling",
+      "4.4 Static Memory Management",
+      "4.5 DMA and Hardware Integration"
+    ],
+    "[5. Cryptography Implementation](#cryptography-implementation)": [
+      "Advanced DMA-Safe Memory Management",
+      "5.1 Secure Coding Patterns",
+      "5.2 Constant-Time Implementations",
+      "5.3 Key Management and Zeroization",
+      "5.4 Hardware Crypto Acceleration",
+      "5.5 Side-Channel Mitigations"
+    ],
+    "[6. Migration and Integration](#migration-and-integration)": [
+      "6. Migration and Integration",
+      "6.1 Incremental Migration Strategies",
+      "6.2 FFI Integration with C Libraries",
+      "6.3 Testing and Validation",
+      "6.4 Debugging and Tooling",
+      "6.5 Performance Considerations"
+    ],
+    "\u26a0\ufe0f Common Migration Pitfalls": [
+      "2. Environment Setup"
+    ],
+    "Minimal Verification Application": [
+      "3. Core Language Concepts"
+    ],
+    "Learning Path": [
+      "3.1 Ownership and Memory Management",
+      "3.2 Error Handling Without Exceptions",
+      "3.3 Type System Advantages for Security"
+    ],
+    "Quick Reference Links": [
+      "1.7 Critical Differences and Gotchas",
+      "4. Embedded-Specific Patterns",
+      "Advanced DMA-Safe Memory Management"
+    ],
+    "Newtype Pattern for Domain-Specific Security": [
+      "4. Embedded-Specific Patterns"
+    ]
+  },
+  "suggestions": [
+    "Line 74: 'memory-model-differences' not found. Check if the target section exists or if the anchor ID is correct.",
+    "Line 75: 'safety-guarantees-for-crypto' not found. Check if the target section exists or if the anchor ID is correct.",
+    "Line 870: 'safety-guarantees-for-crypto' not found. Check if the target section exists or if the anchor ID is correct."
+  ]
+}

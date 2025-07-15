@@ -1,0 +1,1923 @@
+{
+  "summary": {
+    "total_segments": 327,
+    "exact_duplicates": 1,
+    "near_duplicates": 13,
+    "similar_content": 25,
+    "conceptual_overlaps": 3,
+    "redundancy_percentage": 4.281345565749235
+  },
+  "exact_duplicates": [
+    {
+      "segment1": {
+        "content": "    // Clear interrupt flag\n    unsafe {\n        // Platform-specific interrupt clearing\n    }\n}",
+        "normalized_content": "// clear interrupt flag unsafe { // platform-specific interrupt clearing } }",
+        "hash": "92afb8908c85389bde5384e2bf085df5",
+        "line_start": 6720,
+        "line_end": 6724,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 12,
+        "key_terms": "{'specific', 'unsafe', 'clearing', 'platform', 'interrupt'}"
+      },
+      "segment2": {
+        "content": "    // Clear interrupt flag\n    unsafe {\n        // Platform-specific interrupt clearing\n    }\n}",
+        "normalized_content": "// clear interrupt flag unsafe { // platform-specific interrupt clearing } }",
+        "hash": "92afb8908c85389bde5384e2bf085df5",
+        "line_start": 6733,
+        "line_end": 6737,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 12,
+        "key_terms": "{'specific', 'unsafe', 'clearing', 'platform', 'interrupt'}"
+      },
+      "similarity_score": 1.0,
+      "match_type": "exact",
+      "common_phrases": [],
+      "diff_summary": "Identical content"
+    }
+  ],
+  "near_duplicates": [
+    {
+      "segment1": {
+        "content": "pub extern \"C\" fn dma_channel0_irq() {\n    // Encryption DMA complete\n    if let Some(dma) = unsafe { &CRYPTO_DMA } {\n        dma.encrypt_complete.store(true, Ordering::Release);\n    }",
+        "normalized_content": "pub extern \"c\" fn dma_channel0_irq() { // encryption dma complete if let some(dma) = unsafe { &crypto_dma } { dma.encrypt_complete.store(true, ordering::release); }",
+        "hash": "58f5c08f8d14e55066e1ee21288a7522",
+        "line_start": 6714,
+        "line_end": 6718,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 22,
+        "key_terms": "{'release', 'dma_channel0_irq', 'unsafe', 'ordering', 'complete', 'encrypt_complete', 'encryption', 'crypto_dma', 'dma'}"
+      },
+      "segment2": {
+        "content": "pub extern \"C\" fn dma_channel2_irq() {\n    // Hash DMA complete\n    if let Some(dma) = unsafe { &CRYPTO_DMA } {\n        dma.hash_complete.store(true, Ordering::Release);\n    }",
+        "normalized_content": "pub extern \"c\" fn dma_channel2_irq() { // hash dma complete if let some(dma) = unsafe { &crypto_dma } { dma.hash_complete.store(true, ordering::release); }",
+        "hash": "db183efb1850e8d4da5046331e825208",
+        "line_start": 6727,
+        "line_end": 6731,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 22,
+        "key_terms": "{'release', 'unsafe', 'ordering', 'hash', 'complete', 'dma_channel2_irq', 'crypto_dma', 'dma', 'hash_complete'}"
+      },
+      "similarity_score": 0.9153605015673981,
+      "match_type": "near_exact",
+      "common_phrases": [
+        "pub extern \"C\" fn dma_channel0_irq() {\n    // Encryption DMA complete\n    if let Some(dma) = unsafe ...",
+        "store(true, Ordering::Release);\n    }"
+      ],
+      "diff_summary": "Large diff with 11 changes. First few:\n--- \n+++ \n@@ -1,5 +1,5 @@\n-pub extern \"C\" fn dma_channel0_irq() {\n-    // Encryption DMA complete"
+    },
+    {
+      "segment1": {
+        "content": "pub extern \"C\" fn crypto_timer_irq() {\n    INTERRUPT_COUNTS[1].fetch_add(1, Ordering::Relaxed);",
+        "normalized_content": "pub extern \"c\" fn crypto_timer_irq() { interrupt_counts[1].fetch_add(1, ordering::relaxed);",
+        "hash": "79a9a72c467e3c609e5e03d3a85d7f58",
+        "line_start": 6852,
+        "line_end": 6853,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 8,
+        "key_terms": "{'crypto_timer_irq', 'interrupt_counts', 'ordering', 'fetch_add', 'relaxed'}"
+      },
+      "segment2": {
+        "content": "pub extern \"C\" fn secure_key_irq() {\n    INTERRUPT_COUNTS[2].fetch_add(1, Ordering::Relaxed);",
+        "normalized_content": "pub extern \"c\" fn secure_key_irq() { interrupt_counts[2].fetch_add(1, ordering::relaxed);",
+        "hash": "0c8a9c717d3cc833945e5960b7c2ac72",
+        "line_start": 6870,
+        "line_end": 6871,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 8,
+        "key_terms": "{'interrupt_counts', 'ordering', 'secure_key_irq', 'fetch_add', 'relaxed'}"
+      },
+      "similarity_score": 0.9,
+      "match_type": "near_exact",
+      "common_phrases": [
+        "pub extern \"C\" fn crypto_timer_irq() {\n    INTERRUPT_COUNTS[1]",
+        "fetch_add(1, Ordering::Relaxed);"
+      ],
+      "diff_summary": "--- \n+++ \n@@ -1,2 +1,2 @@\n-pub extern \"C\" fn crypto_timer_irq() {\n-    INTERRUPT_COUNTS[1].fetch_add(1, Ordering::Relaxed);\n+pub extern \"C\" fn secure_key_irq() {\n+    INTERRUPT_COUNTS[2].fetch_add(1, Ordering::Relaxed);"
+    },
+    {
+      "segment1": {
+        "content": "unsafe fn handle_encrypt_complete() {\n    // Handle encryption completion\n}",
+        "normalized_content": "unsafe fn handle_encrypt_complete() { // handle encryption completion }",
+        "hash": "74ef66ef42ededecd75e5624bd1d5719",
+        "line_start": 6901,
+        "line_end": 6903,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 9,
+        "key_terms": "{'encryption', 'handle_encrypt_complete', 'completion', 'unsafe'}"
+      },
+      "segment2": {
+        "content": "unsafe fn handle_decrypt_complete() {\n    // Handle decryption completion\n}",
+        "normalized_content": "unsafe fn handle_decrypt_complete() { // handle decryption completion }",
+        "hash": "e7c2819c9792b8d1445389a2f61458d2",
+        "line_start": 6905,
+        "line_end": 6907,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 9,
+        "key_terms": "{'decryption', 'handle_decrypt_complete', 'completion', 'unsafe'}"
+      },
+      "similarity_score": 0.971830985915493,
+      "match_type": "near_exact",
+      "common_phrases": [
+        "unsafe fn handle_encrypt_complete() {\n    // Handle encryption completion\n}"
+      ],
+      "diff_summary": "--- \n+++ \n@@ -1,3 +1,3 @@\n-unsafe fn handle_encrypt_complete() {\n-    // Handle encryption completion\n+unsafe fn handle_decrypt_complete() {\n+    // Handle decryption completion\n }"
+    },
+    {
+      "segment1": {
+        "content": "**Phase 1 Complete When You Can:**",
+        "normalized_content": "phase 1 complete when you can:",
+        "hash": "00a0b4d52cd9173b4bd5771f7636e48c",
+        "line_start": 8880,
+        "line_end": 8880,
+        "section": "Phase Completion Criteria:",
+        "segment_type": "paragraph",
+        "word_count": 6,
+        "key_terms": "{'complete'}"
+      },
+      "segment2": {
+        "content": "**Phase 2 Complete When You Can:**",
+        "normalized_content": "phase 2 complete when you can:",
+        "hash": "10450b012735d176d919e9713ded7faa",
+        "line_start": 8885,
+        "line_end": 8885,
+        "section": "Phase Completion Criteria:",
+        "segment_type": "paragraph",
+        "word_count": 6,
+        "key_terms": "{'complete'}"
+      },
+      "similarity_score": 0.9666666666666667,
+      "match_type": "near_exact",
+      "common_phrases": [
+        "**Phase 1 Complete When You Can:**"
+      ],
+      "diff_summary": "--- \n+++ \n@@ -1 +1 @@\n-**Phase 1 Complete When You Can:**\n+**Phase 2 Complete When You Can:**"
+    },
+    {
+      "segment1": {
+        "content": "**Phase 1 Complete When You Can:**",
+        "normalized_content": "phase 1 complete when you can:",
+        "hash": "00a0b4d52cd9173b4bd5771f7636e48c",
+        "line_start": 8880,
+        "line_end": 8880,
+        "section": "Phase Completion Criteria:",
+        "segment_type": "paragraph",
+        "word_count": 6,
+        "key_terms": "{'complete'}"
+      },
+      "segment2": {
+        "content": "**Phase 3 Complete When You Can:**",
+        "normalized_content": "phase 3 complete when you can:",
+        "hash": "a68b8c606e49f00b9f0e1e56d5b4fb3e",
+        "line_start": 8890,
+        "line_end": 8890,
+        "section": "Phase Completion Criteria:",
+        "segment_type": "paragraph",
+        "word_count": 6,
+        "key_terms": "{'complete'}"
+      },
+      "similarity_score": 0.9666666666666667,
+      "match_type": "near_exact",
+      "common_phrases": [
+        "**Phase 1 Complete When You Can:**"
+      ],
+      "diff_summary": "--- \n+++ \n@@ -1 +1 @@\n-**Phase 1 Complete When You Can:**\n+**Phase 3 Complete When You Can:**"
+    },
+    {
+      "segment1": {
+        "content": "**Phase 1 Complete When You Can:**",
+        "normalized_content": "phase 1 complete when you can:",
+        "hash": "00a0b4d52cd9173b4bd5771f7636e48c",
+        "line_start": 8880,
+        "line_end": 8880,
+        "section": "Phase Completion Criteria:",
+        "segment_type": "paragraph",
+        "word_count": 6,
+        "key_terms": "{'complete'}"
+      },
+      "segment2": {
+        "content": "**Phase 4 Complete When You Can:**",
+        "normalized_content": "phase 4 complete when you can:",
+        "hash": "9156e22c662e3135020cfc030f98ca39",
+        "line_start": 8895,
+        "line_end": 8895,
+        "section": "Phase Completion Criteria:",
+        "segment_type": "paragraph",
+        "word_count": 6,
+        "key_terms": "{'complete'}"
+      },
+      "similarity_score": 0.9666666666666667,
+      "match_type": "near_exact",
+      "common_phrases": [
+        "**Phase 1 Complete When You Can:**"
+      ],
+      "diff_summary": "--- \n+++ \n@@ -1 +1 @@\n-**Phase 1 Complete When You Can:**\n+**Phase 4 Complete When You Can:**"
+    },
+    {
+      "segment1": {
+        "content": "**Phase 1 Complete When You Can:**",
+        "normalized_content": "phase 1 complete when you can:",
+        "hash": "00a0b4d52cd9173b4bd5771f7636e48c",
+        "line_start": 8880,
+        "line_end": 8880,
+        "section": "Phase Completion Criteria:",
+        "segment_type": "paragraph",
+        "word_count": 6,
+        "key_terms": "{'complete'}"
+      },
+      "segment2": {
+        "content": "**Phase 5 Complete When You Can:**",
+        "normalized_content": "phase 5 complete when you can:",
+        "hash": "1994e410117f2d681b3ef41edc7e5bd9",
+        "line_start": 8900,
+        "line_end": 8900,
+        "section": "Phase Completion Criteria:",
+        "segment_type": "paragraph",
+        "word_count": 6,
+        "key_terms": "{'complete'}"
+      },
+      "similarity_score": 0.9666666666666667,
+      "match_type": "near_exact",
+      "common_phrases": [
+        "**Phase 1 Complete When You Can:**"
+      ],
+      "diff_summary": "--- \n+++ \n@@ -1 +1 @@\n-**Phase 1 Complete When You Can:**\n+**Phase 5 Complete When You Can:**"
+    },
+    {
+      "segment1": {
+        "content": "**Phase 2 Complete When You Can:**",
+        "normalized_content": "phase 2 complete when you can:",
+        "hash": "10450b012735d176d919e9713ded7faa",
+        "line_start": 8885,
+        "line_end": 8885,
+        "section": "Phase Completion Criteria:",
+        "segment_type": "paragraph",
+        "word_count": 6,
+        "key_terms": "{'complete'}"
+      },
+      "segment2": {
+        "content": "**Phase 3 Complete When You Can:**",
+        "normalized_content": "phase 3 complete when you can:",
+        "hash": "a68b8c606e49f00b9f0e1e56d5b4fb3e",
+        "line_start": 8890,
+        "line_end": 8890,
+        "section": "Phase Completion Criteria:",
+        "segment_type": "paragraph",
+        "word_count": 6,
+        "key_terms": "{'complete'}"
+      },
+      "similarity_score": 0.9666666666666667,
+      "match_type": "near_exact",
+      "common_phrases": [
+        "**Phase 2 Complete When You Can:**"
+      ],
+      "diff_summary": "--- \n+++ \n@@ -1 +1 @@\n-**Phase 2 Complete When You Can:**\n+**Phase 3 Complete When You Can:**"
+    },
+    {
+      "segment1": {
+        "content": "**Phase 2 Complete When You Can:**",
+        "normalized_content": "phase 2 complete when you can:",
+        "hash": "10450b012735d176d919e9713ded7faa",
+        "line_start": 8885,
+        "line_end": 8885,
+        "section": "Phase Completion Criteria:",
+        "segment_type": "paragraph",
+        "word_count": 6,
+        "key_terms": "{'complete'}"
+      },
+      "segment2": {
+        "content": "**Phase 4 Complete When You Can:**",
+        "normalized_content": "phase 4 complete when you can:",
+        "hash": "9156e22c662e3135020cfc030f98ca39",
+        "line_start": 8895,
+        "line_end": 8895,
+        "section": "Phase Completion Criteria:",
+        "segment_type": "paragraph",
+        "word_count": 6,
+        "key_terms": "{'complete'}"
+      },
+      "similarity_score": 0.9666666666666667,
+      "match_type": "near_exact",
+      "common_phrases": [
+        "**Phase 2 Complete When You Can:**"
+      ],
+      "diff_summary": "--- \n+++ \n@@ -1 +1 @@\n-**Phase 2 Complete When You Can:**\n+**Phase 4 Complete When You Can:**"
+    },
+    {
+      "segment1": {
+        "content": "**Phase 2 Complete When You Can:**",
+        "normalized_content": "phase 2 complete when you can:",
+        "hash": "10450b012735d176d919e9713ded7faa",
+        "line_start": 8885,
+        "line_end": 8885,
+        "section": "Phase Completion Criteria:",
+        "segment_type": "paragraph",
+        "word_count": 6,
+        "key_terms": "{'complete'}"
+      },
+      "segment2": {
+        "content": "**Phase 5 Complete When You Can:**",
+        "normalized_content": "phase 5 complete when you can:",
+        "hash": "1994e410117f2d681b3ef41edc7e5bd9",
+        "line_start": 8900,
+        "line_end": 8900,
+        "section": "Phase Completion Criteria:",
+        "segment_type": "paragraph",
+        "word_count": 6,
+        "key_terms": "{'complete'}"
+      },
+      "similarity_score": 0.9666666666666667,
+      "match_type": "near_exact",
+      "common_phrases": [
+        "**Phase 2 Complete When You Can:**"
+      ],
+      "diff_summary": "--- \n+++ \n@@ -1 +1 @@\n-**Phase 2 Complete When You Can:**\n+**Phase 5 Complete When You Can:**"
+    },
+    {
+      "segment1": {
+        "content": "**Phase 3 Complete When You Can:**",
+        "normalized_content": "phase 3 complete when you can:",
+        "hash": "a68b8c606e49f00b9f0e1e56d5b4fb3e",
+        "line_start": 8890,
+        "line_end": 8890,
+        "section": "Phase Completion Criteria:",
+        "segment_type": "paragraph",
+        "word_count": 6,
+        "key_terms": "{'complete'}"
+      },
+      "segment2": {
+        "content": "**Phase 4 Complete When You Can:**",
+        "normalized_content": "phase 4 complete when you can:",
+        "hash": "9156e22c662e3135020cfc030f98ca39",
+        "line_start": 8895,
+        "line_end": 8895,
+        "section": "Phase Completion Criteria:",
+        "segment_type": "paragraph",
+        "word_count": 6,
+        "key_terms": "{'complete'}"
+      },
+      "similarity_score": 0.9666666666666667,
+      "match_type": "near_exact",
+      "common_phrases": [
+        "**Phase 3 Complete When You Can:**"
+      ],
+      "diff_summary": "--- \n+++ \n@@ -1 +1 @@\n-**Phase 3 Complete When You Can:**\n+**Phase 4 Complete When You Can:**"
+    },
+    {
+      "segment1": {
+        "content": "**Phase 3 Complete When You Can:**",
+        "normalized_content": "phase 3 complete when you can:",
+        "hash": "a68b8c606e49f00b9f0e1e56d5b4fb3e",
+        "line_start": 8890,
+        "line_end": 8890,
+        "section": "Phase Completion Criteria:",
+        "segment_type": "paragraph",
+        "word_count": 6,
+        "key_terms": "{'complete'}"
+      },
+      "segment2": {
+        "content": "**Phase 5 Complete When You Can:**",
+        "normalized_content": "phase 5 complete when you can:",
+        "hash": "1994e410117f2d681b3ef41edc7e5bd9",
+        "line_start": 8900,
+        "line_end": 8900,
+        "section": "Phase Completion Criteria:",
+        "segment_type": "paragraph",
+        "word_count": 6,
+        "key_terms": "{'complete'}"
+      },
+      "similarity_score": 0.9666666666666667,
+      "match_type": "near_exact",
+      "common_phrases": [
+        "**Phase 3 Complete When You Can:**"
+      ],
+      "diff_summary": "--- \n+++ \n@@ -1 +1 @@\n-**Phase 3 Complete When You Can:**\n+**Phase 5 Complete When You Can:**"
+    },
+    {
+      "segment1": {
+        "content": "**Phase 4 Complete When You Can:**",
+        "normalized_content": "phase 4 complete when you can:",
+        "hash": "9156e22c662e3135020cfc030f98ca39",
+        "line_start": 8895,
+        "line_end": 8895,
+        "section": "Phase Completion Criteria:",
+        "segment_type": "paragraph",
+        "word_count": 6,
+        "key_terms": "{'complete'}"
+      },
+      "segment2": {
+        "content": "**Phase 5 Complete When You Can:**",
+        "normalized_content": "phase 5 complete when you can:",
+        "hash": "1994e410117f2d681b3ef41edc7e5bd9",
+        "line_start": 8900,
+        "line_end": 8900,
+        "section": "Phase Completion Criteria:",
+        "segment_type": "paragraph",
+        "word_count": 6,
+        "key_terms": "{'complete'}"
+      },
+      "similarity_score": 0.9666666666666667,
+      "match_type": "near_exact",
+      "common_phrases": [
+        "**Phase 4 Complete When You Can:**"
+      ],
+      "diff_summary": "--- \n+++ \n@@ -1 +1 @@\n-**Phase 4 Complete When You Can:**\n+**Phase 5 Complete When You Can:**"
+    }
+  ],
+  "similar_content": [
+    {
+      "segment1": {
+        "content": "**Binary Crates (`src/main.rs`)** - Use for:",
+        "normalized_content": "binary crates (src/main.rs) - use for:",
+        "hash": "67098b4506acad342a55e2663c831520",
+        "line_start": 392,
+        "line_end": 392,
+        "section": "Binary Crates vs Library Crates for Embedded Cryptography",
+        "segment_type": "paragraph",
+        "word_count": 6,
+        "key_terms": "set()"
+      },
+      "segment2": {
+        "content": "**Library Crates (`src/lib.rs`)** - Use for:",
+        "normalized_content": "library crates (src/lib.rs) - use for:",
+        "hash": "c690bea2477f84442afbabee0fe70e3b",
+        "line_start": 426,
+        "line_end": 426,
+        "section": "Binary Crates vs Library Crates for Embedded Cryptography",
+        "segment_type": "paragraph",
+        "word_count": 6,
+        "key_terms": "{'library'}"
+      },
+      "similarity_score": 0.868421052631579,
+      "match_type": "similar",
+      "common_phrases": [
+        "**Binary Crates (`src/main",
+        "rs`)** - Use for:"
+      ],
+      "diff_summary": "--- \n+++ \n@@ -1 +1 @@\n-**Binary Crates (`src/main.rs`)** - Use for:\n+**Library Crates (`src/lib.rs`)** - Use for:"
+    },
+    {
+      "segment1": {
+        "content": "// src/crypto/mod.rs\npub mod aes;\npub mod chacha20;\npub mod hash;\n\n// Re-export commonly used items for convenience\npub use aes::{Aes128, Aes256};\npub use chacha20::ChaCha20;\npub use hash::{Sha256, Blake3};\n\n// Module-level configuration\npub const DEFAULT_KEY_SIZE: usize = 32;\npub const MAX_NONCE_SIZE: usize = 24;",
+        "normalized_content": "pub mod aes;\npub mod chacha20;\npub mod hash;\npub use aes::{Aes128, Aes256};\npub use chacha20::ChaCha20;\npub use hash::{Sha256, Blake3};\npub const DEFAULT_KEY_SIZE: usize = 32;\npub const MAX_NONCE_SIZE: usize = 24;",
+        "hash": "552837983b3ed13bbc9d5087197b0c63",
+        "line_start": 521,
+        "line_end": 535,
+        "section": "Module Organization Patterns",
+        "segment_type": "code_rust",
+        "word_count": 44,
+        "key_terms": "{'configuration', 'chacha20', 'hash', 'crypto', 'commonly', 'max_nonce_size', 'convenience', 'default_key_size', 'aes'}"
+      },
+      "segment2": {
+        "content": "// src/crypto.rs (replaces crypto/mod.rs)\npub mod aes;\npub mod chacha20;\npub mod hash;\n\npub use aes::{Aes128, Aes256};\npub use chacha20::ChaCha20;\npub use hash::{Sha256, Blake3};",
+        "normalized_content": "pub mod aes;\npub mod chacha20;\npub mod hash;\npub use aes::{Aes128, Aes256};\npub use chacha20::ChaCha20;\npub use hash::{Sha256, Blake3};",
+        "hash": "463b32d666462ab161590818cf857cce",
+        "line_start": 552,
+        "line_end": 561,
+        "section": "Module Organization Patterns",
+        "segment_type": "code_rust",
+        "word_count": 24,
+        "key_terms": "{'chacha20', 'hash', 'crypto', 'replaces', 'aes'}"
+      },
+      "similarity_score": 0.7758620689655172,
+      "match_type": "similar",
+      "common_phrases": [
+        "// src/crypto/mod"
+      ],
+      "diff_summary": "Large diff with 16 changes. First few:\n--- \n+++ \n@@ -1,2 +1,2 @@\n-// src/crypto/mod.rs\n+// src/crypto.rs (replaces crypto/mod.rs)"
+    },
+    {
+      "segment1": {
+        "content": "    /// Get a slice to the buffer data\n    pub fn as_slice(&self) -> &[u8] {\n        &self.data\n    }",
+        "normalized_content": "/// get a slice to the buffer data pub fn as_slice(&self) -> &[u8] { &self.data }",
+        "hash": "7f3be71d39ef5bd05cf898f49cc7fe85",
+        "line_start": 6476,
+        "line_end": 6479,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 16,
+        "key_terms": "{'slice', 'as_slice', 'buffer'}"
+      },
+      "segment2": {
+        "content": "    /// Get a mutable slice to the buffer data\n    pub fn as_mut_slice(&mut self) -> &mut [u8] {\n        &mut self.data\n    }",
+        "normalized_content": "/// get a mutable slice to the buffer data pub fn as_mut_slice(&mut self) -> &mut [u8] { &mut self.data }",
+        "hash": "f2351fdf7bc483be6a573b4226f10cd8",
+        "line_start": 6481,
+        "line_end": 6484,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 20,
+        "key_terms": "{'slice', 'as_mut_slice', 'mutable', 'buffer'}"
+      },
+      "similarity_score": 0.8709677419354839,
+      "match_type": "similar",
+      "common_phrases": [
+        "/// Get a slice to the buffer data\n    pub fn as_slice(&self) -> &[u8] {\n        &self",
+        "data\n    }"
+      ],
+      "diff_summary": "--- \n+++ \n@@ -1,4 +1,4 @@\n-    /// Get a slice to the buffer data\n-    pub fn as_slice(&self) -> &[u8] {\n-        &self.data\n+    /// Get a mutable slice to the buffer data\n+    pub fn as_mut_slice(&mut self) -> &mut [u8] {\n+        &mut self.data\n     }"
+    },
+    {
+      "segment1": {
+        "content": "    /// Get the physical address for DMA operations\n    pub fn as_ptr(&self) -> *const u8 {\n        self.data.as_ptr()\n    }",
+        "normalized_content": "/// get the physical address for dma operations pub fn as_ptr(&self) -> *const u8 { self.data.as_ptr() }",
+        "hash": "f4d3a7464c78a843481f4b73090b0d54",
+        "line_start": 6486,
+        "line_end": 6489,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 17,
+        "key_terms": "{'physical', 'operations', 'dma', 'address'}"
+      },
+      "segment2": {
+        "content": "    /// Get mutable pointer for DMA operations\n    pub fn as_mut_ptr(&mut self) -> *mut u8 {\n        self.data.as_mut_ptr()\n    }",
+        "normalized_content": "/// get mutable pointer for dma operations pub fn as_mut_ptr(&mut self) -> *mut u8 { self.data.as_mut_ptr() }",
+        "hash": "1d53020948ed65e8da08d2153557cca2",
+        "line_start": 6491,
+        "line_end": 6494,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 17,
+        "key_terms": "{'pointer', 'mutable', 'as_mut_ptr', 'operations', 'dma'}"
+      },
+      "similarity_score": 0.8075117370892019,
+      "match_type": "similar",
+      "common_phrases": [
+        "/// Get the physical address for DMA operations\n    pub fn as_ptr(&self) -> *const u8 {\n        self",
+        "as_ptr()\n    }"
+      ],
+      "diff_summary": "--- \n+++ \n@@ -1,4 +1,4 @@\n-    /// Get the physical address for DMA operations\n-    pub fn as_ptr(&self) -> *const u8 {\n-        self.data.as_ptr()\n+    /// Get mutable pointer for DMA operations\n+    pub fn as_mut_ptr(&mut self) -> *mut u8 {\n+        self.data.as_mut_ptr()\n     }"
+    },
+    {
+      "segment1": {
+        "content": "    /// Ensure cache coherency before DMA read\n    pub fn invalidate_cache(&mut self) {\n        // Platform-specific cache invalidation\n        #[cfg(target_arch = \"arm\")]\n        unsafe {\n            // ARM cache invalidation\n            let start = self.as_ptr() as u32;\n            let end = start + N as u32;",
+        "normalized_content": "/// ensure cache coherency before dma read pub fn invalidate_cache(&mut self) { // platform-specific cache invalidation #[cfg(target_arch = \"arm\")] unsafe { // arm cache invalidation let start = self.as_ptr() as u32; let end = start + n as u32;",
+        "hash": "366e6406fd16b49fd7e7c17e1eea358a",
+        "line_start": 6496,
+        "line_end": 6503,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 39,
+        "key_terms": "{'specific', 'unsafe', 'target_arch', 'arm', 'invalidation', 'coherency', 'invalidate_cache', 'platform', 'dma'}"
+      },
+      "segment2": {
+        "content": "    /// Ensure cache coherency after DMA write\n    pub fn flush_cache(&self) {\n        #[cfg(target_arch = \"arm\")]\n        unsafe {\n            // ARM cache flush\n            let start = self.as_ptr() as u32;\n            let end = start + N as u32;",
+        "normalized_content": "/// ensure cache coherency after dma write pub fn flush_cache(&self) { #[cfg(target_arch = \"arm\")] unsafe { // arm cache flush let start = self.as_ptr() as u32; let end = start + n as u32;",
+        "hash": "9d8adb44ca5dcbec2dbce81f6a1e0e4f",
+        "line_start": 6512,
+        "line_end": 6518,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 34,
+        "key_terms": "{'unsafe', 'target_arch', 'arm', 'coherency', 'dma', 'flush_cache'}"
+      },
+      "similarity_score": 0.8055555555555556,
+      "match_type": "similar",
+      "common_phrases": [
+        "as_ptr() as u32;\n            let end = start + N as u32;"
+      ],
+      "diff_summary": "Large diff with 13 changes. First few:\n--- \n+++ \n@@ -1,7 +1,6 @@\n-    /// Ensure cache coherency before DMA read\n-    pub fn invalidate_cache(&mut self) {"
+    },
+    {
+      "segment1": {
+        "content": "            // Invalidate data cache for this range\n            cortex_r::asm::dsb();\n            // Platform-specific cache ops would go here\n            cortex_r::asm::dsb();\n        }\n    }",
+        "normalized_content": "// invalidate data cache for this range cortex_r::asm::dsb(); // platform-specific cache ops would go here cortex_r::asm::dsb(); } }",
+        "hash": "4b69d4388508958f54ea6d5787b83b21",
+        "line_start": 6505,
+        "line_end": 6510,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 18,
+        "key_terms": "{'platform', 'specific', 'invalidate', 'cortex_r'}"
+      },
+      "segment2": {
+        "content": "            cortex_r::asm::dsb();\n            // Platform-specific cache ops would go here\n            cortex_r::asm::dsb();\n        }\n    }\n}",
+        "normalized_content": "cortex_r::asm::dsb(); // platform-specific cache ops would go here cortex_r::asm::dsb(); } } }",
+        "hash": "45a25576d56007bb4721d3a67d4a6b83",
+        "line_start": 6520,
+        "line_end": 6525,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 12,
+        "key_terms": "{'platform', 'specific', 'cortex_r'}"
+      },
+      "similarity_score": 0.8141592920353983,
+      "match_type": "similar",
+      "common_phrases": [
+        "// Invalidate data cache for this range\n            cortex_r::asm::dsb();\n            // Platform-sp..."
+      ],
+      "diff_summary": "--- \n+++ \n@@ -1,2 +1 @@\n-            // Invalidate data cache for this range\n             cortex_r::asm::dsb();\n@@ -6 +5,2 @@\n     }\n+}"
+    },
+    {
+      "segment1": {
+        "content": "    unsafe fn setup_crypto_accelerator(&self, key: &[u8; 32]) -> Result<(), DmaError> {\n        // Platform-specific crypto accelerator setup\n        Ok(())\n    }",
+        "normalized_content": "unsafe fn setup_crypto_accelerator(&self, key: &[u8; 32]) -> result<(), dmaerror> { // platform-specific crypto accelerator setup ok(()) }",
+        "hash": "7a6c09370fe24c097616582701ecd04c",
+        "line_start": 6686,
+        "line_end": 6689,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 17,
+        "key_terms": "{'specific', 'unsafe', 'crypto', 'dmaerror', 'platform', 'accelerator', 'setup_crypto_accelerator', 'key'}"
+      },
+      "segment2": {
+        "content": "    unsafe fn setup_hash_accelerator(&self) -> Result<(), DmaError> {\n        // Platform-specific hash accelerator setup\n        Ok(())\n    }",
+        "normalized_content": "unsafe fn setup_hash_accelerator(&self) -> result<(), dmaerror> { // platform-specific hash accelerator setup ok(()) }",
+        "hash": "e612bb12d46d6fdb84bc9f401c7ad92c",
+        "line_start": 6691,
+        "line_end": 6694,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 14,
+        "key_terms": "{'specific', 'unsafe', 'hash', 'dmaerror', 'platform', 'accelerator', 'setup_hash_accelerator'}"
+      },
+      "similarity_score": 0.859375,
+      "match_type": "similar",
+      "common_phrases": [
+        "unsafe fn setup_crypto_accelerator(&self, key: &[u8; 32]) -> Result<(), DmaError> {\n        // Platf..."
+      ],
+      "diff_summary": "--- \n+++ \n@@ -1,3 +1,3 @@\n-    unsafe fn setup_crypto_accelerator(&self, key: &[u8; 32]) -> Result<(), DmaError> {\n-        // Platform-specific crypto accelerator setup\n+    unsafe fn setup_hash_accelerator(&self) -> Result<(), DmaError> {\n+        // Platform-specific hash accelerator setup\n         Ok(())"
+    },
+    {
+      "segment1": {
+        "content": "pub extern \"C\" fn crypto_accelerator_irq() {\n    // Increment interrupt counter\n    INTERRUPT_COUNTS[0].fetch_add(1, Ordering::Relaxed);",
+        "normalized_content": "pub extern \"c\" fn crypto_accelerator_irq() { // increment interrupt counter interrupt_counts[0].fetch_add(1, ordering::relaxed);",
+        "hash": "4d38da2155819d33818df7f29404e513",
+        "line_start": 6829,
+        "line_end": 6831,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 12,
+        "key_terms": "{'crypto_accelerator_irq', 'interrupt_counts', 'ordering', 'increment', 'counter', 'interrupt', 'fetch_add', 'relaxed'}"
+      },
+      "segment2": {
+        "content": "pub extern \"C\" fn crypto_timer_irq() {\n    INTERRUPT_COUNTS[1].fetch_add(1, Ordering::Relaxed);",
+        "normalized_content": "pub extern \"c\" fn crypto_timer_irq() { interrupt_counts[1].fetch_add(1, ordering::relaxed);",
+        "hash": "79a9a72c467e3c609e5e03d3a85d7f58",
+        "line_start": 6852,
+        "line_end": 6853,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 8,
+        "key_terms": "{'crypto_timer_irq', 'interrupt_counts', 'ordering', 'fetch_add', 'relaxed'}"
+      },
+      "similarity_score": 0.7945205479452054,
+      "match_type": "similar",
+      "common_phrases": [
+        "fetch_add(1, Ordering::Relaxed);"
+      ],
+      "diff_summary": "--- \n+++ \n@@ -1,3 +1,2 @@\n-pub extern \"C\" fn crypto_accelerator_irq() {\n-    // Increment interrupt counter\n-    INTERRUPT_COUNTS[0].fetch_add(1, Ordering::Relaxed);\n+pub extern \"C\" fn crypto_timer_irq() {\n+    INTERRUPT_COUNTS[1].fetch_add(1, Ordering::Relaxed);"
+    },
+    {
+      "segment1": {
+        "content": "pub extern \"C\" fn crypto_accelerator_irq() {\n    // Increment interrupt counter\n    INTERRUPT_COUNTS[0].fetch_add(1, Ordering::Relaxed);",
+        "normalized_content": "pub extern \"c\" fn crypto_accelerator_irq() { // increment interrupt counter interrupt_counts[0].fetch_add(1, ordering::relaxed);",
+        "hash": "4d38da2155819d33818df7f29404e513",
+        "line_start": 6829,
+        "line_end": 6831,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 12,
+        "key_terms": "{'crypto_accelerator_irq', 'interrupt_counts', 'ordering', 'increment', 'counter', 'interrupt', 'fetch_add', 'relaxed'}"
+      },
+      "segment2": {
+        "content": "pub extern \"C\" fn secure_key_irq() {\n    INTERRUPT_COUNTS[2].fetch_add(1, Ordering::Relaxed);",
+        "normalized_content": "pub extern \"c\" fn secure_key_irq() { interrupt_counts[2].fetch_add(1, ordering::relaxed);",
+        "hash": "0c8a9c717d3cc833945e5960b7c2ac72",
+        "line_start": 6870,
+        "line_end": 6871,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 8,
+        "key_terms": "{'interrupt_counts', 'ordering', 'secure_key_irq', 'fetch_add', 'relaxed'}"
+      },
+      "similarity_score": 0.7465437788018433,
+      "match_type": "similar",
+      "common_phrases": [
+        "fetch_add(1, Ordering::Relaxed);"
+      ],
+      "diff_summary": "--- \n+++ \n@@ -1,3 +1,2 @@\n-pub extern \"C\" fn crypto_accelerator_irq() {\n-    // Increment interrupt counter\n-    INTERRUPT_COUNTS[0].fetch_add(1, Ordering::Relaxed);\n+pub extern \"C\" fn secure_key_irq() {\n+    INTERRUPT_COUNTS[2].fetch_add(1, Ordering::Relaxed);"
+    },
+    {
+      "segment1": {
+        "content": "    // Handle crypto accelerator completion\n    unsafe {\n        let status = read_crypto_status();",
+        "normalized_content": "// handle crypto accelerator completion unsafe { let status = read_crypto_status();",
+        "hash": "a503baf66059752f162f23d473d54a78",
+        "line_start": 6833,
+        "line_end": 6835,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 11,
+        "key_terms": "{'completion', 'unsafe', 'crypto', 'read_crypto_status', 'accelerator'}"
+      },
+      "segment2": {
+        "content": "    // Handle secure key operations\n    unsafe {\n        let key_status = read_key_manager_status();",
+        "normalized_content": "// handle secure key operations unsafe { let key_status = read_key_manager_status();",
+        "hash": "3f5a8dcbbc3f1e19261a47bc5eb8a381",
+        "line_start": 6873,
+        "line_end": 6875,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 11,
+        "key_terms": "{'key_status', 'unsafe', 'read_key_manager_status', 'operations', 'key'}"
+      },
+      "similarity_score": 0.718562874251497,
+      "match_type": "similar",
+      "common_phrases": [],
+      "diff_summary": "--- \n+++ \n@@ -1,3 +1,3 @@\n-    // Handle crypto accelerator completion\n+    // Handle secure key operations\n     unsafe {\n-        let status = read_crypto_status();\n+        let key_status = read_key_manager_status();"
+    },
+    {
+      "segment1": {
+        "content": "        // Clear interrupt\n        clear_crypto_interrupt();\n    }\n}",
+        "normalized_content": "// clear interrupt clear_crypto_interrupt(); } }",
+        "hash": "f4d4a9befac32088726aec6d59b5e518",
+        "line_start": 6845,
+        "line_end": 6848,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 6,
+        "key_terms": "{'interrupt', 'clear_crypto_interrupt'}"
+      },
+      "segment2": {
+        "content": "        // Clear timer interrupt\n        clear_timer_interrupt();\n    }\n}",
+        "normalized_content": "// clear timer interrupt clear_timer_interrupt(); } }",
+        "hash": "45598b1432f11f1982f002db2730ee0d",
+        "line_start": 6863,
+        "line_end": 6866,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 7,
+        "key_terms": "{'clear_timer_interrupt', 'interrupt'}"
+      },
+      "similarity_score": 0.8514851485148515,
+      "match_type": "similar",
+      "common_phrases": [
+        "// Clear interrupt\n        clear_crypto_interrupt();\n    }\n}"
+      ],
+      "diff_summary": "--- \n+++ \n@@ -1,3 +1,3 @@\n-        // Clear interrupt\n-        clear_crypto_interrupt();\n+        // Clear timer interrupt\n+        clear_timer_interrupt();\n     }"
+    },
+    {
+      "segment1": {
+        "content": "        if key_status & KEY_GENERATION_COMPLETE != 0 {\n            handle_key_generation_complete();\n        }",
+        "normalized_content": "if key_status & key_generation_complete != 0 { handle_key_generation_complete(); }",
+        "hash": "90e9e9ca731a5baa936cde2cc4388621",
+        "line_start": 6877,
+        "line_end": 6879,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 9,
+        "key_terms": "{'key_status', 'key_generation_complete', 'handle_key_generation_complete'}"
+      },
+      "segment2": {
+        "content": "        if key_status & KEY_ZEROIZATION_REQUEST != 0 {\n            handle_emergency_key_zeroization();\n        }",
+        "normalized_content": "if key_status & key_zeroization_request != 0 { handle_emergency_key_zeroization(); }",
+        "hash": "4dfdea94dcbecc9a35a39eae85bde698",
+        "line_start": 6881,
+        "line_end": 6883,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 9,
+        "key_terms": "{'key_status', 'key_zeroization_request', 'handle_emergency_key_zeroization'}"
+      },
+      "similarity_score": 0.7349397590361446,
+      "match_type": "similar",
+      "common_phrases": [],
+      "diff_summary": "--- \n+++ \n@@ -1,3 +1,3 @@\n-        if key_status & KEY_GENERATION_COMPLETE != 0 {\n-            handle_key_generation_complete();\n+        if key_status & KEY_ZEROIZATION_REQUEST != 0 {\n+            handle_emergency_key_zeroization();\n         }"
+    },
+    {
+      "segment1": {
+        "content": "unsafe fn read_crypto_status() -> u32 {\n    // Read crypto accelerator status register\n    0 // Placeholder\n}",
+        "normalized_content": "unsafe fn read_crypto_status() -> u32 { // read crypto accelerator status register 0 // placeholder }",
+        "hash": "fd7e948d055a4a41cf87914a627dacb9",
+        "line_start": 6896,
+        "line_end": 6899,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 16,
+        "key_terms": "{'register', 'unsafe', 'crypto', 'read_crypto_status', 'accelerator', 'placeholder'}"
+      },
+      "segment2": {
+        "content": "unsafe fn read_key_manager_status() -> u32 {\n    // Read key manager status\n    0 // Placeholder\n}",
+        "normalized_content": "unsafe fn read_key_manager_status() -> u32 { // read key manager status 0 // placeholder }",
+        "hash": "7dcf03dcdfbb41ba1f3f3fb9195f49f6",
+        "line_start": 6933,
+        "line_end": 6936,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 15,
+        "key_terms": "{'unsafe', 'key', 'read_key_manager_status', 'manager', 'placeholder'}"
+      },
+      "similarity_score": 0.774869109947644,
+      "match_type": "similar",
+      "common_phrases": [],
+      "diff_summary": "--- \n+++ \n@@ -1,3 +1,3 @@\n-unsafe fn read_crypto_status() -> u32 {\n-    // Read crypto accelerator status register\n+unsafe fn read_key_manager_status() -> u32 {\n+    // Read key manager status\n     0 // Placeholder"
+    },
+    {
+      "segment1": {
+        "content": "unsafe fn handle_encrypt_complete() {\n    // Handle encryption completion\n}",
+        "normalized_content": "unsafe fn handle_encrypt_complete() { // handle encryption completion }",
+        "hash": "74ef66ef42ededecd75e5624bd1d5719",
+        "line_start": 6901,
+        "line_end": 6903,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 9,
+        "key_terms": "{'encryption', 'handle_encrypt_complete', 'completion', 'unsafe'}"
+      },
+      "segment2": {
+        "content": "unsafe fn handle_hash_complete() {\n    // Handle hash completion\n}",
+        "normalized_content": "unsafe fn handle_hash_complete() { // handle hash completion }",
+        "hash": "0e145ae6591db67948c3c2a64d824aa6",
+        "line_start": 6909,
+        "line_end": 6911,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 9,
+        "key_terms": "{'hash', 'completion', 'unsafe', 'handle_hash_complete'}"
+      },
+      "similarity_score": 0.8120300751879699,
+      "match_type": "similar",
+      "common_phrases": [
+        "unsafe fn handle_encrypt_complete() {\n    // Handle encryption completion\n}"
+      ],
+      "diff_summary": "--- \n+++ \n@@ -1,3 +1,3 @@\n-unsafe fn handle_encrypt_complete() {\n-    // Handle encryption completion\n+unsafe fn handle_hash_complete() {\n+    // Handle hash completion\n }"
+    },
+    {
+      "segment1": {
+        "content": "unsafe fn handle_encrypt_complete() {\n    // Handle encryption completion\n}",
+        "normalized_content": "unsafe fn handle_encrypt_complete() { // handle encryption completion }",
+        "hash": "74ef66ef42ededecd75e5624bd1d5719",
+        "line_start": 6901,
+        "line_end": 6903,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 9,
+        "key_terms": "{'encryption', 'handle_encrypt_complete', 'completion', 'unsafe'}"
+      },
+      "segment2": {
+        "content": "unsafe fn handle_crypto_error() {\n    // Handle crypto error\n}",
+        "normalized_content": "unsafe fn handle_crypto_error() { // handle crypto error }",
+        "hash": "1900433597c21539229fee3599bf77a0",
+        "line_start": 6913,
+        "line_end": 6915,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 9,
+        "key_terms": "{'handle_crypto_error', 'crypto', 'unsafe'}"
+      },
+      "similarity_score": 0.7596899224806202,
+      "match_type": "similar",
+      "common_phrases": [],
+      "diff_summary": "--- \n+++ \n@@ -1,3 +1,3 @@\n-unsafe fn handle_encrypt_complete() {\n-    // Handle encryption completion\n+unsafe fn handle_crypto_error() {\n+    // Handle crypto error\n }"
+    },
+    {
+      "segment1": {
+        "content": "unsafe fn handle_encrypt_complete() {\n    // Handle encryption completion\n}",
+        "normalized_content": "unsafe fn handle_encrypt_complete() { // handle encryption completion }",
+        "hash": "74ef66ef42ededecd75e5624bd1d5719",
+        "line_start": 6901,
+        "line_end": 6903,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 9,
+        "key_terms": "{'encryption', 'handle_encrypt_complete', 'completion', 'unsafe'}"
+      },
+      "segment2": {
+        "content": "unsafe fn handle_key_generation_complete() {\n    // Handle key generation completion\n}",
+        "normalized_content": "unsafe fn handle_key_generation_complete() { // handle key generation completion }",
+        "hash": "9d11cb065719d091a10ab61d85f0c762",
+        "line_start": 6938,
+        "line_end": 6940,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 10,
+        "key_terms": "{'completion', 'unsafe', 'generation', 'handle_key_generation_complete', 'key'}"
+      },
+      "similarity_score": 0.8496732026143791,
+      "match_type": "similar",
+      "common_phrases": [
+        "unsafe fn handle_encrypt_complete() {\n    // Handle encryption completion\n}"
+      ],
+      "diff_summary": "--- \n+++ \n@@ -1,3 +1,3 @@\n-unsafe fn handle_encrypt_complete() {\n-    // Handle encryption completion\n+unsafe fn handle_key_generation_complete() {\n+    // Handle key generation completion\n }"
+    },
+    {
+      "segment1": {
+        "content": "unsafe fn handle_decrypt_complete() {\n    // Handle decryption completion\n}",
+        "normalized_content": "unsafe fn handle_decrypt_complete() { // handle decryption completion }",
+        "hash": "e7c2819c9792b8d1445389a2f61458d2",
+        "line_start": 6905,
+        "line_end": 6907,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 9,
+        "key_terms": "{'decryption', 'handle_decrypt_complete', 'completion', 'unsafe'}"
+      },
+      "segment2": {
+        "content": "unsafe fn handle_hash_complete() {\n    // Handle hash completion\n}",
+        "normalized_content": "unsafe fn handle_hash_complete() { // handle hash completion }",
+        "hash": "0e145ae6591db67948c3c2a64d824aa6",
+        "line_start": 6909,
+        "line_end": 6911,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 9,
+        "key_terms": "{'hash', 'completion', 'unsafe', 'handle_hash_complete'}"
+      },
+      "similarity_score": 0.8120300751879699,
+      "match_type": "similar",
+      "common_phrases": [
+        "unsafe fn handle_decrypt_complete() {\n    // Handle decryption completion\n}"
+      ],
+      "diff_summary": "--- \n+++ \n@@ -1,3 +1,3 @@\n-unsafe fn handle_decrypt_complete() {\n-    // Handle decryption completion\n+unsafe fn handle_hash_complete() {\n+    // Handle hash completion\n }"
+    },
+    {
+      "segment1": {
+        "content": "unsafe fn handle_decrypt_complete() {\n    // Handle decryption completion\n}",
+        "normalized_content": "unsafe fn handle_decrypt_complete() { // handle decryption completion }",
+        "hash": "e7c2819c9792b8d1445389a2f61458d2",
+        "line_start": 6905,
+        "line_end": 6907,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 9,
+        "key_terms": "{'decryption', 'handle_decrypt_complete', 'completion', 'unsafe'}"
+      },
+      "segment2": {
+        "content": "unsafe fn handle_crypto_error() {\n    // Handle crypto error\n}",
+        "normalized_content": "unsafe fn handle_crypto_error() { // handle crypto error }",
+        "hash": "1900433597c21539229fee3599bf77a0",
+        "line_start": 6913,
+        "line_end": 6915,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 9,
+        "key_terms": "{'handle_crypto_error', 'crypto', 'unsafe'}"
+      },
+      "similarity_score": 0.7596899224806202,
+      "match_type": "similar",
+      "common_phrases": [],
+      "diff_summary": "--- \n+++ \n@@ -1,3 +1,3 @@\n-unsafe fn handle_decrypt_complete() {\n-    // Handle decryption completion\n+unsafe fn handle_crypto_error() {\n+    // Handle crypto error\n }"
+    },
+    {
+      "segment1": {
+        "content": "unsafe fn handle_decrypt_complete() {\n    // Handle decryption completion\n}",
+        "normalized_content": "unsafe fn handle_decrypt_complete() { // handle decryption completion }",
+        "hash": "e7c2819c9792b8d1445389a2f61458d2",
+        "line_start": 6905,
+        "line_end": 6907,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 9,
+        "key_terms": "{'decryption', 'handle_decrypt_complete', 'completion', 'unsafe'}"
+      },
+      "segment2": {
+        "content": "unsafe fn handle_key_generation_complete() {\n    // Handle key generation completion\n}",
+        "normalized_content": "unsafe fn handle_key_generation_complete() { // handle key generation completion }",
+        "hash": "9d11cb065719d091a10ab61d85f0c762",
+        "line_start": 6938,
+        "line_end": 6940,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 10,
+        "key_terms": "{'completion', 'unsafe', 'generation', 'handle_key_generation_complete', 'key'}"
+      },
+      "similarity_score": 0.8235294117647058,
+      "match_type": "similar",
+      "common_phrases": [
+        "unsafe fn handle_decrypt_complete() {\n    // Handle decryption completion\n}"
+      ],
+      "diff_summary": "--- \n+++ \n@@ -1,3 +1,3 @@\n-unsafe fn handle_decrypt_complete() {\n-    // Handle decryption completion\n+unsafe fn handle_key_generation_complete() {\n+    // Handle key generation completion\n }"
+    },
+    {
+      "segment1": {
+        "content": "unsafe fn handle_hash_complete() {\n    // Handle hash completion\n}",
+        "normalized_content": "unsafe fn handle_hash_complete() { // handle hash completion }",
+        "hash": "0e145ae6591db67948c3c2a64d824aa6",
+        "line_start": 6909,
+        "line_end": 6911,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 9,
+        "key_terms": "{'hash', 'completion', 'unsafe', 'handle_hash_complete'}"
+      },
+      "segment2": {
+        "content": "unsafe fn handle_key_generation_complete() {\n    // Handle key generation completion\n}",
+        "normalized_content": "unsafe fn handle_key_generation_complete() { // handle key generation completion }",
+        "hash": "9d11cb065719d091a10ab61d85f0c762",
+        "line_start": 6938,
+        "line_end": 6940,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 10,
+        "key_terms": "{'completion', 'unsafe', 'generation', 'handle_key_generation_complete', 'key'}"
+      },
+      "similarity_score": 0.7777777777777778,
+      "match_type": "similar",
+      "common_phrases": [],
+      "diff_summary": "--- \n+++ \n@@ -1,3 +1,3 @@\n-unsafe fn handle_hash_complete() {\n-    // Handle hash completion\n+unsafe fn handle_key_generation_complete() {\n+    // Handle key generation completion\n }"
+    },
+    {
+      "segment1": {
+        "content": "unsafe fn handle_crypto_error() {\n    // Handle crypto error\n}",
+        "normalized_content": "unsafe fn handle_crypto_error() { // handle crypto error }",
+        "hash": "1900433597c21539229fee3599bf77a0",
+        "line_start": 6913,
+        "line_end": 6915,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 9,
+        "key_terms": "{'handle_crypto_error', 'crypto', 'unsafe'}"
+      },
+      "segment2": {
+        "content": "unsafe fn clear_crypto_interrupt() {\n    // Clear crypto interrupt flag\n}",
+        "normalized_content": "unsafe fn clear_crypto_interrupt() { // clear crypto interrupt flag }",
+        "hash": "12f8cb635f4fa66e0e43979699a0afb4",
+        "line_start": 6917,
+        "line_end": 6919,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 10,
+        "key_terms": "{'crypto', 'interrupt', 'unsafe', 'clear_crypto_interrupt'}"
+      },
+      "similarity_score": 0.7244094488188977,
+      "match_type": "similar",
+      "common_phrases": [],
+      "diff_summary": "--- \n+++ \n@@ -1,3 +1,3 @@\n-unsafe fn handle_crypto_error() {\n-    // Handle crypto error\n+unsafe fn clear_crypto_interrupt() {\n+    // Clear crypto interrupt flag\n }"
+    },
+    {
+      "segment1": {
+        "content": "unsafe fn clear_crypto_interrupt() {\n    // Clear crypto interrupt flag\n}",
+        "normalized_content": "unsafe fn clear_crypto_interrupt() { // clear crypto interrupt flag }",
+        "hash": "12f8cb635f4fa66e0e43979699a0afb4",
+        "line_start": 6917,
+        "line_end": 6919,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 10,
+        "key_terms": "{'crypto', 'interrupt', 'unsafe', 'clear_crypto_interrupt'}"
+      },
+      "segment2": {
+        "content": "unsafe fn clear_timer_interrupt() {\n    // Clear timer interrupt\n}",
+        "normalized_content": "unsafe fn clear_timer_interrupt() { // clear timer interrupt }",
+        "hash": "e49629c42fc2e539fa6399383500c92c",
+        "line_start": 6929,
+        "line_end": 6931,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 9,
+        "key_terms": "{'clear_timer_interrupt', 'interrupt', 'unsafe'}"
+      },
+      "similarity_score": 0.8244274809160306,
+      "match_type": "similar",
+      "common_phrases": [
+        "unsafe fn clear_crypto_interrupt() {\n    // Clear crypto interrupt flag\n}"
+      ],
+      "diff_summary": "--- \n+++ \n@@ -1,3 +1,3 @@\n-unsafe fn clear_crypto_interrupt() {\n-    // Clear crypto interrupt flag\n+unsafe fn clear_timer_interrupt() {\n+    // Clear timer interrupt\n }"
+    },
+    {
+      "segment1": {
+        "content": "unsafe fn clear_crypto_interrupt() {\n    // Clear crypto interrupt flag\n}",
+        "normalized_content": "unsafe fn clear_crypto_interrupt() { // clear crypto interrupt flag }",
+        "hash": "12f8cb635f4fa66e0e43979699a0afb4",
+        "line_start": 6917,
+        "line_end": 6919,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 10,
+        "key_terms": "{'crypto', 'interrupt', 'unsafe', 'clear_crypto_interrupt'}"
+      },
+      "segment2": {
+        "content": "unsafe fn clear_key_manager_interrupt() {\n    // Clear key manager interrupt\n}",
+        "normalized_content": "unsafe fn clear_key_manager_interrupt() { // clear key manager interrupt }",
+        "hash": "3c8e51870c1a4587f6d1aeabc067a6f6",
+        "line_start": 6946,
+        "line_end": 6948,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 10,
+        "key_terms": "{'unsafe', 'clear_key_manager_interrupt', 'manager', 'key', 'interrupt'}"
+      },
+      "similarity_score": 0.7552447552447552,
+      "match_type": "similar",
+      "common_phrases": [],
+      "diff_summary": "--- \n+++ \n@@ -1,3 +1,3 @@\n-unsafe fn clear_crypto_interrupt() {\n-    // Clear crypto interrupt flag\n+unsafe fn clear_key_manager_interrupt() {\n+    // Clear key manager interrupt\n }"
+    },
+    {
+      "segment1": {
+        "content": "unsafe fn clear_timer_interrupt() {\n    // Clear timer interrupt\n}",
+        "normalized_content": "unsafe fn clear_timer_interrupt() { // clear timer interrupt }",
+        "hash": "e49629c42fc2e539fa6399383500c92c",
+        "line_start": 6929,
+        "line_end": 6931,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 9,
+        "key_terms": "{'clear_timer_interrupt', 'interrupt', 'unsafe'}"
+      },
+      "segment2": {
+        "content": "unsafe fn clear_key_manager_interrupt() {\n    // Clear key manager interrupt\n}",
+        "normalized_content": "unsafe fn clear_key_manager_interrupt() { // clear key manager interrupt }",
+        "hash": "3c8e51870c1a4587f6d1aeabc067a6f6",
+        "line_start": 6946,
+        "line_end": 6948,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 10,
+        "key_terms": "{'unsafe', 'clear_key_manager_interrupt', 'manager', 'key', 'interrupt'}"
+      },
+      "similarity_score": 0.8529411764705882,
+      "match_type": "similar",
+      "common_phrases": [
+        "unsafe fn clear_timer_interrupt() {\n    // Clear timer interrupt\n}"
+      ],
+      "diff_summary": "--- \n+++ \n@@ -1,3 +1,3 @@\n-unsafe fn clear_timer_interrupt() {\n-    // Clear timer interrupt\n+unsafe fn clear_key_manager_interrupt() {\n+    // Clear key manager interrupt\n }"
+    },
+    {
+      "segment1": {
+        "content": "    /// Start timing measurement\n    pub fn start_timing(&self) -> TimingGuard {\n        let start_cycles = self.read_cycle_counter();\n        TimingGuard {\n            analyzer: self,\n            start_cycles,\n            operation_type: 0,\n        }\n    }",
+        "normalized_content": "/// start timing measurement pub fn start_timing(&self) -> timingguard { let start_cycles = self.read_cycle_counter(); timingguard { analyzer: self, start_cycles, operation_type: 0, } }",
+        "hash": "7c25fa9fce08f138b3076a3f090a20dc",
+        "line_start": 6991,
+        "line_end": 6999,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 23,
+        "key_terms": "{'analyzer', 'read_cycle_counter', 'start_timing', 'operation_type', 'measurement', 'start_cycles', 'timingguard'}"
+      },
+      "segment2": {
+        "content": "    /// Start timing for specific operation type\n    pub fn start_operation_timing(&self, operation_type: usize) -> TimingGuard {\n        let start_cycles = self.read_cycle_counter();\n        TimingGuard {\n            analyzer: self,\n            start_cycles,\n            operation_type,\n        }\n    }",
+        "normalized_content": "/// start timing for specific operation type pub fn start_operation_timing(&self, operation_type: usize) -> timingguard { let start_cycles = self.read_cycle_counter(); timingguard { analyzer: self, start_cycles, operation_type, } }",
+        "hash": "1c5026266824ee04b77605a77ebb1c51",
+        "line_start": 7001,
+        "line_end": 7009,
+        "section": "Multi-core Programming on ZynqMP",
+        "segment_type": "paragraph",
+        "word_count": 27,
+        "key_terms": "{'specific', 'analyzer', 'read_cycle_counter', 'operation_type', 'start_operation_timing', 'operation', 'start_cycles', 'timingguard'}"
+      },
+      "similarity_score": 0.8221153846153846,
+      "match_type": "similar",
+      "common_phrases": [
+        "read_cycle_counter();\n        TimingGuard {\n            analyzer: self,\n            start_cycles,\n  ..."
+      ],
+      "diff_summary": "Large diff with 13 changes. First few:\n--- \n+++ \n@@ -1,3 +1,3 @@\n-    /// Start timing measurement\n-    pub fn start_timing(&self) -> TimingGuard {"
+    }
+  ],
+  "conceptual_overlaps": [
+    {
+      "segment1": {
+        "content": "This section provides a quick lookup for common C patterns and their Rust equivalents. Keep this handy as you transition.",
+        "normalized_content": "this section provides a quick lookup for common c patterns and their rust equivalents. keep this handy as you transition.",
+        "hash": "fa9e1a5700784010656baf6d305e3b0f",
+        "line_start": 47,
+        "line_end": 47,
+        "section": "Quick Reference: C to Rust Cheat Sheet",
+        "segment_type": "paragraph",
+        "word_count": 20,
+        "key_terms": "{'rust', 'provides', 'patterns', 'equivalents', 'transition', 'section'}"
+      },
+      "segment2": {
+        "content": "This section provides direct comparisons between C patterns you know and their Rust equivalents, focusing on embedded cryptography use cases.",
+        "normalized_content": "this section provides direct comparisons between c patterns you know and their rust equivalents, focusing on embedded cryptography use cases.",
+        "hash": "8f661e998126e4b851de18721241200f",
+        "line_start": 3994,
+        "line_end": 3994,
+        "section": "Core Language Differences from C",
+        "segment_type": "paragraph",
+        "word_count": 20,
+        "key_terms": "{'embedded', 'rust', 'provides', 'patterns', 'equivalents', 'comparisons', 'between', 'focusing', 'cryptography', 'section'}"
+      },
+      "similarity_score": 0.45454545454545453,
+      "match_type": "conceptual",
+      "common_phrases": [
+        "rust",
+        "provides",
+        "patterns",
+        "equivalents",
+        "section"
+      ],
+      "diff_summary": "Shares 5 key terms: rust, provides, patterns, equivalents, section"
+    },
+    {
+      "segment1": {
+        "content": "# Cargo.toml\n[package]\nname = \"my_crypto_app\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[dependencies]\n# Core embedded dependencies\ncortex-m = \"0.7\"\ncortex-m-rt = \"0.7\"\npanic-halt = \"0.2\"\nembedded-hal = \"0.2\"\n\n# HAL for your specific MCU (examples):\n# stm32f4xx-hal = { version = \"0.14\", features = [\"stm32f411\"] }\n# nrf52840-hal = \"0.16\"\n# rp2040-hal = \"0.9\"\n\n# Crypto dependencies\nchacha20poly1305 = { version = \"0.10\", default-features = false }\naes-gcm = { version = \"0.10\", default-features = false }\nsha2 = { version = \"0.10\", default-features = false }\nhmac = { version = \"0.12\", default-features = false }\nsubtle = { version = \"2.5\", default-features = false }\n\n# For static collections\nheapless = \"0.7\"\n\n[profile.release]\nopt-level = \"z\"     # Optimize for size\nlto = true          # Link-time optimization\ndebug = true        # Keep debug symbols for debugging\nstrip = false       # Don't strip symbols",
+        "normalized_content": "# Cargo.toml\n[package]\nname = \"my_crypto_app\"\nversion = \"0.1.0\"\nedition = \"2021\"\n[dependencies]\n# Core embedded dependencies\ncortex-m = \"0.7\"\ncortex-m-rt = \"0.7\"\npanic-halt = \"0.2\"\nembedded-hal = \"0.2\"\n# HAL for your specific MCU (examples):\n# stm32f4xx-hal = { version = \"0.14\", features = [\"stm32f411\"] }\n# nrf52840-hal = \"0.16\"\n# rp2040-hal = \"0.9\"\n# Crypto dependencies\nchacha20poly1305 = { version = \"0.10\", default-features = false }\naes-gcm = { version = \"0.10\", default-features = false }\nsha2 = { version = \"0.10\", default-features = false }\nhmac = { version = \"0.12\", default-features = false }\nsubtle = { version = \"2.5\", default-features = false }\n# For static collections\nheapless = \"0.7\"\n[profile.release]\nopt-level = \"z\" # Optimize for size\nlto = true # Link-time optimization\ndebug = true # Keep debug symbols for debugging\nstrip = false # Don't strip symbols",
+        "hash": "354383841e29bd9c02ce5010a8b225c6",
+        "line_start": 245,
+        "line_end": 279,
+        "section": "Project Structure",
+        "segment_type": "code_toml",
+        "word_count": 145,
+        "key_terms": "{'embedded', 'release', 'specific', 'heapless', 'edition', 'optimization', 'stm32f411', 'examples', 'nrf52840', 'symbols', 'features', 'cortex', 'profile', 'stm32f4xx', 'my_crypto_app', 'crypto', 'optimize', 'chacha20poly1305', 'aes', 'default', 'version', 'collections', 'debugging', 'package', 'dependencies'}"
+      },
+      "segment2": {
+        "content": "# Cargo.toml for Xilinx Ultrascale+ Cortex-R5\n[package]\nname = \"zynqmp_crypto_app\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[dependencies]\n# Core embedded dependencies for Cortex-R5\ncortex-r = \"0.1\"           # Cortex-R specific runtime\npanic-halt = \"0.2\"\nembedded-hal = \"0.2\"\n\n# Note: No official Xilinx HAL crate yet, you may need to:\n# 1. Use raw register access via PAC\n# 2. Create your own HAL wrapper\n# 3. Use Xilinx's C libraries via FFI\n\n# Crypto dependencies (no-std compatible)\nchacha20poly1305 = { version = \"0.10\", default-features = false }\naes-gcm = { version = \"0.10\", default-features = false }\nsha2 = { version = \"0.10\", default-features = false }\nhmac = { version = \"0.12\", default-features = false }\nsubtle = { version = \"2.5\", default-features = false }\n\n# For static collections\nheapless = \"0.7\"\n\n# Optional: If you need to interface with Xilinx C libraries\n[dependencies.xilinx-sys]\n# This would be a custom crate wrapping Xilinx BSP\n# path = \"../xilinx-sys\"  # Your custom wrapper\n\n[profile.release]\nopt-level = \"z\"     # Optimize for size\nlto = true          # Link-time optimization\ndebug = true        # Keep debug symbols for Xilinx tools\nstrip = false       # Don't strip symbols (Xilinx tools need them)\n\n# Cortex-R5 specific optimizations\n[profile.release.package.\"*\"]\nopt-level = \"z\"",
+        "normalized_content": "# Cargo.toml for Xilinx Ultrascale+ Cortex-R5\n[package]\nname = \"zynqmp_crypto_app\"\nversion = \"0.1.0\"\nedition = \"2021\"\n[dependencies]\n# Core embedded dependencies for Cortex-R5\ncortex-r = \"0.1\" # Cortex-R specific runtime\npanic-halt = \"0.2\"\nembedded-hal = \"0.2\"\n# Note: No official Xilinx HAL crate yet, you may need to:\n# 1. Use raw register access via PAC\n# 2. Create your own HAL wrapper\n# 3. Use Xilinx's C libraries via FFI\n# Crypto dependencies (no-std compatible)\nchacha20poly1305 = { version = \"0.10\", default-features = false }\naes-gcm = { version = \"0.10\", default-features = false }\nsha2 = { version = \"0.10\", default-features = false }\nhmac = { version = \"0.12\", default-features = false }\nsubtle = { version = \"2.5\", default-features = false }\n# For static collections\nheapless = \"0.7\"\n# Optional: If you need to interface with Xilinx C libraries\n[dependencies.xilinx-sys]\n# This would be a custom crate wrapping Xilinx BSP\n# path = \"../xilinx-sys\" # Your custom wrapper\n[profile.release]\nopt-level = \"z\" # Optimize for size\nlto = true # Link-time optimization\ndebug = true # Keep debug symbols for Xilinx tools\nstrip = false # Don't strip symbols (Xilinx tools need them)\n# Cortex-R5 specific optimizations\n[profile.release.package.\"*\"]\nopt-level = \"z\"",
+        "hash": "f7f166d9011f46f4ec5a9eba2b71a4e4",
+        "line_start": 338,
+        "line_end": 380,
+        "section": "Xilinx-Specific Cargo.toml",
+        "segment_type": "code_toml",
+        "word_count": 206,
+        "key_terms": "{'embedded', 'compatible', 'specific', 'heapless', 'wrapping', 'register', 'release', 'edition', 'optimizations', 'official', 'optimization', 'ultrascale', 'symbols', 'features', 'cortex', 'profile', 'zynqmp_crypto_app', 'interface', 'crypto', 'optimize', 'chacha20poly1305', 'libraries', 'aes', 'optional', 'default', 'version', 'collections', 'runtime', 'package', 'wrapper', 'dependencies'}"
+      },
+      "similarity_score": 0.5135135135135135,
+      "match_type": "conceptual",
+      "common_phrases": [
+        "embedded",
+        "release",
+        "specific",
+        "heapless",
+        "edition",
+        "optimization",
+        "symbols",
+        "features",
+        "cortex",
+        "profile",
+        "crypto",
+        "optimize",
+        "chacha20poly1305",
+        "aes",
+        "default",
+        "version",
+        "collections",
+        "package",
+        "dependencies"
+      ],
+      "diff_summary": "Shares 19 key terms: embedded, release, specific, heapless, edition"
+    },
+    {
+      "segment1": {
+        "content": "C STRUCT LAYOUT (Unpredictable)          RUST STRUCT LAYOUT\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510               \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 struct CryptoPacket {  \u2502               \u2502 #[repr(C)]  // C-compat\u2502\n\u2502   uint8_t version;     \u2502               \u2502 struct CryptoPacket {  \u2502\n\u2502   // 3 bytes padding?  \u2502               \u2502   version: u8,         \u2502\n\u2502   uint32_t length;     \u2502               \u2502   length: u32,         \u2502\n\u2502   uint8_t tag[16];     \u2502               \u2502   tag: [u8; 16],       \u2502\n\u2502   uint8_t* data;       \u2502               \u2502   data: Box<[u8]>,     \u2502\n\u2502 };                     \u2502               \u2502 }                      \u2502\n\u2502                        \u2502               \u2502                        \u2502\n\u2502 Compiler decides:      \u2502               \u2502 Explicit control:      \u2502\n\u2502 - Padding              \u2502               \u2502 - repr(C): C-compat    \u2502\n\u2502 - Alignment            \u2502               \u2502 - repr(packed): No pad \u2502\n\u2502 - Field order          \u2502               \u2502 - repr(align(N)): Force\u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518               \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518",
+        "normalized_content": "C STRUCT LAYOUT (Unpredictable) RUST STRUCT LAYOUT\n\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 struct CryptoPacket { \u2502 \u2502 #[repr(C)]\n\u2502 uint8_t version; \u2502 \u2502 struct CryptoPacket { \u2502\n\u2502\n\u2502 uint32_t length; \u2502 \u2502 length: u32, \u2502\n\u2502 uint8_t tag[16]; \u2502 \u2502 tag: [u8; 16], \u2502\n\u2502 uint8_t* data; \u2502 \u2502 data: Box<[u8]>, \u2502\n\u2502 }; \u2502 \u2502 } \u2502\n\u2502 \u2502 \u2502 \u2502\n\u2502 Compiler decides: \u2502 \u2502 Explicit control: \u2502\n\u2502 - Padding \u2502 \u2502 - repr(C): C-compat \u2502\n\u2502 - Alignment \u2502 \u2502 - repr(packed): No pad \u2502\n\u2502 - Field order \u2502 \u2502 - repr(align(N)): Force\u2502\n\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518 \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518",
+        "hash": "e8806f4a4ab802be9083cf874ca72c4c",
+        "line_start": 4693,
+        "line_end": 4709,
+        "section": "Memory Layout Comparison",
+        "segment_type": "code_c",
+        "word_count": 110,
+        "key_terms": "{'cryptopacket', 'rust', 'decides', 'version', 'alignment', 'uint8_t', 'padding', 'compiler', 'unpredictable', 'control', 'explicit', 'uint32_t', 'struct'}"
+      },
+      "segment2": {
+        "content": "// C: Compiler may reorder/pad structs\nstruct Packet {\n    uint8_t  header;   // 1 byte\n    uint32_t length;   // 4 bytes (may have 3 bytes padding before)\n    uint8_t  data[16]; // 16 bytes\n};  // Total: potentially 24 bytes due to padding\n\n// Rust: Explicit control over layout\n#[repr(C)]  // C-compatible layout\nstruct Packet {\n    header: u8,\n    length: u32,\n    data: [u8; 16],\n}\n\n#[repr(packed)]  // No padding (careful with alignment!)\nstruct PackedPacket {\n    header: u8,\n    length: u32,    // Unaligned access!\n    data: [u8; 16],\n}\n\n#[repr(align(4))]  // Force alignment\nstruct AlignedBuffer {\n    data: [u8; 64],\n}",
+        "normalized_content": "struct Packet {\nuint8_t header;\nuint32_t length;\nuint8_t data[16];\n};\n#[repr(C)]\nstruct Packet {\nheader: u8,\nlength: u32,\ndata: [u8; 16],\n}\n#[repr(packed)]\nstruct PackedPacket {\nheader: u8,\nlength: u32,\ndata: [u8; 16],\n}\n#[repr(align(4))]\nstruct AlignedBuffer {\ndata: [u8; 64],\n}",
+        "hash": "9a5ad288ebaf487e84f9f54bb20216a2",
+        "line_start": 4926,
+        "line_end": 4953,
+        "section": "Memory Layout and Alignment",
+        "segment_type": "code_rust",
+        "word_count": 92,
+        "key_terms": "{'compatible', 'rust', 'potentially', 'alignment', 'uint8_t', 'alignedbuffer', 'padding', 'compiler', 'packedpacket', 'unaligned', 'reorder', 'control', 'structs', 'uint32_t', 'explicit', 'careful', 'struct'}"
+      },
+      "similarity_score": 0.42857142857142855,
+      "match_type": "conceptual",
+      "common_phrases": [
+        "rust",
+        "alignment",
+        "uint8_t",
+        "padding",
+        "compiler",
+        "control",
+        "explicit",
+        "uint32_t",
+        "struct"
+      ],
+      "diff_summary": "Shares 9 key terms: rust, alignment, uint8_t, padding, compiler"
+    }
+  ],
+  "redundancy_statistics": {
+    "total_segments": 327,
+    "exact_duplicates": 1,
+    "near_duplicates": 13,
+    "similar_content": 25,
+    "conceptual_overlaps": 3,
+    "total_redundancy_issues": 42,
+    "list_segments": 35,
+    "paragraph_segments": 167,
+    "table_segments": 5,
+    "code_rust_segments": 93,
+    "code_bash_segments": 4,
+    "code_toml_segments": 5,
+    "code_segments": 8,
+    "code_c_segments": 10
+  },
+  "section_analysis": {
+    "Table of Contents": {
+      "total_segments": 1,
+      "list": 1
+    },
+    "Introduction: Why Rust for Embedded Cryptography": {
+      "total_segments": 5,
+      "paragraph": 2,
+      "list": 3
+    },
+    "Quick Reference: C to Rust Cheat Sheet": {
+      "total_segments": 1,
+      "paragraph": 1
+    },
+    "Memory and Pointers": {
+      "total_segments": 1,
+      "table": 1
+    },
+    "Functions and Control Flow": {
+      "total_segments": 1,
+      "table": 1
+    },
+    "Error Handling": {
+      "total_segments": 1,
+      "table": 1
+    },
+    "Crypto-Specific Patterns": {
+      "total_segments": 1,
+      "table": 1
+    },
+    "Common Embedded Patterns": {
+      "total_segments": 1,
+      "table": 1
+    },
+    "Quick Syntax Reference": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Embedded-Specific Quick Reference": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Xilinx Ultrascale+ with Cortex-R5 Setup": {
+      "total_segments": 2,
+      "paragraph": 1,
+      "code_bash": 1
+    },
+    "Project Structure": {
+      "total_segments": 1,
+      "code_toml": 1
+    },
+    "Xilinx Ultrascale+ Configuration": {
+      "total_segments": 3,
+      "paragraph": 1,
+      "code_toml": 1,
+      "code_rust": 1
+    },
+    "Xilinx-Specific Cargo.toml": {
+      "total_segments": 1,
+      "code_toml": 1
+    },
+    "Project Structure and Organization for Embedded Cryptography": {
+      "total_segments": 1,
+      "paragraph": 1
+    },
+    "Binary Crates vs Library Crates for Embedded Cryptography": {
+      "total_segments": 7,
+      "paragraph": 3,
+      "list": 2,
+      "code_rust": 2
+    },
+    "When to Use Each Approach": {
+      "total_segments": 4,
+      "list": 2,
+      "paragraph": 1,
+      "code": 1
+    },
+    "Module Organization Patterns": {
+      "total_segments": 7,
+      "paragraph": 3,
+      "code": 2,
+      "code_rust": 2
+    },
+    "Structuring Cryptographic Algorithms Across Modules": {
+      "total_segments": 2,
+      "paragraph": 1,
+      "code_rust": 1
+    },
+    "Detailed Module Organization Example": {
+      "total_segments": 2,
+      "paragraph": 1,
+      "code_rust": 1
+    },
+    "Visibility Rules and `pub` Usage for Crypto APIs": {
+      "total_segments": 1,
+      "paragraph": 1
+    },
+    "Visibility Levels": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Security-Focused Visibility Patterns": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Path Resolution and Use Statements for Embedded Projects": {
+      "total_segments": 1,
+      "paragraph": 1
+    },
+    "Absolute vs Relative Paths": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Use Statement Patterns for Crypto Libraries": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Advanced Use Patterns for Large Crypto Projects": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Comprehensive `build.rs` Usage for Embedded Projects": {
+      "total_segments": 2,
+      "paragraph": 1,
+      "code_rust": 1
+    },
+    "Custom Build Scripts for Cryptographic Code Generation": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Conditional Compilation for Different MCU Targets": {
+      "total_segments": 2,
+      "paragraph": 1,
+      "code_rust": 1
+    },
+    "Integration with Hardware-Specific Build Requirements": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "How Project Structure Differs in No-std Environments": {
+      "total_segments": 2,
+      "paragraph": 1,
+      "code_rust": 1
+    },
+    "Organizing Code When std Library is Unavailable": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Managing Dependencies and Features for Embedded Crypto": {
+      "total_segments": 6,
+      "paragraph": 3,
+      "code_toml": 1,
+      "code_rust": 1,
+      "list": 1
+    },
+    "Core Language Differences from C": {
+      "total_segments": 1,
+      "paragraph": 1
+    },
+    "Variables and Mutability": {
+      "total_segments": 2,
+      "code_c": 1,
+      "code_rust": 1
+    },
+    "Memory Management: Stack vs Heap": {
+      "total_segments": 2,
+      "code_c": 1,
+      "code_rust": 1
+    },
+    "Function Pointers vs Closures": {
+      "total_segments": 2,
+      "code_c": 1,
+      "code_rust": 1
+    },
+    "Pointers and References": {
+      "total_segments": 2,
+      "code_c": 1,
+      "code_rust": 1
+    },
+    "No Null Pointers - Use Option<T>": {
+      "total_segments": 2,
+      "code_c": 1,
+      "code_rust": 1
+    },
+    "Arrays and Slices": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Type Inference": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Statements vs Expressions": {
+      "total_segments": 1,
+      "paragraph": 1
+    },
+    "Core Concepts": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "The Unit Type ()": {
+      "total_segments": 2,
+      "paragraph": 1,
+      "code_rust": 1
+    },
+    "Expression Types and Return Behavior": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Practical Crypto Examples": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Key Differences from C": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Practical Crypto Examples with Expressions": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Memory Model: Rust vs C": {
+      "total_segments": 1,
+      "paragraph": 1
+    },
+    "C Memory Model": {
+      "total_segments": 2,
+      "code": 1,
+      "code_c": 1
+    },
+    "Rust Memory Model": {
+      "total_segments": 2,
+      "code_rust": 2
+    },
+    "Memory Layout Comparison": {
+      "total_segments": 1,
+      "code_c": 1
+    },
+    "Stack and Ownership Flow": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Stack and Heap Allocation": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Zero-Copy and Memory Safety": {
+      "total_segments": 1,
+      "code_c": 1
+    },
+    "Lifetime Visualization": {
+      "total_segments": 3,
+      "code_rust": 3
+    },
+    "Memory Safety Benefits for Cryptography": {
+      "total_segments": 1,
+      "code": 1
+    },
+    "Memory Layout and Alignment": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Undefined Behavior Prevention": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Volatile Access for Crypto Hardware": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Memory Ordering and Atomics": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Zero-Copy Operations": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Static Memory in Embedded": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "DMA-Safe Memory for Crypto Operations": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Common Crypto Pitfalls When Coming from C": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Memory Safety in Cryptographic Context": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Ownership and Memory Management": {
+      "total_segments": 1,
+      "paragraph": 1
+    },
+    "The Three Rules of Ownership": {
+      "total_segments": 2,
+      "list": 1,
+      "code_rust": 1
+    },
+    "Borrowing References": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Lifetimes": {
+      "total_segments": 2,
+      "paragraph": 1,
+      "code_rust": 1
+    },
+    "Interior Mutability": {
+      "total_segments": 2,
+      "paragraph": 1,
+      "code_rust": 1
+    },
+    "Error Handling Without Exceptions": {
+      "total_segments": 1,
+      "paragraph": 1
+    },
+    "The Result Type": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Custom Error Types": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Panic Handling in Embedded": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "No-std Programming": {
+      "total_segments": 2,
+      "paragraph": 1,
+      "code_rust": 1
+    },
+    "Heap Allocation in No-std": {
+      "total_segments": 2,
+      "paragraph": 1,
+      "code_rust": 1
+    },
+    "Working with Hardware": {
+      "total_segments": 1,
+      "paragraph": 1
+    },
+    "Xilinx Ultrascale+ Specific Hardware Integration": {
+      "total_segments": 1,
+      "paragraph": 1
+    },
+    "Interfacing with Xilinx Crypto Accelerators": {
+      "total_segments": 4,
+      "paragraph": 1,
+      "code_rust": 2,
+      "code_c": 1
+    },
+    "Using Xilinx BSP Libraries via FFI": {
+      "total_segments": 2,
+      "paragraph": 1,
+      "code_rust": 1
+    },
+    "Multi-core Programming on ZynqMP": {
+      "total_segments": 108,
+      "paragraph": 104,
+      "code_rust": 1,
+      "code": 3
+    },
+    "Peripheral Access Crate (PAC)": {
+      "total_segments": 2,
+      "paragraph": 1,
+      "code_rust": 1
+    },
+    "Hardware Abstraction Layer (HAL) for Crypto": {
+      "total_segments": 2,
+      "paragraph": 1,
+      "code_rust": 1
+    },
+    "Embedded-HAL Traits": {
+      "total_segments": 2,
+      "paragraph": 1,
+      "code_rust": 1
+    },
+    "Interrupt Handlers for Crypto Operations": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Secure Coding Patterns": {
+      "total_segments": 2,
+      "paragraph": 1,
+      "code_rust": 1
+    },
+    "DMA (Direct Memory Access)": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "State Machines for Cryptographic Protocols": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Builder Pattern for Crypto Configuration": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Side-Channel Resistant Patterns": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "RTIC for Real-Time Systems": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Type State Pattern for Secure APIs": {
+      "total_segments": 2,
+      "paragraph": 1,
+      "code_rust": 1
+    },
+    "Debugging with probe-rs": {
+      "total_segments": 1,
+      "code_bash": 1
+    },
+    "RTT (Real-Time Transfer) for Printf Debugging": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Panic Information": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Size Optimization": {
+      "total_segments": 1,
+      "code_toml": 1
+    },
+    "Memory Usage Analysis": {
+      "total_segments": 1,
+      "code_bash": 1
+    },
+    "Unit Testing with Test Vectors": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Property-Based Testing": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Hardware-in-the-Loop Testing": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Fuzzing Crypto Implementations": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Real-World Example: Secure Communication Module": {
+      "total_segments": 2,
+      "paragraph": 1,
+      "code_rust": 1
+    },
+    "Key Takeaways for Embedded Crypto Developers": {
+      "total_segments": 1,
+      "list": 1
+    },
+    "General Embedded Rust": {
+      "total_segments": 1,
+      "list": 1
+    },
+    "Cryptography in Rust": {
+      "total_segments": 1,
+      "list": 1
+    },
+    "Security Resources": {
+      "total_segments": 1,
+      "list": 1
+    },
+    "Migration Strategy: From C to Rust": {
+      "total_segments": 1,
+      "paragraph": 1
+    },
+    "Phase 1: Foundation (Weeks 1-2)": {
+      "total_segments": 1,
+      "paragraph": 1
+    },
+    "Week 1: Environment and Syntax": {
+      "total_segments": 4,
+      "code_bash": 1,
+      "paragraph": 1,
+      "code_c": 1,
+      "code_rust": 1
+    },
+    "Week 2: Ownership and Memory Management": {
+      "total_segments": 3,
+      "paragraph": 1,
+      "list": 1,
+      "code_rust": 1
+    },
+    "Phase 2: Embedded Rust Basics (Weeks 3-4)": {
+      "total_segments": 1,
+      "paragraph": 1
+    },
+    "Week 3: No-std Programming": {
+      "total_segments": 2,
+      "code_rust": 1,
+      "list": 1
+    },
+    "Week 4: Hardware Abstraction": {
+      "total_segments": 2,
+      "list": 1,
+      "code_rust": 1
+    },
+    "Phase 3: Cryptography Implementation (Weeks 5-8)": {
+      "total_segments": 1,
+      "paragraph": 1
+    },
+    "Week 5-6: Basic Crypto Algorithms": {
+      "total_segments": 2,
+      "code_rust": 1,
+      "list": 1
+    },
+    "Week 7-8: Advanced Crypto Patterns": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Phase 4: Xilinx Integration (Weeks 9-10)": {
+      "total_segments": 1,
+      "paragraph": 1
+    },
+    "Week 9: Xilinx Hardware Integration": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Week 10: Complete Integration": {
+      "total_segments": 2,
+      "paragraph": 1,
+      "list": 1
+    },
+    "Phase 5: Production Readiness (Weeks 11-12)": {
+      "total_segments": 1,
+      "paragraph": 1
+    },
+    "Testing Strategy": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Debugging and Optimization": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Before Starting Each Phase:": {
+      "total_segments": 1,
+      "list": 1
+    },
+    "Phase Completion Criteria:": {
+      "total_segments": 10,
+      "paragraph": 5,
+      "list": 5
+    },
+    "Pitfall 1: Fighting the Borrow Checker": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Pitfall 2: Overusing `unsafe`": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Pitfall 3: Ignoring Error Handling": {
+      "total_segments": 1,
+      "code_rust": 1
+    },
+    "Phase 1 Resources:": {
+      "total_segments": 1,
+      "list": 1
+    },
+    "Phase 2 Resources:": {
+      "total_segments": 1,
+      "list": 1
+    },
+    "Phase 3 Resources:": {
+      "total_segments": 1,
+      "list": 1
+    },
+    "Phase 4 Resources:": {
+      "total_segments": 1,
+      "list": 1
+    },
+    "Phase 5 Resources:": {
+      "total_segments": 1,
+      "list": 1
+    },
+    "Timeline Flexibility": {
+      "total_segments": 2,
+      "paragraph": 1,
+      "list": 1
+    },
+    "Success Metrics": {
+      "total_segments": 2,
+      "paragraph": 1,
+      "list": 1
+    },
+    "Summary": {
+      "total_segments": 5,
+      "paragraph": 4,
+      "list": 1
+    },
+    "Core Embedded Crates": {
+      "total_segments": 1,
+      "list": 1
+    },
+    "Cryptography Crates for Embedded": {
+      "total_segments": 1,
+      "list": 1
+    }
+  }
+}
