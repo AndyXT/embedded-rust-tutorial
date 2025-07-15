@@ -1,0 +1,3241 @@
+{
+  "document_stats": {
+    "total_sections": 227,
+    "total_words": 28832,
+    "total_code_blocks": 329
+  },
+  "section_analysis": [
+    {
+      "title": "Embedded Rust Tutorial for Cryptography Engineers",
+      "level": 1,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "0-2"
+    },
+    {
+      "title": "Table of Contents",
+      "level": 2,
+      "word_count": 78,
+      "code_blocks_count": 0,
+      "line_range": "2-18"
+    },
+    {
+      "title": "Introduction: Why Rust for Embedded Cryptography",
+      "level": 2,
+      "word_count": 222,
+      "code_blocks_count": 0,
+      "line_range": "18-44"
+    },
+    {
+      "title": "Quick Reference: C to Rust Cheat Sheet",
+      "level": 2,
+      "word_count": 20,
+      "code_blocks_count": 0,
+      "line_range": "44-48"
+    },
+    {
+      "title": "Memory and Pointers",
+      "level": 3,
+      "word_count": 109,
+      "code_blocks_count": 15,
+      "line_range": "48-60"
+    },
+    {
+      "title": "Functions and Control Flow",
+      "level": 3,
+      "word_count": 111,
+      "code_blocks_count": 16,
+      "line_range": "60-72"
+    },
+    {
+      "title": "Error Handling",
+      "level": 3,
+      "word_count": 52,
+      "code_blocks_count": 7,
+      "line_range": "72-80"
+    },
+    {
+      "title": "Crypto-Specific Patterns",
+      "level": 3,
+      "word_count": 68,
+      "code_blocks_count": 8,
+      "line_range": "80-89"
+    },
+    {
+      "title": "Common Embedded Patterns",
+      "level": 3,
+      "word_count": 97,
+      "code_blocks_count": 11,
+      "line_range": "89-99"
+    },
+    {
+      "title": "Quick Syntax Reference",
+      "level": 3,
+      "word_count": 210,
+      "code_blocks_count": 2,
+      "line_range": "99-159"
+    },
+    {
+      "title": "Embedded-Specific Quick Reference",
+      "level": 3,
+      "word_count": 96,
+      "code_blocks_count": 2,
+      "line_range": "159-205"
+    },
+    {
+      "title": "Setting Up Your Environment",
+      "level": 2,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "205-207"
+    },
+    {
+      "title": "Xilinx Ultrascale+ with Cortex-R5 Setup",
+      "level": 3,
+      "word_count": 14,
+      "code_blocks_count": 0,
+      "line_range": "207-212"
+    },
+    {
+      "title": "Install Rust",
+      "level": 1,
+      "word_count": 8,
+      "code_blocks_count": 0,
+      "line_range": "212-215"
+    },
+    {
+      "title": "Install embedded target for Xilinx Ultrascale+ with Cortex-R5:",
+      "level": 1,
+      "word_count": 18,
+      "code_blocks_count": 0,
+      "line_range": "215-219"
+    },
+    {
+      "title": "Install Xilinx-specific tools",
+      "level": 1,
+      "word_count": 8,
+      "code_blocks_count": 0,
+      "line_range": "219-222"
+    },
+    {
+      "title": "Note: You may need to use Xilinx's own debugging tools (XSCT, Vitis)",
+      "level": 1,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "222-223"
+    },
+    {
+      "title": "alongside or instead of probe-rs depending on your setup",
+      "level": 1,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "223-225"
+    },
+    {
+      "title": "Other common targets:",
+      "level": 1,
+      "word_count": 35,
+      "code_blocks_count": 0,
+      "line_range": "225-232"
+    },
+    {
+      "title": "Install useful tools",
+      "level": 1,
+      "word_count": 11,
+      "code_blocks_count": 0,
+      "line_range": "232-237"
+    },
+    {
+      "title": "Create a new embedded project",
+      "level": 1,
+      "word_count": 7,
+      "code_blocks_count": 0,
+      "line_range": "237-242"
+    },
+    {
+      "title": "Project Structure",
+      "level": 3,
+      "word_count": 1,
+      "code_blocks_count": 0,
+      "line_range": "242-245"
+    },
+    {
+      "title": "Cargo.toml",
+      "level": 1,
+      "word_count": 11,
+      "code_blocks_count": 0,
+      "line_range": "245-252"
+    },
+    {
+      "title": "Core embedded dependencies",
+      "level": 1,
+      "word_count": 12,
+      "code_blocks_count": 0,
+      "line_range": "252-258"
+    },
+    {
+      "title": "HAL for your specific MCU (examples):",
+      "level": 1,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "258-259"
+    },
+    {
+      "title": "stm32f4xx-hal = { version = \"0.14\", features = [\"stm32f411\"] }",
+      "level": 1,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "259-260"
+    },
+    {
+      "title": "nrf52840-hal = \"0.16\"",
+      "level": 1,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "260-261"
+    },
+    {
+      "title": "rp2040-hal = \"0.9\"",
+      "level": 1,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "261-263"
+    },
+    {
+      "title": "Crypto dependencies",
+      "level": 1,
+      "word_count": 50,
+      "code_blocks_count": 0,
+      "line_range": "263-270"
+    },
+    {
+      "title": "For static collections",
+      "level": 1,
+      "word_count": 34,
+      "code_blocks_count": 0,
+      "line_range": "270-280"
+    },
+    {
+      "title": "Xilinx Ultrascale+ Configuration",
+      "level": 3,
+      "word_count": 11,
+      "code_blocks_count": 0,
+      "line_range": "280-285"
+    },
+    {
+      "title": ".cargo/config.toml for Xilinx Ultrascale+ Cortex-R5",
+      "level": 1,
+      "word_count": 1,
+      "code_blocks_count": 0,
+      "line_range": "285-287"
+    },
+    {
+      "title": "Xilinx typically uses JTAG debugging through Vitis/XSCT",
+      "level": 1,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "287-288"
+    },
+    {
+      "title": "You may need custom runners or use Xilinx tools directly",
+      "level": 1,
+      "word_count": 31,
+      "code_blocks_count": 0,
+      "line_range": "288-300"
+    },
+    {
+      "title": "Alternative for non-FPU version",
+      "level": 1,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "300-301"
+    },
+    {
+      "title": "[target.armv7r-none-eabi]",
+      "level": 1,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "301-302"
+    },
+    {
+      "title": "runner = \"echo 'Use Xilinx Vitis or XSCT for debugging'\"",
+      "level": 1,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "302-303"
+    },
+    {
+      "title": "rustflags = [",
+      "level": 1,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "303-304"
+    },
+    {
+      "title": "\"-C\", \"link-arg=-Tlink.x\",",
+      "level": 1,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "304-305"
+    },
+    {
+      "title": "\"-C\", \"target-cpu=cortex-r5\",",
+      "level": 1,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "305-306"
+    },
+    {
+      "title": "]",
+      "level": 1,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "306-307"
+    },
+    {
+      "title": "[build]",
+      "level": 1,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "307-308"
+    },
+    {
+      "title": "target = \"armv7r-none-eabi\"",
+      "level": 1,
+      "word_count": 120,
+      "code_blocks_count": 3,
+      "line_range": "308-335"
+    },
+    {
+      "title": "Xilinx-Specific Cargo.toml",
+      "level": 3,
+      "word_count": 1,
+      "code_blocks_count": 0,
+      "line_range": "335-338"
+    },
+    {
+      "title": "Cargo.toml for Xilinx Ultrascale+ Cortex-R5",
+      "level": 1,
+      "word_count": 11,
+      "code_blocks_count": 0,
+      "line_range": "338-345"
+    },
+    {
+      "title": "Core embedded dependencies for Cortex-R5",
+      "level": 1,
+      "word_count": 13,
+      "code_blocks_count": 0,
+      "line_range": "345-350"
+    },
+    {
+      "title": "Note: No official Xilinx HAL crate yet, you may need to:",
+      "level": 1,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "350-351"
+    },
+    {
+      "title": "1. Use raw register access via PAC",
+      "level": 1,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "351-352"
+    },
+    {
+      "title": "2. Create your own HAL wrapper",
+      "level": 1,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "352-353"
+    },
+    {
+      "title": "3. Use Xilinx's C libraries via FFI",
+      "level": 1,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "353-355"
+    },
+    {
+      "title": "Crypto dependencies (no-std compatible)",
+      "level": 1,
+      "word_count": 50,
+      "code_blocks_count": 0,
+      "line_range": "355-362"
+    },
+    {
+      "title": "For static collections",
+      "level": 1,
+      "word_count": 3,
+      "code_blocks_count": 0,
+      "line_range": "362-365"
+    },
+    {
+      "title": "Optional: If you need to interface with Xilinx C libraries",
+      "level": 1,
+      "word_count": 1,
+      "code_blocks_count": 0,
+      "line_range": "365-367"
+    },
+    {
+      "title": "This would be a custom crate wrapping Xilinx BSP",
+      "level": 1,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "367-368"
+    },
+    {
+      "title": "path = \"../xilinx-sys\"  # Your custom wrapper",
+      "level": 1,
+      "word_count": 35,
+      "code_blocks_count": 0,
+      "line_range": "368-376"
+    },
+    {
+      "title": "Cortex-R5 specific optimizations",
+      "level": 1,
+      "word_count": 5,
+      "code_blocks_count": 0,
+      "line_range": "376-381"
+    },
+    {
+      "title": "Project Structure and Organization for Embedded Cryptography",
+      "level": 2,
+      "word_count": 51,
+      "code_blocks_count": 0,
+      "line_range": "381-385"
+    },
+    {
+      "title": "Project Structure Fundamentals",
+      "level": 3,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "385-387"
+    },
+    {
+      "title": "Binary Crates vs Library Crates for Embedded Cryptography",
+      "level": 4,
+      "word_count": 235,
+      "code_blocks_count": 7,
+      "line_range": "387-466"
+    },
+    {
+      "title": "When to Use Each Approach",
+      "level": 4,
+      "word_count": 130,
+      "code_blocks_count": 3,
+      "line_range": "466-496"
+    },
+    {
+      "title": "Module System Deep Dive",
+      "level": 3,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "496-498"
+    },
+    {
+      "title": "Module Organization Patterns",
+      "level": 4,
+      "word_count": 200,
+      "code_blocks_count": 12,
+      "line_range": "498-562"
+    },
+    {
+      "title": "Structuring Cryptographic Algorithms Across Modules",
+      "level": 4,
+      "word_count": 152,
+      "code_blocks_count": 2,
+      "line_range": "562-604"
+    },
+    {
+      "title": "Detailed Module Organization Example",
+      "level": 4,
+      "word_count": 134,
+      "code_blocks_count": 2,
+      "line_range": "604-658"
+    },
+    {
+      "title": "Visibility Rules and `pub` Usage for Crypto APIs",
+      "level": 3,
+      "word_count": 16,
+      "code_blocks_count": 0,
+      "line_range": "658-662"
+    },
+    {
+      "title": "Visibility Levels",
+      "level": 4,
+      "word_count": 195,
+      "code_blocks_count": 2,
+      "line_range": "662-730"
+    },
+    {
+      "title": "Security-Focused Visibility Patterns",
+      "level": 4,
+      "word_count": 159,
+      "code_blocks_count": 2,
+      "line_range": "730-784"
+    },
+    {
+      "title": "Path Resolution and Use Statements for Embedded Projects",
+      "level": 3,
+      "word_count": 11,
+      "code_blocks_count": 0,
+      "line_range": "784-788"
+    },
+    {
+      "title": "Absolute vs Relative Paths",
+      "level": 4,
+      "word_count": 70,
+      "code_blocks_count": 2,
+      "line_range": "788-814"
+    },
+    {
+      "title": "Use Statement Patterns for Crypto Libraries",
+      "level": 4,
+      "word_count": 160,
+      "code_blocks_count": 2,
+      "line_range": "814-879"
+    },
+    {
+      "title": "Advanced Use Patterns for Large Crypto Projects",
+      "level": 4,
+      "word_count": 121,
+      "code_blocks_count": 2,
+      "line_range": "879-926"
+    },
+    {
+      "title": "Build Configuration",
+      "level": 3,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "926-928"
+    },
+    {
+      "title": "Comprehensive `build.rs` Usage for Embedded Projects",
+      "level": 4,
+      "word_count": 7139,
+      "code_blocks_count": 2,
+      "line_range": "928-3120"
+    },
+    {
+      "title": "Custom Build Scripts for Cryptographic Code Generation",
+      "level": 4,
+      "word_count": 357,
+      "code_blocks_count": 2,
+      "line_range": "3120-3223"
+    },
+    {
+      "title": "Conditional Compilation for Different MCU Targets",
+      "level": 4,
+      "word_count": 36,
+      "code_blocks_count": 0,
+      "line_range": "3223-3236"
+    },
+    {
+      "title": "Target-specific dependencies",
+      "level": 1,
+      "word_count": 15,
+      "code_blocks_count": 0,
+      "line_range": "3236-3243"
+    },
+    {
+      "title": "src/crypto/mod.rs - Conditional compilation in action",
+      "level": 1,
+      "word_count": 283,
+      "code_blocks_count": 0,
+      "line_range": "3243-3341"
+    },
+    {
+      "title": "Integration with Hardware-Specific Build Requirements",
+      "level": 4,
+      "word_count": 254,
+      "code_blocks_count": 2,
+      "line_range": "3341-3444"
+    },
+    {
+      "title": "No-std Specific Considerations",
+      "level": 3,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "3444-3446"
+    },
+    {
+      "title": "How Project Structure Differs in No-std Environments",
+      "level": 4,
+      "word_count": 252,
+      "code_blocks_count": 2,
+      "line_range": "3446-3533"
+    },
+    {
+      "title": "Organizing Code When std Library is Unavailable",
+      "level": 4,
+      "word_count": 487,
+      "code_blocks_count": 2,
+      "line_range": "3533-3684"
+    },
+    {
+      "title": "Managing Dependencies and Features for Embedded Crypto",
+      "level": 4,
+      "word_count": 18,
+      "code_blocks_count": 0,
+      "line_range": "3684-3689"
+    },
+    {
+      "title": "Cargo.toml - Comprehensive dependency management for embedded crypto",
+      "level": 1,
+      "word_count": 42,
+      "code_blocks_count": 0,
+      "line_range": "3689-3702"
+    },
+    {
+      "title": "Default features for most embedded use cases",
+      "level": 1,
+      "word_count": 5,
+      "code_blocks_count": 0,
+      "line_range": "3702-3705"
+    },
+    {
+      "title": "Core cryptographic algorithms",
+      "level": 1,
+      "word_count": 21,
+      "code_blocks_count": 0,
+      "line_range": "3705-3714"
+    },
+    {
+      "title": "Higher-level protocols",
+      "level": 1,
+      "word_count": 12,
+      "code_blocks_count": 0,
+      "line_range": "3714-3718"
+    },
+    {
+      "title": "Asymmetric cryptography",
+      "level": 1,
+      "word_count": 13,
+      "code_blocks_count": 0,
+      "line_range": "3718-3724"
+    },
+    {
+      "title": "Hardware acceleration",
+      "level": 1,
+      "word_count": 6,
+      "code_blocks_count": 0,
+      "line_range": "3724-3728"
+    },
+    {
+      "title": "Memory allocation support",
+      "level": 1,
+      "word_count": 7,
+      "code_blocks_count": 0,
+      "line_range": "3728-3732"
+    },
+    {
+      "title": "Development and testing features",
+      "level": 1,
+      "word_count": 9,
+      "code_blocks_count": 0,
+      "line_range": "3732-3737"
+    },
+    {
+      "title": "Size optimization features",
+      "level": 1,
+      "word_count": 19,
+      "code_blocks_count": 0,
+      "line_range": "3737-3742"
+    },
+    {
+      "title": "Core dependencies (always available)",
+      "level": 1,
+      "word_count": 16,
+      "code_blocks_count": 0,
+      "line_range": "3742-3747"
+    },
+    {
+      "title": "Crypto dependencies with no-std support",
+      "level": 1,
+      "word_count": 91,
+      "code_blocks_count": 0,
+      "line_range": "3747-3756"
+    },
+    {
+      "title": "Asymmetric crypto (larger dependencies)",
+      "level": 1,
+      "word_count": 52,
+      "code_blocks_count": 0,
+      "line_range": "3756-3762"
+    },
+    {
+      "title": "Utilities",
+      "level": 1,
+      "word_count": 26,
+      "code_blocks_count": 0,
+      "line_range": "3762-3768"
+    },
+    {
+      "title": "Optional allocator support",
+      "level": 1,
+      "word_count": 10,
+      "code_blocks_count": 0,
+      "line_range": "3768-3771"
+    },
+    {
+      "title": "Hardware-specific dependencies",
+      "level": 1,
+      "word_count": 10,
+      "code_blocks_count": 0,
+      "line_range": "3771-3774"
+    },
+    {
+      "title": "Development dependencies",
+      "level": 1,
+      "word_count": 24,
+      "code_blocks_count": 0,
+      "line_range": "3774-3780"
+    },
+    {
+      "title": "Target-specific dependencies",
+      "level": 1,
+      "word_count": 12,
+      "code_blocks_count": 0,
+      "line_range": "3780-3787"
+    },
+    {
+      "title": "Profile optimizations for embedded",
+      "level": 1,
+      "word_count": 58,
+      "code_blocks_count": 0,
+      "line_range": "3787-3800"
+    },
+    {
+      "title": "Size-optimized profile",
+      "level": 1,
+      "word_count": 628,
+      "code_blocks_count": 3,
+      "line_range": "3800-3991"
+    },
+    {
+      "title": "Core Language Differences from C",
+      "level": 2,
+      "word_count": 20,
+      "code_blocks_count": 0,
+      "line_range": "3991-3995"
+    },
+    {
+      "title": "Variables and Mutability",
+      "level": 3,
+      "word_count": 103,
+      "code_blocks_count": 5,
+      "line_range": "3995-4022"
+    },
+    {
+      "title": "Memory Management: Stack vs Heap",
+      "level": 3,
+      "word_count": 156,
+      "code_blocks_count": 5,
+      "line_range": "4022-4068"
+    },
+    {
+      "title": "Function Pointers vs Closures",
+      "level": 3,
+      "word_count": 129,
+      "code_blocks_count": 5,
+      "line_range": "4068-4115"
+    },
+    {
+      "title": "Pointers and References",
+      "level": 3,
+      "word_count": 190,
+      "code_blocks_count": 5,
+      "line_range": "4115-4158"
+    },
+    {
+      "title": "No Null Pointers - Use Option<T>",
+      "level": 3,
+      "word_count": 575,
+      "code_blocks_count": 5,
+      "line_range": "4158-4305"
+    },
+    {
+      "title": "Arrays and Slices",
+      "level": 3,
+      "word_count": 58,
+      "code_blocks_count": 2,
+      "line_range": "4305-4322"
+    },
+    {
+      "title": "Type Inference",
+      "level": 3,
+      "word_count": 45,
+      "code_blocks_count": 2,
+      "line_range": "4322-4335"
+    },
+    {
+      "title": "Statements vs Expressions",
+      "level": 3,
+      "word_count": 24,
+      "code_blocks_count": 0,
+      "line_range": "4335-4339"
+    },
+    {
+      "title": "Core Concepts",
+      "level": 4,
+      "word_count": 103,
+      "code_blocks_count": 2,
+      "line_range": "4339-4357"
+    },
+    {
+      "title": "The Unit Type ()",
+      "level": 4,
+      "word_count": 69,
+      "code_blocks_count": 4,
+      "line_range": "4357-4373"
+    },
+    {
+      "title": "Expression Types and Return Behavior",
+      "level": 4,
+      "word_count": 246,
+      "code_blocks_count": 3,
+      "line_range": "4373-4429"
+    },
+    {
+      "title": "Practical Crypto Examples",
+      "level": 4,
+      "word_count": 131,
+      "code_blocks_count": 2,
+      "line_range": "4429-4475"
+    },
+    {
+      "title": "Key Differences from C",
+      "level": 4,
+      "word_count": 85,
+      "code_blocks_count": 2,
+      "line_range": "4475-4498"
+    },
+    {
+      "title": "Practical Crypto Examples with Expressions",
+      "level": 4,
+      "word_count": 187,
+      "code_blocks_count": 2,
+      "line_range": "4498-4560"
+    },
+    {
+      "title": "Memory Model: Rust vs C",
+      "level": 3,
+      "word_count": 25,
+      "code_blocks_count": 0,
+      "line_range": "4560-4564"
+    },
+    {
+      "title": "C Memory Model",
+      "level": 4,
+      "word_count": 262,
+      "code_blocks_count": 5,
+      "line_range": "4564-4625"
+    },
+    {
+      "title": "Rust Memory Model",
+      "level": 4,
+      "word_count": 322,
+      "code_blocks_count": 5,
+      "line_range": "4625-4690"
+    },
+    {
+      "title": "Memory Layout Comparison",
+      "level": 4,
+      "word_count": 112,
+      "code_blocks_count": 2,
+      "line_range": "4690-4710"
+    },
+    {
+      "title": "Stack and Ownership Flow",
+      "level": 4,
+      "word_count": 147,
+      "code_blocks_count": 2,
+      "line_range": "4710-4746"
+    },
+    {
+      "title": "Stack and Heap Allocation",
+      "level": 4,
+      "word_count": 86,
+      "code_blocks_count": 2,
+      "line_range": "4746-4765"
+    },
+    {
+      "title": "Zero-Copy and Memory Safety",
+      "level": 4,
+      "word_count": 117,
+      "code_blocks_count": 2,
+      "line_range": "4765-4786"
+    },
+    {
+      "title": "Lifetime Visualization",
+      "level": 4,
+      "word_count": 491,
+      "code_blocks_count": 10,
+      "line_range": "4786-4895"
+    },
+    {
+      "title": "Memory Safety Benefits for Cryptography",
+      "level": 4,
+      "word_count": 166,
+      "code_blocks_count": 2,
+      "line_range": "4895-4923"
+    },
+    {
+      "title": "Memory Layout and Alignment",
+      "level": 4,
+      "word_count": 94,
+      "code_blocks_count": 2,
+      "line_range": "4923-4954"
+    },
+    {
+      "title": "Undefined Behavior Prevention",
+      "level": 4,
+      "word_count": 88,
+      "code_blocks_count": 2,
+      "line_range": "4954-4975"
+    },
+    {
+      "title": "Volatile Access for Crypto Hardware",
+      "level": 4,
+      "word_count": 141,
+      "code_blocks_count": 2,
+      "line_range": "4975-5016"
+    },
+    {
+      "title": "Memory Ordering and Atomics",
+      "level": 4,
+      "word_count": 120,
+      "code_blocks_count": 2,
+      "line_range": "5016-5055"
+    },
+    {
+      "title": "Zero-Copy Operations",
+      "level": 4,
+      "word_count": 125,
+      "code_blocks_count": 2,
+      "line_range": "5055-5102"
+    },
+    {
+      "title": "Static Memory in Embedded",
+      "level": 4,
+      "word_count": 67,
+      "code_blocks_count": 2,
+      "line_range": "5102-5118"
+    },
+    {
+      "title": "DMA-Safe Memory for Crypto Operations",
+      "level": 4,
+      "word_count": 96,
+      "code_blocks_count": 2,
+      "line_range": "5118-5157"
+    },
+    {
+      "title": "Common Crypto Pitfalls When Coming from C",
+      "level": 4,
+      "word_count": 176,
+      "code_blocks_count": 2,
+      "line_range": "5157-5203"
+    },
+    {
+      "title": "Memory Safety in Cryptographic Context",
+      "level": 4,
+      "word_count": 235,
+      "code_blocks_count": 2,
+      "line_range": "5203-5274"
+    },
+    {
+      "title": "Ownership and Memory Management",
+      "level": 2,
+      "word_count": 22,
+      "code_blocks_count": 0,
+      "line_range": "5274-5278"
+    },
+    {
+      "title": "The Three Rules of Ownership",
+      "level": 3,
+      "word_count": 126,
+      "code_blocks_count": 2,
+      "line_range": "5278-5305"
+    },
+    {
+      "title": "Borrowing References",
+      "level": 3,
+      "word_count": 66,
+      "code_blocks_count": 2,
+      "line_range": "5305-5328"
+    },
+    {
+      "title": "Lifetimes",
+      "level": 3,
+      "word_count": 172,
+      "code_blocks_count": 2,
+      "line_range": "5328-5385"
+    },
+    {
+      "title": "Interior Mutability",
+      "level": 3,
+      "word_count": 184,
+      "code_blocks_count": 2,
+      "line_range": "5385-5460"
+    },
+    {
+      "title": "Error Handling Without Exceptions",
+      "level": 2,
+      "word_count": 17,
+      "code_blocks_count": 2,
+      "line_range": "5460-5464"
+    },
+    {
+      "title": "The Result Type",
+      "level": 3,
+      "word_count": 94,
+      "code_blocks_count": 2,
+      "line_range": "5464-5500"
+    },
+    {
+      "title": "Custom Error Types",
+      "level": 3,
+      "word_count": 79,
+      "code_blocks_count": 2,
+      "line_range": "5500-5537"
+    },
+    {
+      "title": "Panic Handling in Embedded",
+      "level": 3,
+      "word_count": 64,
+      "code_blocks_count": 2,
+      "line_range": "5537-5555"
+    },
+    {
+      "title": "No-std Programming",
+      "level": 2,
+      "word_count": 110,
+      "code_blocks_count": 2,
+      "line_range": "5555-5584"
+    },
+    {
+      "title": "Heap Allocation in No-std",
+      "level": 3,
+      "word_count": 84,
+      "code_blocks_count": 2,
+      "line_range": "5584-5619"
+    },
+    {
+      "title": "Working with Hardware",
+      "level": 2,
+      "word_count": 34,
+      "code_blocks_count": 0,
+      "line_range": "5619-5623"
+    },
+    {
+      "title": "Xilinx Ultrascale+ Specific Hardware Integration",
+      "level": 3,
+      "word_count": 18,
+      "code_blocks_count": 0,
+      "line_range": "5623-5627"
+    },
+    {
+      "title": "Interfacing with Xilinx Crypto Accelerators",
+      "level": 4,
+      "word_count": 929,
+      "code_blocks_count": 8,
+      "line_range": "5627-5990"
+    },
+    {
+      "title": "Using Xilinx BSP Libraries via FFI",
+      "level": 4,
+      "word_count": 461,
+      "code_blocks_count": 2,
+      "line_range": "5990-6149"
+    },
+    {
+      "title": "Multi-core Programming on ZynqMP",
+      "level": 4,
+      "word_count": 863,
+      "code_blocks_count": 0,
+      "line_range": "6149-6453"
+    },
+    {
+      "title": "Advanced DMA Operations in Rust",
+      "level": 3,
+      "word_count": 787,
+      "code_blocks_count": 2,
+      "line_range": "6453-6739"
+    },
+    {
+      "title": "Advanced Interrupt Handling Patterns",
+      "level": 3,
+      "word_count": 610,
+      "code_blocks_count": 2,
+      "line_range": "6739-6964"
+    },
+    {
+      "title": "Real-Time Constraints and Timing Analysis",
+      "level": 3,
+      "word_count": 426,
+      "code_blocks_count": 2,
+      "line_range": "6964-7112"
+    },
+    {
+      "title": "General Embedded Hardware Patterns",
+      "level": 3,
+      "word_count": 12,
+      "code_blocks_count": 0,
+      "line_range": "7112-7117"
+    },
+    {
+      "title": "Peripheral Access Crate (PAC)",
+      "level": 3,
+      "word_count": 60,
+      "code_blocks_count": 2,
+      "line_range": "7117-7139"
+    },
+    {
+      "title": "Hardware Abstraction Layer (HAL) for Crypto",
+      "level": 3,
+      "word_count": 114,
+      "code_blocks_count": 2,
+      "line_range": "7139-7171"
+    },
+    {
+      "title": "Embedded-HAL Traits",
+      "level": 3,
+      "word_count": 50,
+      "code_blocks_count": 2,
+      "line_range": "7171-7197"
+    },
+    {
+      "title": "Interrupt Handlers for Crypto Operations",
+      "level": 3,
+      "word_count": 202,
+      "code_blocks_count": 2,
+      "line_range": "7197-7279"
+    },
+    {
+      "title": "Secure Coding Patterns",
+      "level": 3,
+      "word_count": 292,
+      "code_blocks_count": 2,
+      "line_range": "7279-7379"
+    },
+    {
+      "title": "DMA (Direct Memory Access)",
+      "level": 3,
+      "word_count": 101,
+      "code_blocks_count": 2,
+      "line_range": "7379-7412"
+    },
+    {
+      "title": "Common Patterns and Best Practices",
+      "level": 2,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "7412-7414"
+    },
+    {
+      "title": "State Machines for Cryptographic Protocols",
+      "level": 3,
+      "word_count": 333,
+      "code_blocks_count": 2,
+      "line_range": "7414-7531"
+    },
+    {
+      "title": "Builder Pattern for Crypto Configuration",
+      "level": 3,
+      "word_count": 287,
+      "code_blocks_count": 2,
+      "line_range": "7531-7663"
+    },
+    {
+      "title": "Side-Channel Resistant Patterns",
+      "level": 3,
+      "word_count": 358,
+      "code_blocks_count": 2,
+      "line_range": "7663-7772"
+    },
+    {
+      "title": "RTIC for Real-Time Systems",
+      "level": 3,
+      "word_count": 76,
+      "code_blocks_count": 2,
+      "line_range": "7772-7809"
+    },
+    {
+      "title": "Type State Pattern for Secure APIs",
+      "level": 3,
+      "word_count": 386,
+      "code_blocks_count": 2,
+      "line_range": "7809-7954"
+    },
+    {
+      "title": "Debugging and Tooling",
+      "level": 2,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "7954-7956"
+    },
+    {
+      "title": "Debugging with probe-rs",
+      "level": 3,
+      "word_count": 1,
+      "code_blocks_count": 0,
+      "line_range": "7956-7959"
+    },
+    {
+      "title": "Flash and run",
+      "level": 1,
+      "word_count": 4,
+      "code_blocks_count": 0,
+      "line_range": "7959-7962"
+    },
+    {
+      "title": "Just flash",
+      "level": 1,
+      "word_count": 5,
+      "code_blocks_count": 0,
+      "line_range": "7962-7965"
+    },
+    {
+      "title": "Debug with GDB",
+      "level": 1,
+      "word_count": 5,
+      "code_blocks_count": 0,
+      "line_range": "7965-7969"
+    },
+    {
+      "title": "RTT (Real-Time Transfer) for Printf Debugging",
+      "level": 3,
+      "word_count": 30,
+      "code_blocks_count": 2,
+      "line_range": "7969-7989"
+    },
+    {
+      "title": "Panic Information",
+      "level": 3,
+      "word_count": 27,
+      "code_blocks_count": 2,
+      "line_range": "7989-8001"
+    },
+    {
+      "title": "Size Optimization",
+      "level": 3,
+      "word_count": 1,
+      "code_blocks_count": 0,
+      "line_range": "8001-8004"
+    },
+    {
+      "title": "Cargo.toml",
+      "level": 1,
+      "word_count": 34,
+      "code_blocks_count": 0,
+      "line_range": "8004-8013"
+    },
+    {
+      "title": "Memory Usage Analysis",
+      "level": 3,
+      "word_count": 1,
+      "code_blocks_count": 0,
+      "line_range": "8013-8016"
+    },
+    {
+      "title": "Check binary size",
+      "level": 1,
+      "word_count": 5,
+      "code_blocks_count": 0,
+      "line_range": "8016-8019"
+    },
+    {
+      "title": "Generate memory map",
+      "level": 1,
+      "word_count": 7,
+      "code_blocks_count": 0,
+      "line_range": "8019-8023"
+    },
+    {
+      "title": "Testing Cryptographic Code",
+      "level": 2,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "8023-8025"
+    },
+    {
+      "title": "Unit Testing with Test Vectors",
+      "level": 3,
+      "word_count": 175,
+      "code_blocks_count": 2,
+      "line_range": "8025-8096"
+    },
+    {
+      "title": "Property-Based Testing",
+      "level": 3,
+      "word_count": 71,
+      "code_blocks_count": 2,
+      "line_range": "8096-8130"
+    },
+    {
+      "title": "Hardware-in-the-Loop Testing",
+      "level": 3,
+      "word_count": 92,
+      "code_blocks_count": 2,
+      "line_range": "8130-8159"
+    },
+    {
+      "title": "Fuzzing Crypto Implementations",
+      "level": 3,
+      "word_count": 55,
+      "code_blocks_count": 2,
+      "line_range": "8159-8183"
+    },
+    {
+      "title": "Real-World Example: Secure Communication Module",
+      "level": 2,
+      "word_count": 1044,
+      "code_blocks_count": 2,
+      "line_range": "8183-8549"
+    },
+    {
+      "title": "Key Takeaways for Embedded Crypto Developers",
+      "level": 2,
+      "word_count": 136,
+      "code_blocks_count": 2,
+      "line_range": "8549-8562"
+    },
+    {
+      "title": "Resources",
+      "level": 2,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "8562-8564"
+    },
+    {
+      "title": "General Embedded Rust",
+      "level": 3,
+      "word_count": 20,
+      "code_blocks_count": 0,
+      "line_range": "8564-8571"
+    },
+    {
+      "title": "Cryptography in Rust",
+      "level": 3,
+      "word_count": 34,
+      "code_blocks_count": 0,
+      "line_range": "8571-8578"
+    },
+    {
+      "title": "Security Resources",
+      "level": 3,
+      "word_count": 19,
+      "code_blocks_count": 0,
+      "line_range": "8578-8584"
+    },
+    {
+      "title": "Migration Strategy: From C to Rust",
+      "level": 2,
+      "word_count": 24,
+      "code_blocks_count": 0,
+      "line_range": "8584-8588"
+    },
+    {
+      "title": "Phase 1: Foundation (Weeks 1-2)",
+      "level": 3,
+      "word_count": 12,
+      "code_blocks_count": 0,
+      "line_range": "8588-8592"
+    },
+    {
+      "title": "Week 1: Environment and Syntax",
+      "level": 4,
+      "word_count": 1,
+      "code_blocks_count": 0,
+      "line_range": "8592-8594"
+    },
+    {
+      "title": "Day 1-2: Setup",
+      "level": 1,
+      "word_count": 19,
+      "code_blocks_count": 0,
+      "line_range": "8594-8599"
+    },
+    {
+      "title": "Day 3-5: Basic syntax practice",
+      "level": 1,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "8599-8600"
+    },
+    {
+      "title": "Create simple programs to understand ownership",
+      "level": 1,
+      "word_count": 87,
+      "code_blocks_count": 6,
+      "line_range": "8600-8626"
+    },
+    {
+      "title": "Week 2: Ownership and Memory Management",
+      "level": 4,
+      "word_count": 69,
+      "code_blocks_count": 2,
+      "line_range": "8626-8650"
+    },
+    {
+      "title": "Phase 2: Embedded Rust Basics (Weeks 3-4)",
+      "level": 3,
+      "word_count": 7,
+      "code_blocks_count": 0,
+      "line_range": "8650-8654"
+    },
+    {
+      "title": "Week 3: No-std Programming",
+      "level": 4,
+      "word_count": 55,
+      "code_blocks_count": 2,
+      "line_range": "8654-8677"
+    },
+    {
+      "title": "Week 4: Hardware Abstraction",
+      "level": 4,
+      "word_count": 52,
+      "code_blocks_count": 2,
+      "line_range": "8677-8698"
+    },
+    {
+      "title": "Phase 3: Cryptography Implementation (Weeks 5-8)",
+      "level": 3,
+      "word_count": 8,
+      "code_blocks_count": 0,
+      "line_range": "8698-8702"
+    },
+    {
+      "title": "Week 5-6: Basic Crypto Algorithms",
+      "level": 4,
+      "word_count": 94,
+      "code_blocks_count": 2,
+      "line_range": "8702-8731"
+    },
+    {
+      "title": "Week 7-8: Advanced Crypto Patterns",
+      "level": 4,
+      "word_count": 59,
+      "code_blocks_count": 2,
+      "line_range": "8731-8758"
+    },
+    {
+      "title": "Phase 4: Xilinx Integration (Weeks 9-10)",
+      "level": 3,
+      "word_count": 8,
+      "code_blocks_count": 0,
+      "line_range": "8758-8762"
+    },
+    {
+      "title": "Week 9: Xilinx Hardware Integration",
+      "level": 4,
+      "word_count": 123,
+      "code_blocks_count": 2,
+      "line_range": "8762-8804"
+    },
+    {
+      "title": "Week 10: Complete Integration",
+      "level": 4,
+      "word_count": 27,
+      "code_blocks_count": 0,
+      "line_range": "8804-8811"
+    },
+    {
+      "title": "Phase 5: Production Readiness (Weeks 11-12)",
+      "level": 3,
+      "word_count": 7,
+      "code_blocks_count": 0,
+      "line_range": "8811-8815"
+    },
+    {
+      "title": "Testing Strategy",
+      "level": 4,
+      "word_count": 67,
+      "code_blocks_count": 2,
+      "line_range": "8815-8847"
+    },
+    {
+      "title": "Debugging and Optimization",
+      "level": 4,
+      "word_count": 59,
+      "code_blocks_count": 2,
+      "line_range": "8847-8869"
+    },
+    {
+      "title": "Migration Checklist",
+      "level": 3,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "8869-8871"
+    },
+    {
+      "title": "Before Starting Each Phase:",
+      "level": 4,
+      "word_count": 27,
+      "code_blocks_count": 0,
+      "line_range": "8871-8877"
+    },
+    {
+      "title": "Phase Completion Criteria:",
+      "level": 4,
+      "word_count": 146,
+      "code_blocks_count": 0,
+      "line_range": "8877-8904"
+    },
+    {
+      "title": "Common Pitfalls and Solutions",
+      "level": 3,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "8904-8906"
+    },
+    {
+      "title": "Pitfall 1: Fighting the Borrow Checker",
+      "level": 4,
+      "word_count": 59,
+      "code_blocks_count": 2,
+      "line_range": "8906-8921"
+    },
+    {
+      "title": "Pitfall 2: Overusing `unsafe`",
+      "level": 4,
+      "word_count": 64,
+      "code_blocks_count": 2,
+      "line_range": "8921-8939"
+    },
+    {
+      "title": "Pitfall 3: Ignoring Error Handling",
+      "level": 4,
+      "word_count": 54,
+      "code_blocks_count": 2,
+      "line_range": "8939-8957"
+    },
+    {
+      "title": "Resources for Each Phase",
+      "level": 3,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "8957-8959"
+    },
+    {
+      "title": "Phase 1 Resources:",
+      "level": 4,
+      "word_count": 13,
+      "code_blocks_count": 0,
+      "line_range": "8959-8964"
+    },
+    {
+      "title": "Phase 2 Resources:",
+      "level": 4,
+      "word_count": 10,
+      "code_blocks_count": 0,
+      "line_range": "8964-8969"
+    },
+    {
+      "title": "Phase 3 Resources:",
+      "level": 4,
+      "word_count": 11,
+      "code_blocks_count": 0,
+      "line_range": "8969-8974"
+    },
+    {
+      "title": "Phase 4 Resources:",
+      "level": 4,
+      "word_count": 14,
+      "code_blocks_count": 0,
+      "line_range": "8974-8979"
+    },
+    {
+      "title": "Phase 5 Resources:",
+      "level": 4,
+      "word_count": 11,
+      "code_blocks_count": 0,
+      "line_range": "8979-8984"
+    },
+    {
+      "title": "Timeline Flexibility",
+      "level": 3,
+      "word_count": 50,
+      "code_blocks_count": 0,
+      "line_range": "8984-8993"
+    },
+    {
+      "title": "Success Metrics",
+      "level": 3,
+      "word_count": 62,
+      "code_blocks_count": 0,
+      "line_range": "8993-9002"
+    },
+    {
+      "title": "Summary",
+      "level": 2,
+      "word_count": 168,
+      "code_blocks_count": 0,
+      "line_range": "9002-9017"
+    },
+    {
+      "title": "Common Crates for Embedded",
+      "level": 2,
+      "word_count": 0,
+      "code_blocks_count": 0,
+      "line_range": "9017-9019"
+    },
+    {
+      "title": "Core Embedded Crates",
+      "level": 3,
+      "word_count": 53,
+      "code_blocks_count": 11,
+      "line_range": "9019-9031"
+    },
+    {
+      "title": "Cryptography Crates for Embedded",
+      "level": 3,
+      "word_count": 48,
+      "code_blocks_count": 11,
+      "line_range": "9031-9042"
+    }
+  ],
+  "duplicate_content": [
+    {
+      "sections": [
+        "Install Xilinx-specific tools",
+        "Install useful tools"
+      ],
+      "similarity_score": 0.875,
+      "content_preview": "cargo install cargo-binutils\ncargo install cargo-embed\ncargo install probe-rs --features cli\n..."
+    },
+    {
+      "sections": [
+        "Project Structure",
+        "Xilinx-Specific Cargo.toml"
+      ],
+      "similarity_score": 1.0,
+      "content_preview": "\n```toml..."
+    },
+    {
+      "sections": [
+        "Project Structure",
+        "Size Optimization"
+      ],
+      "similarity_score": 1.0,
+      "content_preview": "\n```toml..."
+    },
+    {
+      "sections": [
+        "Cargo.toml",
+        "Cargo.toml for Xilinx Ultrascale+ Cortex-R5"
+      ],
+      "similarity_score": 0.8,
+      "content_preview": "[package]\nname = \"zynqmp_crypto_app\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[dependencies]..."
+    },
+    {
+      "sections": [
+        "Crypto dependencies",
+        "Crypto dependencies (no-std compatible)"
+      ],
+      "similarity_score": 1.0,
+      "content_preview": "chacha20poly1305 = { version = \"0.10\", default-features = false }\naes-gcm = { version = \"0.10\", defa..."
+    },
+    {
+      "sections": [
+        "For static collections",
+        "path = \"../xilinx-sys\"  # Your custom wrapper"
+      ],
+      "similarity_score": 0.7142857142857143,
+      "content_preview": "\n[profile.release]\nopt-level = \"z\"     # Optimize for size\nlto = true          # Link-time optimizat..."
+    },
+    {
+      "sections": [
+        "Xilinx-Specific Cargo.toml",
+        "Size Optimization"
+      ],
+      "similarity_score": 1.0,
+      "content_preview": "\n```toml..."
+    },
+    {
+      "sections": [
+        "Target-specific dependencies",
+        "Target-specific dependencies"
+      ],
+      "similarity_score": 0.8571428571428571,
+      "content_preview": "[target.'cfg(any(target_arch = \"arm\", target_arch = \"aarch64\"))'.dependencies]\ncortex-m = \"0.7\"\n\n[ta..."
+    },
+    {
+      "sections": [
+        "Debugging with probe-rs",
+        "Memory Usage Analysis"
+      ],
+      "similarity_score": 1.0,
+      "content_preview": "\n```bash..."
+    },
+    {
+      "sections": [
+        "Debugging with probe-rs",
+        "Week 1: Environment and Syntax"
+      ],
+      "similarity_score": 1.0,
+      "content_preview": "\n```bash..."
+    },
+    {
+      "sections": [
+        "Memory Usage Analysis",
+        "Week 1: Environment and Syntax"
+      ],
+      "similarity_score": 1.0,
+      "content_preview": "\n```bash..."
+    }
+  ],
+  "redundant_patterns": {
+    "setup_instructions": [
+      "Table of Contents",
+      "Embedded-Specific Quick Reference",
+      "Xilinx Ultrascale+ with Cortex-R5 Setup",
+      "Install Rust",
+      "Install embedded target for Xilinx Ultrascale+ with Cortex-R5:",
+      "Install Xilinx-specific tools",
+      "Other common targets:",
+      "Install useful tools",
+      "Create a new embedded project",
+      "When to Use Each Approach",
+      "Comprehensive `build.rs` Usage for Embedded Projects",
+      "Conditional Compilation for Different MCU Targets",
+      "Integration with Hardware-Specific Build Requirements",
+      "Panic Handling in Embedded",
+      "Heap Allocation in No-std",
+      "Interfacing with Xilinx Crypto Accelerators",
+      "Advanced DMA Operations in Rust",
+      "Side-Channel Resistant Patterns",
+      "Flash and run",
+      "Check binary size",
+      "Generate memory map",
+      "Unit Testing with Test Vectors",
+      "Day 1-2: Setup",
+      "Create simple programs to understand ownership"
+    ],
+    "memory_management_explanations": [
+      "Table of Contents",
+      "Introduction: Why Rust for Embedded Cryptography",
+      "Memory and Pointers",
+      "target = \"armv7r-none-eabi\"",
+      "Structuring Cryptographic Algorithms Across Modules",
+      "Comprehensive `build.rs` Usage for Embedded Projects",
+      "Integration with Hardware-Specific Build Requirements",
+      "How Project Structure Differs in No-std Environments",
+      "Size-optimized profile",
+      "Memory Management: Stack vs Heap",
+      "Pointers and References",
+      "Memory Model: Rust vs C",
+      "C Memory Model",
+      "Rust Memory Model",
+      "Stack and Ownership Flow",
+      "Stack and Heap Allocation",
+      "Lifetime Visualization",
+      "Memory Safety Benefits for Cryptography",
+      "Memory Ordering and Atomics",
+      "Memory Safety in Cryptographic Context",
+      "Ownership and Memory Management",
+      "The Three Rules of Ownership",
+      "Heap Allocation in No-std",
+      "Multi-core Programming on ZynqMP",
+      "Advanced DMA Operations in Rust",
+      "Peripheral Access Crate (PAC)",
+      "Hardware Abstraction Layer (HAL) for Crypto",
+      "Interrupt Handlers for Crypto Operations",
+      "DMA (Direct Memory Access)",
+      "Hardware-in-the-Loop Testing",
+      "Real-World Example: Secure Communication Module",
+      "Key Takeaways for Embedded Crypto Developers",
+      "Week 2: Ownership and Memory Management",
+      "Week 4: Hardware Abstraction",
+      "Phase Completion Criteria:",
+      "Success Metrics",
+      "Summary",
+      "Cryptography Crates for Embedded"
+    ],
+    "error_handling_patterns": [
+      "Table of Contents",
+      "Introduction: Why Rust for Embedded Cryptography",
+      "Memory and Pointers",
+      "Functions and Control Flow",
+      "Error Handling",
+      "Quick Syntax Reference",
+      "Embedded-Specific Quick Reference",
+      "Binary Crates vs Library Crates for Embedded Cryptography",
+      "Structuring Cryptographic Algorithms Across Modules",
+      "Detailed Module Organization Example",
+      "Use Statement Patterns for Crypto Libraries",
+      "Advanced Use Patterns for Large Crypto Projects",
+      "Comprehensive `build.rs` Usage for Embedded Projects",
+      "Custom Build Scripts for Cryptographic Code Generation",
+      "Integration with Hardware-Specific Build Requirements",
+      "How Project Structure Differs in No-std Environments",
+      "Organizing Code When std Library is Unavailable",
+      "Core dependencies (always available)",
+      "Crypto dependencies with no-std support",
+      "Asymmetric crypto (larger dependencies)",
+      "Optional allocator support",
+      "Hardware-specific dependencies",
+      "Development dependencies",
+      "Size-optimized profile",
+      "Variables and Mutability",
+      "Pointers and References",
+      "No Null Pointers - Use Option<T>",
+      "Type Inference",
+      "The Unit Type ()",
+      "Expression Types and Return Behavior",
+      "Practical Crypto Examples",
+      "Practical Crypto Examples with Expressions",
+      "Rust Memory Model",
+      "Stack and Ownership Flow",
+      "Stack and Heap Allocation",
+      "Lifetime Visualization",
+      "Memory Safety Benefits for Cryptography",
+      "Undefined Behavior Prevention",
+      "Volatile Access for Crypto Hardware",
+      "Zero-Copy Operations",
+      "Static Memory in Embedded",
+      "Common Crypto Pitfalls When Coming from C",
+      "Memory Safety in Cryptographic Context",
+      "The Three Rules of Ownership",
+      "Interior Mutability",
+      "Error Handling Without Exceptions",
+      "The Result Type",
+      "Custom Error Types",
+      "Panic Handling in Embedded",
+      "No-std Programming",
+      "Heap Allocation in No-std",
+      "Interfacing with Xilinx Crypto Accelerators",
+      "Using Xilinx BSP Libraries via FFI",
+      "Multi-core Programming on ZynqMP",
+      "Advanced DMA Operations in Rust",
+      "Advanced Interrupt Handling Patterns",
+      "Real-Time Constraints and Timing Analysis",
+      "Peripheral Access Crate (PAC)",
+      "Hardware Abstraction Layer (HAL) for Crypto",
+      "Interrupt Handlers for Crypto Operations",
+      "Secure Coding Patterns",
+      "State Machines for Cryptographic Protocols",
+      "Builder Pattern for Crypto Configuration",
+      "Side-Channel Resistant Patterns",
+      "Type State Pattern for Secure APIs",
+      "Unit Testing with Test Vectors",
+      "Hardware-in-the-Loop Testing",
+      "Fuzzing Crypto Implementations",
+      "Real-World Example: Secure Communication Module",
+      "Key Takeaways for Embedded Crypto Developers",
+      "Week 9: Xilinx Hardware Integration",
+      "Week 10: Complete Integration",
+      "Testing Strategy",
+      "Phase Completion Criteria:",
+      "Pitfall 1: Fighting the Borrow Checker",
+      "Pitfall 3: Ignoring Error Handling",
+      "Timeline Flexibility",
+      "Success Metrics"
+    ],
+    "code_examples": [],
+    "c_to_rust_comparisons": [
+      "Quick Reference: C to Rust Cheat Sheet",
+      "Memory and Pointers",
+      "Functions and Control Flow",
+      "Error Handling",
+      "Crypto-Specific Patterns",
+      "Common Embedded Patterns",
+      "Install Rust",
+      "Security-Focused Visibility Patterns",
+      "Comprehensive `build.rs` Usage for Embedded Projects",
+      "Size-optimized profile",
+      "Core Language Differences from C",
+      "Function Pointers vs Closures",
+      "No Null Pointers - Use Option<T>",
+      "Practical Crypto Examples with Expressions",
+      "Lifetime Visualization",
+      "Volatile Access for Crypto Hardware",
+      "Memory Safety in Cryptographic Context",
+      "Interfacing with Xilinx Crypto Accelerators",
+      "Using Xilinx BSP Libraries via FFI",
+      "Multi-core Programming on ZynqMP",
+      "Advanced Interrupt Handling Patterns",
+      "Peripheral Access Crate (PAC)",
+      "Interrupt Handlers for Crypto Operations",
+      "Secure Coding Patterns",
+      "DMA (Direct Memory Access)",
+      "RTIC for Real-Time Systems",
+      "Fuzzing Crypto Implementations",
+      "Real-World Example: Secure Communication Module",
+      "Day 1-2: Setup",
+      "Create simple programs to understand ownership",
+      "Phase 2: Embedded Rust Basics (Weeks 3-4)",
+      "Week 4: Hardware Abstraction"
+    ]
+  },
+  "content_mapping": [
+    {
+      "original_section": "Embedded Rust Tutorial for Cryptography Engineers",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Table of Contents",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "TOC will be regenerated"
+    },
+    {
+      "original_section": "Introduction: Why Rust for Embedded Cryptography",
+      "proposed_section": "TBD",
+      "action": "consolidate",
+      "reason": "Introduction content should be consolidated"
+    },
+    {
+      "original_section": "Quick Reference: C to Rust Cheat Sheet",
+      "proposed_section": "Quick Reference Section",
+      "action": "keep",
+      "reason": "Direct mapping to proposed structure"
+    },
+    {
+      "original_section": "Memory and Pointers",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Functions and Control Flow",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Error Handling",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Crypto-Specific Patterns",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Common Embedded Patterns",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Quick Syntax Reference",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Embedded-Specific Quick Reference",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Setting Up Your Environment",
+      "proposed_section": "Environment Setup Section",
+      "action": "keep",
+      "reason": "Direct mapping to proposed structure"
+    },
+    {
+      "original_section": "Xilinx Ultrascale+ with Cortex-R5 Setup",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Install Rust",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Install embedded target for Xilinx Ultrascale+ with Cortex-R5:",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Install Xilinx-specific tools",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Note: You may need to use Xilinx's own debugging tools (XSCT, Vitis)",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "alongside or instead of probe-rs depending on your setup",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Other common targets:",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Install useful tools",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Create a new embedded project",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Project Structure",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Cargo.toml",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Core embedded dependencies",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "HAL for your specific MCU (examples):",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "stm32f4xx-hal = { version = \"0.14\", features = [\"stm32f411\"] }",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "nrf52840-hal = \"0.16\"",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "rp2040-hal = \"0.9\"",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Crypto dependencies",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "For static collections",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Xilinx Ultrascale+ Configuration",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": ".cargo/config.toml for Xilinx Ultrascale+ Cortex-R5",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Xilinx typically uses JTAG debugging through Vitis/XSCT",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "You may need custom runners or use Xilinx tools directly",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Alternative for non-FPU version",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "[target.armv7r-none-eabi]",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "runner = \"echo 'Use Xilinx Vitis or XSCT for debugging'\"",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "rustflags = [",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "\"-C\", \"link-arg=-Tlink.x\",",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "\"-C\", \"target-cpu=cortex-r5\",",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "]",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "[build]",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "target = \"armv7r-none-eabi\"",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Xilinx-Specific Cargo.toml",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Cargo.toml for Xilinx Ultrascale+ Cortex-R5",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Core embedded dependencies for Cortex-R5",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Note: No official Xilinx HAL crate yet, you may need to:",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "1. Use raw register access via PAC",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "2. Create your own HAL wrapper",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "3. Use Xilinx's C libraries via FFI",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Crypto dependencies (no-std compatible)",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "For static collections",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Optional: If you need to interface with Xilinx C libraries",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "This would be a custom crate wrapping Xilinx BSP",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "path = \"../xilinx-sys\"  # Your custom wrapper",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Cortex-R5 specific optimizations",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Project Structure and Organization for Embedded Cryptography",
+      "proposed_section": "Embedded-Specific Patterns Section",
+      "action": "keep",
+      "reason": "Direct mapping to proposed structure"
+    },
+    {
+      "original_section": "Project Structure Fundamentals",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Binary Crates vs Library Crates for Embedded Cryptography",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "When to Use Each Approach",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Module System Deep Dive",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Module Organization Patterns",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Structuring Cryptographic Algorithms Across Modules",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Detailed Module Organization Example",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Visibility Rules and `pub` Usage for Crypto APIs",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Visibility Levels",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Security-Focused Visibility Patterns",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Path Resolution and Use Statements for Embedded Projects",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Absolute vs Relative Paths",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Use Statement Patterns for Crypto Libraries",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Advanced Use Patterns for Large Crypto Projects",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Build Configuration",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Comprehensive `build.rs` Usage for Embedded Projects",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Custom Build Scripts for Cryptographic Code Generation",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Conditional Compilation for Different MCU Targets",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Target-specific dependencies",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "src/crypto/mod.rs - Conditional compilation in action",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Integration with Hardware-Specific Build Requirements",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "No-std Specific Considerations",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "How Project Structure Differs in No-std Environments",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Organizing Code When std Library is Unavailable",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Managing Dependencies and Features for Embedded Crypto",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Cargo.toml - Comprehensive dependency management for embedded crypto",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Default features for most embedded use cases",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Core cryptographic algorithms",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Higher-level protocols",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Asymmetric cryptography",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Hardware acceleration",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Memory allocation support",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Development and testing features",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Size optimization features",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Core dependencies (always available)",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Crypto dependencies with no-std support",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Asymmetric crypto (larger dependencies)",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Utilities",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Optional allocator support",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Hardware-specific dependencies",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Development dependencies",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Target-specific dependencies",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Profile optimizations for embedded",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Size-optimized profile",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Core Language Differences from C",
+      "proposed_section": "Core Language Concepts Section",
+      "action": "keep",
+      "reason": "Direct mapping to proposed structure"
+    },
+    {
+      "original_section": "Variables and Mutability",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Memory Management: Stack vs Heap",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Function Pointers vs Closures",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Pointers and References",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "No Null Pointers - Use Option<T>",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Arrays and Slices",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Type Inference",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Statements vs Expressions",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Core Concepts",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "The Unit Type ()",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Expression Types and Return Behavior",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Practical Crypto Examples",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Key Differences from C",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Practical Crypto Examples with Expressions",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Memory Model: Rust vs C",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "C Memory Model",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Rust Memory Model",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Memory Layout Comparison",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Stack and Ownership Flow",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Stack and Heap Allocation",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Zero-Copy and Memory Safety",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Lifetime Visualization",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Memory Safety Benefits for Cryptography",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Memory Layout and Alignment",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Undefined Behavior Prevention",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Volatile Access for Crypto Hardware",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Memory Ordering and Atomics",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Zero-Copy Operations",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Static Memory in Embedded",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "DMA-Safe Memory for Crypto Operations",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Common Crypto Pitfalls When Coming from C",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Memory Safety in Cryptographic Context",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Ownership and Memory Management",
+      "proposed_section": "Core Language Concepts Section",
+      "action": "keep",
+      "reason": "Direct mapping to proposed structure"
+    },
+    {
+      "original_section": "The Three Rules of Ownership",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Borrowing References",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Lifetimes",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Interior Mutability",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Error Handling Without Exceptions",
+      "proposed_section": "Core Language Concepts Section",
+      "action": "keep",
+      "reason": "Direct mapping to proposed structure"
+    },
+    {
+      "original_section": "The Result Type",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Custom Error Types",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Panic Handling in Embedded",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "No-std Programming",
+      "proposed_section": "Embedded-Specific Patterns Section",
+      "action": "keep",
+      "reason": "Direct mapping to proposed structure"
+    },
+    {
+      "original_section": "Heap Allocation in No-std",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Working with Hardware",
+      "proposed_section": "Embedded-Specific Patterns Section",
+      "action": "keep",
+      "reason": "Direct mapping to proposed structure"
+    },
+    {
+      "original_section": "Xilinx Ultrascale+ Specific Hardware Integration",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Interfacing with Xilinx Crypto Accelerators",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Using Xilinx BSP Libraries via FFI",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Multi-core Programming on ZynqMP",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Advanced DMA Operations in Rust",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Advanced Interrupt Handling Patterns",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Real-Time Constraints and Timing Analysis",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "General Embedded Hardware Patterns",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Peripheral Access Crate (PAC)",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Hardware Abstraction Layer (HAL) for Crypto",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Embedded-HAL Traits",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Interrupt Handlers for Crypto Operations",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Secure Coding Patterns",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "DMA (Direct Memory Access)",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Common Patterns and Best Practices",
+      "proposed_section": "Quick Reference Section",
+      "action": "keep",
+      "reason": "Direct mapping to proposed structure"
+    },
+    {
+      "original_section": "State Machines for Cryptographic Protocols",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Builder Pattern for Crypto Configuration",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Side-Channel Resistant Patterns",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "RTIC for Real-Time Systems",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Type State Pattern for Secure APIs",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Debugging and Tooling",
+      "proposed_section": "Migration and Integration Section",
+      "action": "keep",
+      "reason": "Direct mapping to proposed structure"
+    },
+    {
+      "original_section": "Debugging with probe-rs",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Flash and run",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Just flash",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Debug with GDB",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "RTT (Real-Time Transfer) for Printf Debugging",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Panic Information",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Size Optimization",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Cargo.toml",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Memory Usage Analysis",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Check binary size",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Generate memory map",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Testing Cryptographic Code",
+      "proposed_section": "Cryptography Implementation Section",
+      "action": "keep",
+      "reason": "Direct mapping to proposed structure"
+    },
+    {
+      "original_section": "Unit Testing with Test Vectors",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Property-Based Testing",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Hardware-in-the-Loop Testing",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Fuzzing Crypto Implementations",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Real-World Example: Secure Communication Module",
+      "proposed_section": "Cryptography Implementation Section",
+      "action": "keep",
+      "reason": "Direct mapping to proposed structure"
+    },
+    {
+      "original_section": "Key Takeaways for Embedded Crypto Developers",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Resources",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "General Embedded Rust",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Cryptography in Rust",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Security Resources",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Migration Strategy: From C to Rust",
+      "proposed_section": "Migration and Integration Section",
+      "action": "keep",
+      "reason": "Direct mapping to proposed structure"
+    },
+    {
+      "original_section": "Phase 1: Foundation (Weeks 1-2)",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Week 1: Environment and Syntax",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Day 1-2: Setup",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Day 3-5: Basic syntax practice",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Create simple programs to understand ownership",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Week 2: Ownership and Memory Management",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Phase 2: Embedded Rust Basics (Weeks 3-4)",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Week 3: No-std Programming",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Week 4: Hardware Abstraction",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Phase 3: Cryptography Implementation (Weeks 5-8)",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Week 5-6: Basic Crypto Algorithms",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Week 7-8: Advanced Crypto Patterns",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Phase 4: Xilinx Integration (Weeks 9-10)",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Week 9: Xilinx Hardware Integration",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Week 10: Complete Integration",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Phase 5: Production Readiness (Weeks 11-12)",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Testing Strategy",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Debugging and Optimization",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Migration Checklist",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Before Starting Each Phase:",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Phase Completion Criteria:",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Common Pitfalls and Solutions",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Pitfall 1: Fighting the Borrow Checker",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Pitfall 2: Overusing `unsafe`",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Pitfall 3: Ignoring Error Handling",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Resources for Each Phase",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Phase 1 Resources:",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Phase 2 Resources:",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Phase 3 Resources:",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Phase 4 Resources:",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Phase 5 Resources:",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Timeline Flexibility",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Success Metrics",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Summary",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Common Crates for Embedded",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    },
+    {
+      "original_section": "Core Embedded Crates",
+      "proposed_section": "TBD",
+      "action": "merge",
+      "reason": "Needs review for consolidation"
+    },
+    {
+      "original_section": "Cryptography Crates for Embedded",
+      "proposed_section": "TBD",
+      "action": "eliminate",
+      "reason": "Section too short, likely redundant"
+    }
+  ],
+  "recommendations": [
+    "Consolidate 1 sections to reduce redundancy",
+    "Found 11 instances of duplicate content that should be merged",
+    "Consolidate setup instructions from 5 sections into single Environment Setup section",
+    "Consolidate memory management explanations from 15 sections"
+  ]
+}
