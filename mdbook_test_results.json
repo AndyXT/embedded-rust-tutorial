@@ -1,0 +1,17 @@
+{
+  "timestamp": "2025-07-16T18:28:30.175073",
+  "results": {
+    "dependencies": true,
+    "file_structure": true,
+    "mdbook_build": true,
+    "content_validation": false,
+    "link_validation": true,
+    "code_validation": false
+  },
+  "summary": {
+    "total_tests": 6,
+    "passed_tests": 4,
+    "failed_tests": 2,
+    "success_rate": 0.6666666666666666
+  }
+}

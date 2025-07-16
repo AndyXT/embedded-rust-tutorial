@@ -82,14 +82,14 @@
   - Test all links between chapters and within chapters
   - _Requirements: 1.2, 2.1, 5.3, 5.4_
 
-- [-] 13. Set up build and deployment automation
+- [x] 13. Set up build and deployment automation
   - Create GitHub Actions workflow for automated mdBook building
   - Configure deployment to GitHub Pages or similar static hosting
   - Set up build validation and testing in CI pipeline
   - Create local development build scripts for testing
   - _Requirements: 3.1, 3.2, 3.3, 6.1, 6.3_
 
-- [ ] 14. Implement content validation testing
+- [-] 14. Implement content validation testing
   - Write automated tests to verify all original content is preserved
   - Create link checking tests to ensure no broken internal references
   - Implement code example validation to ensure Rust syntax highlighting works

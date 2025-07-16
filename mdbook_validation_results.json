@@ -1,0 +1,103 @@
+{
+  "total_tests": 4,
+  "passed_tests": 2,
+  "failed_tests": 2,
+  "warnings_count": 10,
+  "errors_count": 52,
+  "overall_success": false,
+  "test_results": [
+    {
+      "test_name": "Content Preservation",
+      "passed": false,
+      "details": "Content preservation analysis:\n- Original sections: 197\n- mdBook sections: 207\n- Missing sections: 18\n- Code block preservation: 114.0%\n- Missing concepts: 0",
+      "errors": [
+        "Missing section: Embedded Rust Tutorial for Cryptography Engineers",
+        "Missing section: \ud83d\ude80 Quick Start Navigation",
+        "Missing section: \ud83d\udccb Table of Contents",
+        "Missing section: Document Usage Modes",
+        "Missing section: Navigation Features",
+        "Missing section: [1. Quick Reference](#quick-reference)",
+        "Missing section: [2. Environment Setup](#environment-setup)",
+        "Missing section: [3. Core Language Concepts](#core-language-concepts)",
+        "Missing section: [4. Embedded-Specific Patterns](#embedded-specific-patterns)",
+        "Missing section: [5. Cryptography Implementation](#cryptography-implementation)",
+        "Missing section: [6. Migration and Integration](#migration-and-integration)",
+        "Missing section: Cross-Reference System",
+        "Missing section: 2. Environment Setup {#environment-setup}",
+        "Missing section: 5.4 Hardware Crypto Acceleration {#hardware-crypto-acceleration}",
+        "Missing section: Benchmarking and Profiling",
+        "Missing section: Conclusion",
+        "Missing section: Key Benefits of This Structure",
+        "Missing section: Next Steps"
+      ],
+      "warnings": []
+    },
+    {
+      "test_name": "Link Integrity",
+      "passed": true,
+      "details": "Link integrity analysis:\n- Total internal links: 129\n- Broken links: 0\n- Orphaned files: 0\n- Link validation rate: 100.0%",
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "test_name": "Code Syntax Highlighting",
+      "passed": false,
+      "details": "Code syntax highlighting analysis:\n- Total code blocks: 122\n- Rust code blocks: 102\n- Syntax valid: 68/102 (66.7%)\n- Compilation testable: 78/102 (76.5%)\n- Untagged blocks: 0\n- mdBook build: \u2705",
+      "errors": [
+        "Syntax error in core-concepts/advanced-types.md line 203",
+        "Syntax error in core-concepts/advanced-types.md line 370",
+        "Syntax error in core-concepts/advanced-types.md line 134",
+        "Syntax error in core-concepts/advanced-types.md line 718",
+        "Syntax error in core-concepts/ownership.md line 24",
+        "Syntax error in core-concepts/ownership.md line 71",
+        "Syntax error in core-concepts/type-system-advantages-for-security.md line 8",
+        "Syntax error in core-concepts/type-system-advantages-for-security.md line 119",
+        "Syntax error in core-concepts/type-system-advantages-for-security.md line 209",
+        "Syntax error in cryptography/constant-time.md line 287",
+        "Syntax error in cryptography/hardware-crypto.md line 512",
+        "Syntax error in cryptography/hardware-crypto.md line 603",
+        "Syntax error in cryptography/key-management.md line 73",
+        "Syntax error in cryptography/key-management.md line 180",
+        "Syntax error in cryptography/secure-patterns.md line 56",
+        "Syntax error in cryptography/secure-patterns.md line 149",
+        "Syntax error in cryptography/side-channels.md line 553",
+        "Syntax error in embedded-patterns/hardware-abstraction.md line 123",
+        "Syntax error in embedded-patterns/hardware-abstraction.md line 338",
+        "Syntax error in embedded-patterns/no-std.md line 8",
+        "Syntax error in embedded-patterns/no-std.md line 233",
+        "Syntax error in environment-setup/build-config.md line 4",
+        "Syntax error in migration/debugging.md line 8",
+        "Syntax error in migration/ffi-integration.md line 266",
+        "Syntax error in migration/ffi-integration.md line 604",
+        "Syntax error in migration/ffi-integration.md line 685",
+        "Syntax error in migration/strategies.md line 40",
+        "Syntax error in migration/strategies.md line 156",
+        "Syntax error in migration/strategies.md line 294",
+        "Syntax error in migration/testing.md line 10",
+        "Syntax error in migration/testing.md line 282",
+        "Syntax error in migration/testing.md line 383",
+        "Syntax error in migration/testing.md line 472",
+        "Syntax error in quick-reference/gotchas.md line 316"
+      ],
+      "warnings": []
+    },
+    {
+      "test_name": "Cross-Reference Validation",
+      "passed": true,
+      "details": "Cross-reference validation:\n- Total cross-references: 72\n- Chapters with cross-refs: 6\n- Missing expected patterns: 10\n- Circular references: 6\n- Reference density: 1.57 refs/file",
+      "errors": [],
+      "warnings": [
+        "Missing expected cross-reference: quick-reference -> embedded-patterns",
+        "Missing expected cross-reference: quick-reference -> cryptography",
+        "Missing expected cross-reference: environment-setup -> quick-reference",
+        "Missing expected cross-reference: embedded-patterns -> quick-reference",
+        "Missing expected cross-reference: embedded-patterns -> core-concepts",
+        "Missing expected cross-reference: cryptography -> quick-reference",
+        "Missing expected cross-reference: cryptography -> embedded-patterns",
+        "Missing expected cross-reference: migration -> quick-reference",
+        "Missing expected cross-reference: migration -> embedded-patterns",
+        "Missing expected cross-reference: migration -> cryptography"
+      ]
+    }
+  ]
+}

@@ -39,30 +39,30 @@ jobs:
         # Check SUMMARY.md exists and has proper structure
         test -f src/SUMMARY.md
         # Check that all files referenced in SUMMARY.md exist
-        python -c "
-import re
-import os
-
-with open('src/SUMMARY.md', 'r') as f:
-    content = f.read()
-
-# Find all markdown file references
-links = re.findall(r'\[.*?\]\((.*?\.md)\)', content)
-missing_files = []
-
-for link in links:
-    file_path = os.path.join('src', link)
-    if not os.path.exists(file_path):
-        missing_files.append(file_path)
-
-if missing_files:
-    print('❌ Missing files referenced in SUMMARY.md:')
-    for f in missing_files:
-        print(f'  - {f}')
-    exit(1)
-else:
-    print('✅ All files referenced in SUMMARY.md exist')
-"
+        python3 -c "
+        import re
+        import os
+        
+        with open('src/SUMMARY.md', 'r') as f:
+            content = f.read()
+        
+        # Find all markdown file references
+        links = re.findall(r'\[.*?\]\((.*?\.md)\)', content)
+        missing_files = []
+        
+        for link in links:
+            file_path = os.path.join('src', link)
+            if not os.path.exists(file_path):
+                missing_files.append(file_path)
+        
+        if missing_files:
+            print('❌ Missing files referenced in SUMMARY.md:')
+            for f in missing_files:
+                print(f'  - {f}')
+            exit(1)
+        else:
+            print('✅ All files referenced in SUMMARY.md exist')
+        "
     
     - name: Test link validation
       run: |
