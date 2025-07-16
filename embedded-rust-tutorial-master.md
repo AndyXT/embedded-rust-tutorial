@@ -12,61 +12,6 @@
 
 **For specific needs:** Use the detailed table of contents below or search (Ctrl+F) for specific topics.
 
-### ⚡ Immediate Setup for Cortex-R5 Development
-
-**Essential Commands (5 minutes):**
-```bash
-# Install Rust + R5 target
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-rustup target add armv7r-none-eabihf
-cargo install cargo-binutils
-rustup component add llvm-tools-preview
-
-# Install debugging tools (OpenOCD + GDB required for R5)
-# Ubuntu/Debian:
-sudo apt install openocd gdb-multiarch
-# Or download ARM GDB: arm-none-eabi-gdb
-```
-
-**Essential Crates for R5 ELF Generation:**
-```toml
-[dependencies]
-cortex-m = "0.7"           # ARM Cortex support
-cortex-m-rt = "0.7"        # Runtime, startup code, linker script
-panic-halt = "0.2"         # Panic handler for no_std
-embedded-hal = "0.2"       # Hardware abstraction layer
-
-# For crypto applications
-zeroize = { version = "1.6", default-features = false }
-sha2 = { version = "0.10", default-features = false }
-aes = { version = "0.8", default-features = false }
-
-# Collections without heap
-heapless = "0.7"
-
-[build-dependencies]
-cc = "1.0"                 # For linking with C libraries if needed
-```
-
-**Why OpenOCD + GDB instead of probe-rs for R5:**
-- probe-rs has limited Cortex-R5 support (especially for Xilinx parts)
-- OpenOCD provides mature R5 debugging with semihosting
-- GDB integration works reliably with Xilinx toolchain
-- Hardware breakpoints and real-time debugging work properly
-
-**Minimal Working R5 Project Structure:**
-```
-my-r5-project/
-├── Cargo.toml              # Dependencies above
-├── .cargo/config.toml      # Target configuration
-├── memory.x                # Memory layout for your board
-├── openocd.cfg            # OpenOCD configuration
-├── gdb_init.txt           # GDB startup script
-├── build.rs               # Build script (optional)
-└── src/
-    └── main.rs            # Your application
-```
-
 ---
 
 ## 📋 Table of Contents
@@ -887,15 +832,27 @@ Choose your target configuration based on your hardware. Each includes optimized
 
 #### 2.2.1 Xilinx Ultrascale+ (Cortex-R5) {#xilinx-ultrascale-cortex-r5}
 
-**Target Installation:**
+**⚡ Quick Start (5 minutes):**
 ```bash
-# Install the Cortex-R5 target (required for Xilinx ZynqMP/Versal)
+# Install Rust + R5 target
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 rustup target add armv7r-none-eabihf
 
-# Essential crates for R5 ELF generation
+# Essential tools for R5 ELF generation
 cargo install cargo-binutils
 rustup component add llvm-tools-preview
+
+# Install debugging tools (OpenOCD + GDB required for R5)
+# Ubuntu/Debian:
+sudo apt install openocd gdb-multiarch
+# Or download ARM GDB: arm-none-eabi-gdb
 ```
+
+**Why OpenOCD + GDB instead of probe-rs for R5:**
+- probe-rs has limited Cortex-R5 support (especially for Xilinx parts)
+- OpenOCD provides mature R5 debugging with semihosting
+- GDB integration works reliably with Xilinx toolchain
+- Hardware breakpoints and real-time debugging work properly
 
 **Project Configuration:**
 ```toml
@@ -7749,7 +7706,6 @@ impl AesContext {
    - Can revert to previous implementation if needed
    - Rollback procedure tested and documented
    - Data compatibility maintained
-```
 
 ### 6.2 FFI Integration with C Libraries {#ffi-integration-with-c-libraries}
 
@@ -9194,7 +9150,6 @@ This comprehensive testing and validation framework provides:
 7. **Automated CI/CD Integration** - Continuous testing in development pipeline
 
 The framework ensures that migrated cryptographic code maintains correctness, security, and performance throughout the migration process.
-```
 
 ### 6.4 Debugging and Tooling {#debugging-and-tooling}
 
