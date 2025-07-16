@@ -60,3 +60,25 @@ This feature involves reorganizing and improving an existing embedded Rust tutor
 2. WHEN potential pitfalls are identified THEN they SHALL include specific examples of what to avoid
 3. WHEN Rust-specific concepts are introduced THEN they SHALL explain why they matter for embedded cryptography
 4. WHEN safety features are discussed THEN they SHALL relate to common C vulnerabilities in crypto code
+
+### Requirement 6
+
+**User Story:** As an embedded cryptography programmer familiar with C enums and function pointers, I want to understand Rust's advanced type system features like enums, traits, and methods, so that I can leverage Rust's more powerful abstractions for cleaner and safer crypto implementations.
+
+#### Acceptance Criteria
+
+1. WHEN Rust enums are explained THEN they SHALL demonstrate advantages over C enums with pattern matching examples
+2. WHEN traits are introduced THEN they SHALL show how they provide safer alternatives to C function pointers
+3. WHEN methods are covered THEN they SHALL demonstrate how they improve code organization compared to C function naming conventions
+4. WHEN enum variants with data are explained THEN they SHALL show practical crypto use cases like error handling and state machines
+
+### Requirement 7
+
+**User Story:** As a C programmer working with mathematical operations and data processing, I want to understand Rust's approach to math operations, iterators, and closures, so that I can write more efficient and expressive embedded crypto code.
+
+#### Acceptance Criteria
+
+1. WHEN mathematical operations are covered THEN they SHALL address overflow handling and checked arithmetic for crypto safety
+2. WHEN iterators are explained THEN they SHALL demonstrate zero-cost abstractions for data processing in embedded contexts
+3. WHEN closures are introduced THEN they SHALL show practical applications in crypto algorithms and callback patterns
+4. WHEN functional programming concepts are covered THEN they SHALL relate to embedded constraints and no_std environments

@@ -62,6 +62,26 @@ The tutorial will be restructured into three main architectural layers:
 
 **Interface:** Concept explanations with embedded crypto examples
 
+### 3a. Advanced Type System Section
+**Purpose:** Rust's powerful type system features for C programmers
+**Content:**
+- Enums with data and pattern matching (vs C enums and switch statements)
+- Traits as safe alternatives to function pointers
+- Methods and associated functions for better code organization
+- Practical crypto use cases: state machines, error handling, algorithm abstractions
+
+**Interface:** Comparative examples showing C patterns and Rust improvements
+
+### 3b. Functional Programming and Data Processing Section  
+**Purpose:** Rust's functional features for efficient embedded crypto code
+**Content:**
+- Mathematical operations with overflow protection and checked arithmetic
+- Iterator patterns for zero-cost data processing abstractions
+- Closures for algorithm customization and callback patterns
+- Functional programming in no_std embedded environments
+
+**Interface:** Performance-focused examples with embedded constraints
+
 ### 4. Embedded-Specific Patterns Section
 **Purpose:** Rust patterns specific to embedded development
 **Content:**
@@ -104,6 +124,9 @@ enum ContentType {
     Example,           // Complete working examples
     Migration,         // Transition guidance from C
     Security,          // Security-specific considerations
+    TypeSystem,        // Advanced type system features (enums, traits, methods)
+    Functional,        // Functional programming concepts (iterators, closures)
+    Mathematics,       // Math operations and safety considerations
 }
 
 enum AudienceLevel {
