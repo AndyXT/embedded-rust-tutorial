@@ -1,0 +1,145 @@
+name: Test and Validate
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  validate-content:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests beautifulsoup4 markdown
+    
+    - name: Setup mdBook
+      uses: peaceiris/actions-mdbook@v1
+      with:
+        mdbook-version: 'latest'
+    
+    - name: Validate book configuration
+      run: |
+        # Check that book.toml exists and is valid
+        test -f book.toml
+        mdbook build --dest-dir book-test
+        echo "✅ Book configuration is valid"
+    
+    - name: Validate SUMMARY.md structure
+      run: |
+        # Check SUMMARY.md exists and has proper structure
+        test -f src/SUMMARY.md
+        # Check that all files referenced in SUMMARY.md exist
+        python -c "
+import re
+import os
+
+with open('src/SUMMARY.md', 'r') as f:
+    content = f.read()
+
+# Find all markdown file references
+links = re.findall(r'\[.*?\]\((.*?\.md)\)', content)
+missing_files = []
+
+for link in links:
+    file_path = os.path.join('src', link)
+    if not os.path.exists(file_path):
+        missing_files.append(file_path)
+
+if missing_files:
+    print('❌ Missing files referenced in SUMMARY.md:')
+    for f in missing_files:
+        print(f'  - {f}')
+    exit(1)
+else:
+    print('✅ All files referenced in SUMMARY.md exist')
+"
+    
+    - name: Test link validation
+      run: |
+        # Run existing link validation if available
+        if [ -f "link_validator.py" ]; then
+          python link_validator.py
+          echo "✅ Link validation completed"
+        else
+          echo "⚠️  Link validator not found, skipping detailed link validation"
+        fi
+    
+    - name: Test build output
+      run: |
+        # Build and verify key pages exist
+        mdbook build
+        
+        # Check critical files exist
+        required_files=(
+          "book/index.html"
+          "book/introduction.html"
+          "book/print.html"
+        )
+        
+        for file in "${required_files[@]}"; do
+          if [ ! -f "$file" ]; then
+            echo "❌ Missing required file: $file"
+            exit 1
+          fi
+        done
+        
+        # Check that chapters have been built
+        required_dirs=(
+          "book/core-concepts"
+          "book/cryptography"
+          "book/embedded-patterns"
+          "book/migration"
+          "book/quick-reference"
+        )
+        
+        for dir in "${required_dirs[@]}"; do
+          if [ ! -d "$dir" ]; then
+            echo "❌ Missing required directory: $dir"
+            exit 1
+          fi
+        done
+        
+        echo "✅ All required build outputs present"
+    
+    - name: Test search functionality
+      run: |
+        # Check that search index is generated
+        if [ -f "book/searchindex.js" ]; then
+          echo "✅ Search index generated successfully"
+        else
+          echo "❌ Search index not found"
+          exit 1
+        fi
+
+  test-rust-examples:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        override: true
+        components: rustfmt, clippy
+    
+    - name: Test Rust code examples
+      run: |
+        # Run existing Rust validation if available
+        if [ -f "validate_new_content.rs" ]; then
+          rustc validate_new_content.rs -o validate_content
+          ./validate_content
+          echo "✅ Rust code examples validated"
+        else
+          echo "⚠️  Rust validator not found, skipping code validation"
+        fi

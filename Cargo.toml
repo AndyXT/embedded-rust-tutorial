@@ -1,0 +1,29 @@
+[package]
+name = "embedded-rust-tutorial-validation"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+cortex-m = "0.7"
+cortex-m-rt = "0.7"
+panic-halt = "0.2"
+heapless = "0.7"
+zeroize = { version = "1.6", default-features = false }
+
+[profile.dev]
+debug = true
+opt-level = "s"
+
+[profile.release]
+debug = true
+opt-level = "s"
+lto = true
+codegen-units = 1
+
+[[bin]]
+name = "validate_new_content"
+path = "validate_new_content.rs"
+
+[[bin]]
+name = "test_math_safety"
+path = "test_math_safety.rs"

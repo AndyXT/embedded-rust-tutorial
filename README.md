@@ -39,6 +39,38 @@ The tutorial has been comprehensively validated and achieved:
 - **Cross-References**: 62 navigation links
 - **Target Coverage**: 4 embedded targets supported
 
+## 🌐 Online Book
+
+The tutorial is also available as an interactive online book built with mdBook:
+
+### Quick Start
+```bash
+# Start development server
+make dev
+# or
+./scripts/dev.sh
+```
+
+### Build Commands
+```bash
+# Build the book
+make build
+
+# Serve locally with auto-reload
+make serve
+
+# Run validation tests
+make test
+
+# Comprehensive validation
+make validate
+```
+
+### Deployment
+The book automatically deploys to GitHub Pages via GitHub Actions on pushes to main branch.
+
+See **[BUILD.md](BUILD.md)** for complete build and deployment documentation.
+
 ## 🚀 Usage
 
 ### For Learning

@@ -1,0 +1,299 @@
+/* Custom CSS for Embedded Rust Tutorial */
+
+/* Enhanced code block styling with copy functionality */
+.hljs {
+    position: relative;
+    border-radius: 6px;
+    border: 1px solid var(--theme-popup-border);
+    margin: 1em 0;
+}
+
+/* Copy button styling */
+.copy-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: var(--theme-hover);
+    border: 1px solid var(--theme-popup-border);
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
+    color: var(--fg);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 10;
+}
+
+.hljs:hover .copy-button {
+    opacity: 1;
+}
+
+.copy-button:hover {
+    background: var(--theme-popup-bg);
+}
+
+.copy-button.copied {
+    background: #28a745;
+    color: white;
+}
+
+/* Enhanced table styling for comparison tables */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--theme-popup-border);
+}
+
+table th,
+table td {
+    border: 1px solid var(--theme-popup-border);
+    padding: 12px 16px;
+    text-align: left;
+    vertical-align: top;
+}
+
+table th {
+    background-color: var(--theme-hover);
+    font-weight: 600;
+    color: var(--fg);
+}
+
+table tr:nth-child(even) {
+    background-color: var(--theme-hover);
+}
+
+table tr:hover {
+    background-color: var(--theme-popup-bg);
+}
+
+/* Code within tables */
+table code {
+    background: var(--inline-code-color);
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+
+/* Responsive design improvements */
+@media screen and (max-width: 768px) {
+    /* Mobile-friendly navigation */
+    .nav-chapters {
+        padding: 0 10px;
+    }
+    
+    .chapter {
+        padding: 8px 0;
+    }
+    
+    /* Better table handling on mobile */
+    table {
+        font-size: 14px;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    
+    table th,
+    table td {
+        padding: 8px 12px;
+        min-width: 120px;
+    }
+    
+    /* Code blocks on mobile */
+    .hljs {
+        font-size: 13px;
+        overflow-x: auto;
+    }
+    
+    /* Search improvements */
+    #searchbar {
+        width: 100%;
+        margin: 10px 0;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    /* Extra small screens */
+    .content {
+        padding: 15px 10px;
+    }
+    
+    h1 {
+        font-size: 1.8em;
+    }
+    
+    h2 {
+        font-size: 1.5em;
+    }
+    
+    h3 {
+        font-size: 1.3em;
+    }
+    
+    /* Compact navigation */
+    .nav-wrapper {
+        padding: 5px;
+    }
+    
+    .previous, .next {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+}
+
+/* Print-friendly styling */
+@media print {
+    .nav-chapters,
+    .nav-wrapper,
+    .mobile-nav-toggle,
+    #searchbar-outer,
+    .copy-button {
+        display: none !important;
+    }
+    
+    .content {
+        max-width: none;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .hljs {
+        border: 1px solid #ccc;
+        page-break-inside: avoid;
+    }
+    
+    table {
+        page-break-inside: avoid;
+        border: 1px solid #000;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+        page-break-after: avoid;
+    }
+    
+    /* Ensure code blocks are readable in print */
+    code, pre {
+        color: #000 !important;
+        background: #f5f5f5 !important;
+    }
+}
+
+/* Enhanced syntax highlighting for Rust */
+.hljs-keyword {
+    color: #d73a49;
+    font-weight: 600;
+}
+
+.hljs-string {
+    color: #032f62;
+}
+
+.hljs-comment {
+    color: #6a737d;
+    font-style: italic;
+}
+
+.hljs-number {
+    color: #005cc5;
+}
+
+.hljs-type {
+    color: #6f42c1;
+    font-weight: 600;
+}
+
+.hljs-function {
+    color: #6f42c1;
+}
+
+.hljs-variable {
+    color: #e36209;
+}
+
+/* Callout boxes for important information */
+.callout {
+    padding: 16px;
+    margin: 16px 0;
+    border-left: 4px solid;
+    border-radius: 0 6px 6px 0;
+    background: var(--theme-hover);
+}
+
+.callout.warning {
+    border-left-color: #f39c12;
+}
+
+.callout.danger {
+    border-left-color: #e74c3c;
+}
+
+.callout.info {
+    border-left-color: #3498db;
+}
+
+.callout.success {
+    border-left-color: #27ae60;
+}
+
+/* Navigation improvements */
+.nav-chapters .chapter.expanded > .toggle {
+    transform: rotate(90deg);
+}
+
+.nav-chapters .chapter > a {
+    padding: 8px 16px;
+    display: block;
+    text-decoration: none;
+    color: var(--fg);
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.nav-chapters .chapter > a:hover {
+    background-color: var(--theme-hover);
+}
+
+.nav-chapters .chapter.active > a {
+    background-color: var(--theme-popup-bg);
+    font-weight: 600;
+}
+
+/* Search result improvements */
+#searchresults .searchresult {
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 6px;
+    border: 1px solid var(--theme-popup-border);
+    background: var(--theme-hover);
+}
+
+#searchresults .searchresult:hover {
+    background: var(--theme-popup-bg);
+}
+
+/* Breadcrumb navigation */
+.breadcrumb {
+    padding: 8px 0;
+    margin-bottom: 16px;
+    font-size: 14px;
+    color: var(--fg);
+    border-bottom: 1px solid var(--theme-popup-border);
+}
+
+.breadcrumb a {
+    color: var(--links);
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb .separator {
+    margin: 0 8px;
+    color: var(--fg);
+}

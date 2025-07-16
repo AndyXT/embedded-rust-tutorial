@@ -1,15 +1,15 @@
 {
-  "total_examples": 77,
-  "rust_examples": 69,
-  "complete_examples": 63,
-  "crypto_examples": 61,
-  "embedded_examples": 31,
-  "syntax_valid_examples": 41,
-  "total_sections": 161,
-  "main_sections": 39,
-  "cross_references": 62,
-  "broken_links": 3,
-  "redundancy_score": 0.26083383790329556,
+  "total_examples": 98,
+  "rust_examples": 87,
+  "complete_examples": 77,
+  "crypto_examples": 79,
+  "embedded_examples": 33,
+  "syntax_valid_examples": 55,
+  "total_sections": 207,
+  "main_sections": 72,
+  "cross_references": 90,
+  "broken_links": 4,
+  "redundancy_score": 0.2460443561734525,
   "coverage_score": 1.0,
   "flow_score": 1.0,
   "embedded_targets_covered": [
@@ -24,6 +24,6 @@
   "overall_grade": "A+ (Excellent)",
   "ready_for_production": true,
   "recommendations": [
-    "Fix 3 broken cross-references"
+    "Fix 4 broken cross-references"
   ]
 }

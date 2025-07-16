@@ -5827,8 +5827,9 @@ fn handle_dma_error(error: DmaError) {
 5. **Quick reference section** for immediate productivity
 6. **Embedded-specific focus** throughout
 
-*The remaining sections (5 and 6) would continue with the same structure and cross-referencing approach.*## 5. C
-ryptography Implementation {#cryptography-implementation}
+*The remaining sections (5 and 6) would continue with the same structure and cross-referencing approach.*
+
+## 5. Cryptography Implementation {#cryptography-implementation}
 
 This section focuses on implementing cryptographic algorithms and protocols in Rust, with emphasis on security, performance, and embedded constraints.
 
