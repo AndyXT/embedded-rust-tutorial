@@ -41,14 +41,14 @@
   - Create integration tests that validate the complete workflow
   - _Requirements: 2.1, 2.3, 2.4_
 
-- [-] 7. Implement mdBook configuration enhancements
+- [x] 7. Implement mdBook configuration enhancements
   - Update `book.toml` to enable runnable playground with embedded-specific settings
   - Create custom mdBook preprocessor for handling embedded Rust examples
   - Implement visual indicators in generated HTML for compilation status
   - Write tests for mdBook integration and HTML generation
   - _Requirements: 1.1, 1.4, 5.1, 5.2_
 
-- [ ] 8. Create local development tools and CLI interface
+- [-] 8. Create local development tools and CLI interface
   - Implement command-line tool for testing individual code examples locally
   - Create development utilities for contributors to validate examples before committing
   - Add support for incremental testing and caching of compilation results

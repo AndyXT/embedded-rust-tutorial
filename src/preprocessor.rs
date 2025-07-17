@@ -231,7 +231,7 @@ impl RustExamplesPreprocessor {
         // Add compilation status indicator
         if should_validate {
             if let Some(ref tester) = self.tester {
-                let cache_key = format!("{:x}", md5::compute(code));
+                let cache_key = simple_hash(code);
                 
                 let test_result = if self.config.cache_enabled.unwrap_or(true) {
                     self.compilation_cache.get(&cache_key).cloned()
@@ -455,12 +455,10 @@ impl RustExamplesPreprocessor {
     }
 }
 
-// Simple MD5 implementation for cache keys
-mod md5 {
-    pub fn compute(input: &str) -> String {
-        // Simple hash for demo - in production, use a proper hash function
-        format!("{:x}", input.len() * 31 + input.chars().map(|c| c as u32).sum::<u32>())
-    }
+// Simple hash function for cache keys
+pub fn simple_hash(input: &str) -> String {
+    // Simple hash for demo - in production, use a proper hash function
+    format!("{:x}", input.len() * 31 + input.chars().map(|c| c as u32).sum::<u32>())
 }
 
 // Simple HTML escape for error messages
@@ -476,50 +474,4 @@ mod html_escape {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_preprocessor_creation() {
-        let preprocessor = RustExamplesPreprocessor::new();
-        assert!(preprocessor.tester.is_none());
-    }
-
-    #[test]
-    fn test_annotation_parsing() {
-        let preprocessor = RustExamplesPreprocessor::new();
-        
-        let context = preprocessor.parse_annotations("no_std,features=crypto");
-        assert!(matches!(context, ExampleContext::NoStd { .. }));
-        
-        let context = preprocessor.parse_annotations("hardware=stm32f4");
-        assert!(matches!(context, ExampleContext::Hardware { .. }));
-        
-        let context = preprocessor.parse_annotations("snippet=incomplete");
-        assert!(matches!(context, ExampleContext::Snippet { .. }));
-    }
-
-    #[test]
-    fn test_feature_extraction() {
-        let preprocessor = RustExamplesPreprocessor::new();
-        
-        let features = preprocessor.extract_features("features=crypto,hardware");
-        assert_eq!(features, vec!["crypto", "hardware"]);
-        
-        let features = preprocessor.extract_features("no_std");
-        assert!(features.is_empty());
-    }
-
-    #[test]
-    fn test_validation_decision() {
-        let preprocessor = RustExamplesPreprocessor::new();
-        
-        let context = ExampleContext::Std { features: vec![] };
-        assert!(preprocessor.should_validate_example(&context, ""));
-        
-        let context = ExampleContext::Snippet { reason: "incomplete".to_string() };
-        assert!(!preprocessor.should_validate_example(&context, ""));
-        
-        assert!(!preprocessor.should_validate_example(&context, "no_compile"));
-    }
-}
+pub mod tests;
