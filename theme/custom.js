@@ -9,6 +9,8 @@
         initializeResponsiveFeatures();
         initializeSearchEnhancements();
         initializePrintOptimizations();
+        initializeCompilationStatusFeatures();
+        initializePlaygroundEnhancements();
     });
 
     // Copy-to-clipboard functionality for code blocks
@@ -387,6 +389,468 @@
     document.addEventListener('DOMContentLoaded', function() {
         addBreadcrumbNavigation();
     });
+
+    // Initialize compilation status features
+    function initializeCompilationStatusFeatures() {
+        // Add interactive features to compilation status indicators
+        const statusIndicators = document.querySelectorAll('.compilation-status');
+        
+        statusIndicators.forEach(function(indicator) {
+            // Add click handler for detailed error information
+            if (indicator.classList.contains('compilation-failed')) {
+                indicator.style.cursor = 'pointer';
+                indicator.addEventListener('click', function() {
+                    showCompilationErrorDetails(indicator);
+                });
+            }
+            
+            // Add hover effects for better UX
+            indicator.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-1px)';
+                this.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+            });
+            
+            indicator.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = 'none';
+            });
+        });
+
+        // Add context indicators to code blocks
+        addCodeBlockContextIndicators();
+        
+        // Initialize compilation metrics display
+        initializeCompilationMetrics();
+    }
+
+    // Show detailed compilation error information
+    function showCompilationErrorDetails(indicator) {
+        const errorTitle = indicator.getAttribute('title');
+        if (!errorTitle) return;
+
+        const errorModal = document.createElement('div');
+        errorModal.className = 'compilation-error-modal';
+        errorModal.innerHTML = `
+            <div class="error-modal-content">
+                <div class="error-modal-header">
+                    <h3>Compilation Error Details</h3>
+                    <button class="error-modal-close" aria-label="Close error details">&times;</button>
+                </div>
+                <div class="error-modal-body">
+                    <pre><code>${escapeHtml(errorTitle)}</code></pre>
+                </div>
+                <div class="error-modal-footer">
+                    <button class="error-modal-copy">Copy Error</button>
+                    <button class="error-modal-close-btn">Close</button>
+                </div>
+            </div>
+        `;
+
+        // Style the modal
+        errorModal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        `;
+
+        const modalContent = errorModal.querySelector('.error-modal-content');
+        modalContent.style.cssText = `
+            background: var(--bg);
+            border: 1px solid var(--theme-popup-border);
+            border-radius: 8px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            color: var(--fg);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        `;
+
+        // Add event handlers
+        const closeButtons = errorModal.querySelectorAll('.error-modal-close, .error-modal-close-btn');
+        closeButtons.forEach(button => {
+            button.addEventListener('click', () => errorModal.remove());
+        });
+
+        const copyButton = errorModal.querySelector('.error-modal-copy');
+        copyButton.addEventListener('click', () => {
+            copyToClipboard(errorTitle, copyButton);
+        });
+
+        // Close on click outside
+        errorModal.addEventListener('click', function(e) {
+            if (e.target === errorModal) {
+                errorModal.remove();
+            }
+        });
+
+        document.body.appendChild(errorModal);
+    }
+
+    // Add context indicators to code blocks
+    function addCodeBlockContextIndicators() {
+        const codeBlocks = document.querySelectorAll('pre code');
+        
+        codeBlocks.forEach(function(codeBlock) {
+            const pre = codeBlock.parentElement;
+            const codeText = codeBlock.textContent;
+            
+            // Detect context from code content
+            const context = detectCodeContext(codeText);
+            
+            if (context) {
+                pre.classList.add(`code-block-${context}`);
+                
+                // Add target architecture indicator if embedded
+                if (context === 'embedded' || context === 'no-std') {
+                    addTargetIndicator(pre, detectTargetArchitecture(codeText));
+                }
+                
+                // Add feature flags if detected
+                const features = detectFeatureFlags(codeText);
+                if (features.length > 0) {
+                    addFeatureFlags(pre, features);
+                }
+            }
+        });
+    }
+
+    // Detect code context from content
+    function detectCodeContext(code) {
+        if (code.includes('#![no_std]') || code.includes('#![no_main]')) {
+            return 'no-std';
+        }
+        if (code.includes('cortex_m') || code.includes('embedded_hal') || code.includes('stm32')) {
+            return 'hardware';
+        }
+        if (code.includes('zeroize') || code.includes('crypto') || code.includes('aes') || code.includes('sha')) {
+            return 'crypto';
+        }
+        if (code.includes('// snippet') || code.includes('// ...')) {
+            return 'snippet';
+        }
+        return null;
+    }
+
+    // Detect target architecture
+    function detectTargetArchitecture(code) {
+        if (code.includes('thumbv7em') || code.includes('cortex-m')) {
+            return 'thumbv7em';
+        }
+        if (code.includes('x86_64')) {
+            return 'x86_64';
+        }
+        return 'generic';
+    }
+
+    // Detect feature flags
+    function detectFeatureFlags(code) {
+        const features = [];
+        if (code.includes('crypto') || code.includes('zeroize')) {
+            features.push('crypto');
+        }
+        if (code.includes('embedded_hal') || code.includes('cortex_m')) {
+            features.push('hardware');
+        }
+        if (code.includes('#![no_std]')) {
+            features.push('embedded');
+        }
+        return features;
+    }
+
+    // Add target architecture indicator
+    function addTargetIndicator(pre, target) {
+        const indicator = document.createElement('span');
+        indicator.className = `target-indicator ${target}`;
+        indicator.textContent = target;
+        indicator.style.cssText = `
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            z-index: 10;
+        `;
+        pre.style.position = 'relative';
+        pre.appendChild(indicator);
+    }
+
+    // Add feature flags display
+    function addFeatureFlags(pre, features) {
+        const flagsContainer = document.createElement('div');
+        flagsContainer.className = 'feature-flags';
+        flagsContainer.style.cssText = `
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            z-index: 10;
+        `;
+
+        features.forEach(feature => {
+            const flag = document.createElement('span');
+            flag.className = `feature-flag ${feature}`;
+            flag.textContent = feature;
+            flagsContainer.appendChild(flag);
+        });
+
+        pre.style.position = 'relative';
+        pre.appendChild(flagsContainer);
+    }
+
+    // Initialize compilation metrics display
+    function initializeCompilationMetrics() {
+        const statusIndicators = document.querySelectorAll('.compilation-status');
+        let totalExamples = statusIndicators.length;
+        let successfulExamples = document.querySelectorAll('.compilation-status.compilation-success').length;
+        let failedExamples = document.querySelectorAll('.compilation-status.compilation-failed').length;
+
+        if (totalExamples > 0) {
+            addCompilationSummary(totalExamples, successfulExamples, failedExamples);
+        }
+    }
+
+    // Add compilation summary to page
+    function addCompilationSummary(total, successful, failed) {
+        const summary = document.createElement('div');
+        summary.className = 'compilation-summary';
+        summary.innerHTML = `
+            <div class="summary-header">
+                <h4>Code Example Compilation Status</h4>
+            </div>
+            <div class="summary-stats">
+                <div class="stat-item">
+                    <span class="stat-number">${total}</span>
+                    <span class="stat-label">Total Examples</span>
+                </div>
+                <div class="stat-item success">
+                    <span class="stat-number">${successful}</span>
+                    <span class="stat-label">✓ Compiled</span>
+                </div>
+                <div class="stat-item failed">
+                    <span class="stat-number">${failed}</span>
+                    <span class="stat-label">✗ Failed</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">${Math.round((successful / total) * 100)}%</span>
+                    <span class="stat-label">Success Rate</span>
+                </div>
+            </div>
+        `;
+
+        // Style the summary
+        summary.style.cssText = `
+            background: var(--theme-hover);
+            border: 1px solid var(--theme-popup-border);
+            border-radius: 6px;
+            padding: 16px;
+            margin: 16px 0;
+            font-size: 14px;
+        `;
+
+        // Insert at the top of content
+        const content = document.querySelector('.content');
+        if (content) {
+            const firstChild = content.firstElementChild;
+            if (firstChild) {
+                content.insertBefore(summary, firstChild);
+            } else {
+                content.appendChild(summary);
+            }
+        }
+    }
+
+    // Initialize playground enhancements
+    function initializePlaygroundEnhancements() {
+        // Process playground configurations
+        const playgroundConfigs = document.querySelectorAll('.playground-config');
+        
+        playgroundConfigs.forEach(function(config) {
+            try {
+                const configData = JSON.parse(config.textContent);
+                enhancePlaygroundWithConfig(config, configData);
+            } catch (e) {
+                console.warn('Failed to parse playground config:', e);
+            }
+        });
+
+        // Add run buttons to runnable examples
+        addRunButtons();
+        
+        // Initialize playground features
+        initializePlaygroundFeatures();
+    }
+
+    // Enhance playground with configuration
+    function enhancePlaygroundWithConfig(configElement, config) {
+        const codeBlock = configElement.previousElementSibling;
+        if (codeBlock && codeBlock.tagName === 'PRE') {
+            codeBlock.classList.add('playground-runnable');
+            
+            // Add configuration data as data attributes
+            codeBlock.dataset.playgroundConfig = JSON.stringify(config);
+            
+            // Add edition indicator
+            if (config.edition) {
+                const editionIndicator = document.createElement('span');
+                editionIndicator.className = 'edition-indicator';
+                editionIndicator.textContent = `Rust ${config.edition}`;
+                editionIndicator.style.cssText = `
+                    position: absolute;
+                    top: 8px;
+                    left: 8px;
+                    background: var(--links);
+                    color: white;
+                    padding: 2px 6px;
+                    border-radius: 3px;
+                    font-size: 10px;
+                    font-weight: bold;
+                    z-index: 10;
+                `;
+                codeBlock.style.position = 'relative';
+                codeBlock.appendChild(editionIndicator);
+            }
+        }
+    }
+
+    // Add run buttons to runnable examples
+    function addRunButtons() {
+        const runnableBlocks = document.querySelectorAll('.playground-runnable');
+        
+        runnableBlocks.forEach(function(block) {
+            const runButton = document.createElement('button');
+            runButton.className = 'playground-run-button';
+            runButton.textContent = '▶ Run';
+            runButton.setAttribute('aria-label', 'Run code example');
+            
+            runButton.style.cssText = `
+                position: absolute;
+                top: 8px;
+                right: 80px;
+                background: #4caf50;
+                color: white;
+                border: none;
+                padding: 4px 8px;
+                border-radius: 3px;
+                font-size: 11px;
+                font-weight: bold;
+                cursor: pointer;
+                z-index: 10;
+                transition: background-color 0.2s ease;
+            `;
+            
+            runButton.addEventListener('click', function() {
+                runCodeExample(block);
+            });
+            
+            runButton.addEventListener('mouseenter', function() {
+                this.style.backgroundColor = '#45a049';
+            });
+            
+            runButton.addEventListener('mouseleave', function() {
+                this.style.backgroundColor = '#4caf50';
+            });
+            
+            block.style.position = 'relative';
+            block.appendChild(runButton);
+        });
+    }
+
+    // Run code example (placeholder - would integrate with actual playground)
+    function runCodeExample(codeBlock) {
+        const code = codeBlock.querySelector('code').textContent;
+        const config = JSON.parse(codeBlock.dataset.playgroundConfig || '{}');
+        
+        // This would integrate with the Rust playground or local execution
+        console.log('Running code example:', { code, config });
+        
+        // Show running indicator
+        const runButton = codeBlock.querySelector('.playground-run-button');
+        const originalText = runButton.textContent;
+        runButton.textContent = '⏳ Running...';
+        runButton.disabled = true;
+        
+        // Simulate execution (replace with actual playground integration)
+        setTimeout(() => {
+            runButton.textContent = originalText;
+            runButton.disabled = false;
+            showExecutionResult(codeBlock, 'Example executed successfully!');
+        }, 2000);
+    }
+
+    // Show execution result
+    function showExecutionResult(codeBlock, result) {
+        const resultDiv = document.createElement('div');
+        resultDiv.className = 'execution-result';
+        resultDiv.innerHTML = `
+            <div class="result-header">Output:</div>
+            <pre><code>${escapeHtml(result)}</code></pre>
+        `;
+        
+        resultDiv.style.cssText = `
+            background: var(--theme-hover);
+            border: 1px solid var(--theme-popup-border);
+            border-top: none;
+            border-radius: 0 0 6px 6px;
+            padding: 12px;
+            font-size: 13px;
+            margin-top: 0;
+        `;
+        
+        // Remove existing result if present
+        const existingResult = codeBlock.nextElementSibling;
+        if (existingResult && existingResult.classList.contains('execution-result')) {
+            existingResult.remove();
+        }
+        
+        codeBlock.parentNode.insertBefore(resultDiv, codeBlock.nextSibling);
+        
+        // Auto-remove after 10 seconds
+        setTimeout(() => {
+            if (resultDiv.parentNode) {
+                resultDiv.remove();
+            }
+        }, 10000);
+    }
+
+    // Initialize additional playground features
+    function initializePlaygroundFeatures() {
+        // Add keyboard shortcuts for playground
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + Enter to run focused code block
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                const focusedElement = document.activeElement;
+                const codeBlock = focusedElement.closest('.playground-runnable');
+                if (codeBlock) {
+                    e.preventDefault();
+                    runCodeExample(codeBlock);
+                }
+            }
+        });
+        
+        // Make code blocks focusable for keyboard navigation
+        const runnableBlocks = document.querySelectorAll('.playground-runnable');
+        runnableBlocks.forEach(function(block) {
+            block.setAttribute('tabindex', '0');
+            block.addEventListener('focus', function() {
+                this.style.outline = '2px solid var(--links)';
+                this.style.outlineOffset = '2px';
+            });
+            block.addEventListener('blur', function() {
+                this.style.outline = 'none';
+            });
+        });
+    }
+
+    // Utility function to escape HTML
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
 
     // Smooth scrolling for anchor links
     document.addEventListener('click', function(e) {

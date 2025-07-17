@@ -45,5 +45,17 @@ level = 0
 copyable = true
 copy-js = true
 line-numbers = true
-editable = false
-runnable = false
+editable = true
+runnable = true
+
+[preprocessor.rust-examples]
+command = "mdbook-rust-examples"
+renderer = ["html"]
+
+[preprocessor.rust-examples.config]
+embedded-target = "thumbv7em-none-eabihf"
+no-std-mode = true
+feature-gates = ["crypto", "hardware", "embedded"]
+validation-enabled = true
+compilation-timeout = 30
+cache-enabled = true

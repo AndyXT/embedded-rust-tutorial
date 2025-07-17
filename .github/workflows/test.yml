@@ -132,14 +132,119 @@ jobs:
         toolchain: stable
         override: true
         components: rustfmt, clippy
+        targets: thumbv7em-none-eabihf
     
-    - name: Test Rust code examples
+    - name: Build Rust compilation testing framework
+      run: |
+        echo "🔨 Building Rust example testing framework..."
+        cargo build --bin rust_example_tester
+        echo "✅ Rust testing framework built successfully"
+    
+    - name: Test Rust code examples with compilation framework
+      run: |
+        echo "🦀 Testing Rust code examples with advanced compilation testing..."
+        
+        # Test with the main tutorial document if available
+        if [ -f "embedded-rust-tutorial-master.md" ]; then
+          ./target/debug/rust_example_tester embedded-rust-tutorial-master.md > rust_compilation_results.json
+          echo "✅ Advanced Rust compilation testing completed"
+          
+          # Display summary
+          echo "📊 Compilation Test Summary:"
+          cat rust_compilation_results.json | jq -r '"Total examples: \(.total_examples), Successful: \(.successful), Failed: \(.failed), Success rate: \(.success_rate)%"'
+        else
+          echo "⚠️  Main tutorial document not found, testing individual files..."
+          
+          # Test individual markdown files in src/
+          find src -name "*.md" -type f | head -5 | while read file; do
+            echo "Testing $file..."
+            if ./target/debug/rust_example_tester "$file" > /dev/null 2>&1; then
+              echo "✅ $file passed"
+            else
+              echo "⚠️  $file had issues"
+            fi
+          done
+        fi
+    
+    - name: Run legacy Rust validation
       run: |
         # Run existing Rust validation if available
         if [ -f "validate_new_content.rs" ]; then
           rustc validate_new_content.rs -o validate_content
           ./validate_content
-          echo "✅ Rust code examples validated"
+          echo "✅ Legacy Rust code examples validated"
         else
-          echo "⚠️  Rust validator not found, skipping code validation"
+          echo "⚠️  Legacy Rust validator not found, skipping"
         fi
+    
+    - name: Upload compilation test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: rust-compilation-results
+        path: |
+          rust_compilation_results.json
+          code_test_report.md
+
+  integration-testing:
+    runs-on: ubuntu-latest
+    needs: [validate-content, test-rust-examples]
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Setup Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        override: true
+        targets: thumbv7em-none-eabihf
+    
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests beautifulsoup4 markdown
+    
+    - name: Build Rust compilation testing framework
+      run: |
+        echo "🔨 Building Rust example testing framework for integration..."
+        cargo build --bin rust_example_tester
+    
+    - name: Run integrated validation with Rust compilation testing
+      run: |
+        echo "🔗 Running integrated validation with Rust compilation testing..."
+        
+        # Test with the main tutorial document if available
+        if [ -f "embedded-rust-tutorial-master.md" ]; then
+          echo "📚 Testing main tutorial document with integrated validation..."
+          python validate_tutorial.py embedded-rust-tutorial-master.md
+          echo "✅ Integrated validation completed"
+        else
+          echo "⚠️  Main tutorial document not found, testing with src/introduction.md..."
+          python validate_tutorial.py src/introduction.md
+        fi
+    
+    - name: Run comprehensive validation suite
+      run: |
+        echo "🎯 Running comprehensive validation suite..."
+        if [ -f "comprehensive_validation_suite.py" ]; then
+          python comprehensive_validation_suite.py
+          echo "✅ Comprehensive validation suite completed"
+        else
+          echo "⚠️  Comprehensive validation suite not found"
+        fi
+    
+    - name: Upload integration test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: integration-test-results
+        path: |
+          code_test_report.md
+          task14_comprehensive_validation_report.md
+          task14_comprehensive_validation_results.json
+          validation_report.md

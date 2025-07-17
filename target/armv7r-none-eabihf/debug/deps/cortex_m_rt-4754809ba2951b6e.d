@@ -1,7 +1,0 @@
-/var/home/atreto/projs/rusty/target/armv7r-none-eabihf/debug/deps/cortex_m_rt-4754809ba2951b6e.d: /home/atreto/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cortex-m-rt-0.7.5/src/lib.rs
-
-/var/home/atreto/projs/rusty/target/armv7r-none-eabihf/debug/deps/libcortex_m_rt-4754809ba2951b6e.rlib: /home/atreto/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cortex-m-rt-0.7.5/src/lib.rs
-
-/var/home/atreto/projs/rusty/target/armv7r-none-eabihf/debug/deps/libcortex_m_rt-4754809ba2951b6e.rmeta: /home/atreto/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cortex-m-rt-0.7.5/src/lib.rs
-
-/home/atreto/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cortex-m-rt-0.7.5/src/lib.rs:

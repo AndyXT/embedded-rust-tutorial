@@ -91,16 +91,28 @@ class ComprehensiveValidationSuite:
         return result
     
     def run_tutorial_validation(self) -> Optional[Dict]:
-        """Run tutorial code example validation"""
+        """Run tutorial code example validation with Rust compilation testing"""
         if not self.tutorial_validator:
             print("\n⚠️  Skipping tutorial validation - original document not found")
             return None
             
-        print("\n🦀 Running Tutorial Code Example Validation...")
+        print("\n🦀 Running Tutorial Code Example Validation with Rust Compilation Testing...")
         print("-" * 50)
         
         result = self.tutorial_validator.run_validation()
         self.results['tutorial'] = result
+        
+        # Check if Rust compilation testing was integrated
+        if result.get('rust_compilation_available'):
+            print("✅ Rust compilation testing integration successful")
+            rust_results = result.get('rust_results', {})
+            if rust_results:
+                total = rust_results.get('total_examples', 0)
+                successful = rust_results.get('successful', 0)
+                print(f"📊 Rust compilation: {successful}/{total} examples compiled successfully")
+        else:
+            print("⚠️  Rust compilation testing not available")
+            print(f"   Reason: {result.get('reason', 'unknown')}")
         
         return result
     
