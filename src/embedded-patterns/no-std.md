@@ -2,6 +2,8 @@
 
 No-std programming is fundamental to embedded Rust. This section consolidates all no-std concepts and patterns from across the document into a single authoritative reference.
 
+For memory management concepts, see [Memory Model Differences](../core-concepts/memory-model.md). For error handling patterns, refer to [Error Handling Patterns](../quick-reference/error-handling.md).
+
 #### Complete No-std Project Template
 
 ```rust

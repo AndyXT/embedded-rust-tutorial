@@ -1,0 +1,516 @@
+{
+  "timestamp": "2025-07-16T21:03:39.078948",
+  "overall_success": false,
+  "task14_requirements_met": true,
+  "content_validation_passed": false,
+  "tutorial_validation_passed": false,
+  "task14_result": {
+    "subtask_1_content_preservation": true,
+    "subtask_2_link_checking": true,
+    "subtask_3_code_validation": true,
+    "subtask_4_cross_references": true,
+    "overall_success": true,
+    "details": {
+      "subtask_1": "Content preservation validated: 47 files, 30 with code examples",
+      "subtask_2": "Link validation passed: 133 links, 100.0% success rate",
+      "subtask_3": "Code validation passed: 102 Rust blocks, 122 total blocks (83.6% Rust)",
+      "subtask_4": "Cross-reference validation passed: 77 cross-refs across 7 chapters"
+    }
+  },
+  "content_result": {
+    "total_tests": 4,
+    "passed_tests": 2,
+    "failed_tests": 2,
+    "warnings_count": 8,
+    "errors_count": 52,
+    "overall_success": false,
+    "test_results": [
+      {
+        "test_name": "Content Preservation",
+        "passed": false,
+        "details": "Content preservation analysis:\n- Original sections: 197\n- mdBook sections: 207\n- Missing sections: 18\n- Code block preservation: 114.0%\n- Missing concepts: 0",
+        "errors": [
+          "Missing section: Embedded Rust Tutorial for Cryptography Engineers",
+          "Missing section: \ud83d\ude80 Quick Start Navigation",
+          "Missing section: \ud83d\udccb Table of Contents",
+          "Missing section: Document Usage Modes",
+          "Missing section: Navigation Features",
+          "Missing section: [1. Quick Reference](#quick-reference)",
+          "Missing section: [2. Environment Setup](#environment-setup)",
+          "Missing section: [3. Core Language Concepts](#core-language-concepts)",
+          "Missing section: [4. Embedded-Specific Patterns](#embedded-specific-patterns)",
+          "Missing section: [5. Cryptography Implementation](#cryptography-implementation)",
+          "Missing section: [6. Migration and Integration](#migration-and-integration)",
+          "Missing section: Cross-Reference System",
+          "Missing section: 2. Environment Setup {#environment-setup}",
+          "Missing section: 5.4 Hardware Crypto Acceleration {#hardware-crypto-acceleration}",
+          "Missing section: Benchmarking and Profiling",
+          "Missing section: Conclusion",
+          "Missing section: Key Benefits of This Structure",
+          "Missing section: Next Steps"
+        ],
+        "warnings": []
+      },
+      {
+        "test_name": "Link Integrity",
+        "passed": true,
+        "details": "Link integrity analysis:\n- Total internal links: 133\n- Broken links: 0\n- Orphaned files: 0\n- Link validation rate: 100.0%",
+        "errors": [],
+        "warnings": []
+      },
+      {
+        "test_name": "Code Syntax Highlighting",
+        "passed": false,
+        "details": "Code syntax highlighting analysis:\n- Total code blocks: 122\n- Rust code blocks: 102\n- Syntax valid: 68/102 (66.7%)\n- Compilation testable: 78/102 (76.5%)\n- Untagged blocks: 0\n- mdBook build: \u2705",
+        "errors": [
+          "Syntax error in core-concepts/advanced-types.md line 203",
+          "Syntax error in core-concepts/advanced-types.md line 370",
+          "Syntax error in core-concepts/advanced-types.md line 134",
+          "Syntax error in core-concepts/advanced-types.md line 718",
+          "Syntax error in core-concepts/ownership.md line 24",
+          "Syntax error in core-concepts/ownership.md line 71",
+          "Syntax error in core-concepts/type-system-advantages-for-security.md line 8",
+          "Syntax error in core-concepts/type-system-advantages-for-security.md line 119",
+          "Syntax error in core-concepts/type-system-advantages-for-security.md line 209",
+          "Syntax error in cryptography/constant-time.md line 287",
+          "Syntax error in cryptography/hardware-crypto.md line 512",
+          "Syntax error in cryptography/hardware-crypto.md line 603",
+          "Syntax error in cryptography/key-management.md line 73",
+          "Syntax error in cryptography/key-management.md line 180",
+          "Syntax error in cryptography/secure-patterns.md line 56",
+          "Syntax error in cryptography/secure-patterns.md line 149",
+          "Syntax error in cryptography/side-channels.md line 553",
+          "Syntax error in embedded-patterns/hardware-abstraction.md line 123",
+          "Syntax error in embedded-patterns/hardware-abstraction.md line 338",
+          "Syntax error in embedded-patterns/no-std.md line 10",
+          "Syntax error in embedded-patterns/no-std.md line 235",
+          "Syntax error in environment-setup/build-config.md line 4",
+          "Syntax error in migration/debugging.md line 8",
+          "Syntax error in migration/ffi-integration.md line 266",
+          "Syntax error in migration/ffi-integration.md line 604",
+          "Syntax error in migration/ffi-integration.md line 685",
+          "Syntax error in migration/strategies.md line 40",
+          "Syntax error in migration/strategies.md line 156",
+          "Syntax error in migration/strategies.md line 294",
+          "Syntax error in migration/testing.md line 10",
+          "Syntax error in migration/testing.md line 282",
+          "Syntax error in migration/testing.md line 383",
+          "Syntax error in migration/testing.md line 472",
+          "Syntax error in quick-reference/gotchas.md line 316"
+        ],
+        "warnings": []
+      },
+      {
+        "test_name": "Cross-Reference Validation",
+        "passed": true,
+        "details": "Cross-reference validation:\n- Total cross-references: 76\n- Chapters with cross-refs: 7\n- Missing expected patterns: 8\n- Circular references: 8\n- Reference density: 1.65 refs/file",
+        "errors": [],
+        "warnings": [
+          "Missing expected cross-reference: quick-reference -> embedded-patterns",
+          "Missing expected cross-reference: quick-reference -> cryptography",
+          "Missing expected cross-reference: environment-setup -> quick-reference",
+          "Missing expected cross-reference: cryptography -> quick-reference",
+          "Missing expected cross-reference: cryptography -> embedded-patterns",
+          "Missing expected cross-reference: migration -> quick-reference",
+          "Missing expected cross-reference: migration -> embedded-patterns",
+          "Missing expected cross-reference: migration -> cryptography"
+        ]
+      }
+    ]
+  },
+  "tutorial_result": {
+    "total_examples": 98,
+    "syntax_valid": 6,
+    "compiles": 35,
+    "failed_examples": [
+      {
+        "section": "No-std Complete Template",
+        "line": 324,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "\u26a0\ufe0f Common Migration Pitfalls",
+        "line": 710,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "\u26a0\ufe0f Common Migration Pitfalls",
+        "line": 730,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "\u26a0\ufe0f Common Migration Pitfalls",
+        "line": 748,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "2.4 Build Configuration {#build-configuration}",
+        "line": 1087,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Ownership in Embedded Crypto Context",
+        "line": 1217,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Borrowing Rules for Crypto Operations",
+        "line": 1264,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Memory Management Patterns for Embedded",
+        "line": 1320,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Error Propagation in Crypto Pipelines",
+        "line": 1425,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Option Types for Safe Nullable Crypto State",
+        "line": 1498,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Error Recovery Patterns for Embedded Crypto",
+        "line": 1537,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Type-Safe Protocol State Machines",
+        "line": 1581,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Const Generics for Compile-Time Crypto Parameters",
+        "line": 1692,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Newtype Pattern for Domain-Specific Security",
+        "line": 1782,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Advanced Enums and Pattern Matching",
+        "line": 1934,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "[derive(Debug)]",
+        "line": 1996,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Traits - Safe Function Pointer Alternatives",
+        "line": 2143,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Traits - Safe Function Pointer Alternatives",
+        "line": 2232,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Methods and Associated Functions",
+        "line": 2411,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "[derive(ZeroizeOnDrop)]",
+        "line": 2475,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Mathematical Operations with Safety",
+        "line": 2786,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Mathematical Operations with Safety",
+        "line": 2824,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Iterator Patterns for Zero-Cost Data Processing",
+        "line": 2974,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Iterator Patterns for Zero-Cost Data Processing",
+        "line": 3031,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Closures for Algorithm Customization",
+        "line": 3225,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Functional Programming in No-std Environments",
+        "line": 3457,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Complete No-std Project Template",
+        "line": 3638,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "No-std Memory Management Patterns",
+        "line": 3718,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Peripheral Access Crate (PAC) Usage",
+        "line": 3923,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Hardware Abstraction Layer (HAL) Patterns",
+        "line": 4038,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Safe Interrupt Handling Fundamentals",
+        "line": 4332,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Interrupt Priority and Timing Considerations",
+        "line": 4796,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Advanced Static Memory Pool Management",
+        "line": 4869,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Compile-Time Memory Layout with Security Features",
+        "line": 5020,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Memory Layout Optimization for Crypto Performance",
+        "line": 5256,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Memory Safety Advantages for Cryptography",
+        "line": 5848,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Automatic Key Zeroization Patterns",
+        "line": 5890,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Type-Safe Protocol State Machines",
+        "line": 5983,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Using the `subtle` Crate for Constant-Time Operations",
+        "line": 6266,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Advanced Constant-Time Patterns",
+        "line": 6342,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Embedded-Specific Constant-Time Considerations",
+        "line": 6508,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Automatic Key Zeroization Patterns",
+        "line": 6606,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Hierarchical Key Derivation with Automatic Cleanup",
+        "line": 6666,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Secure Random Number Generation with Hardware Integration",
+        "line": 6773,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Key Lifecycle Management",
+        "line": 6931,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Power Analysis Protection",
+        "line": 7165,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Step 2: Module-by-Module Migration",
+        "line": 7262,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Step 5: Hardware Abstraction Layer Migration",
+        "line": 7620,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "[derive(Debug)]",
+        "line": 7897,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Integration with mbedTLS",
+        "line": 7975,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Hardware Crypto Library Integration",
+        "line": 8147,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Link to crypto libraries based on features",
+        "line": 8313,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Usage Examples and Best Practices",
+        "line": 8394,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Automated Testing Framework",
+        "line": 8748,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Hardware-in-the-Loop Testing",
+        "line": 8849,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Test Data Management",
+        "line": 8938,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "RTT Debugging for Crypto",
+        "line": 9161,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Benchmarking and Profiling",
+        "line": 9223,
+        "language": "rust",
+        "error": "Compilation failed"
+      },
+      {
+        "section": "Or download ARM GDB: arm-none-eabi-gdb",
+        "line": 858,
+        "language": "toml",
+        "error": "TOML parsing failed"
+      },
+      {
+        "section": "Build settings for proper ELF generation",
+        "line": 885,
+        "language": "toml",
+        "error": "TOML parsing failed"
+      },
+      {
+        "section": "2.2.2 ARM Cortex-M Series {#arm-cortex-m-series}",
+        "line": 1020,
+        "language": "toml",
+        "error": "TOML parsing failed"
+      },
+      {
+        "section": "2.3 Project Structure and Dependencies {#project-structure-and-dependencies}",
+        "line": 1044,
+        "language": "toml",
+        "error": "TOML parsing failed"
+      },
+      {
+        "section": "Build System Integration",
+        "line": 8282,
+        "language": "toml",
+        "error": "TOML parsing failed"
+      }
+    ]
+  },
+  "total_tests_run": 10,
+  "tests_passed": 7,
+  "critical_errors": 52,
+  "warnings": 8,
+  "recommendations": [
+    "HIGH: Address 52 critical content errors",
+    "MEDIUM: Improve code example quality - only 35.7% compile successfully",
+    "Set up automated validation in CI/CD pipeline",
+    "Run validation tests before each content update"
+  ]
+}

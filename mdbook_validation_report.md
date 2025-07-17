@@ -1,6 +1,6 @@
 # mdBook Content Validation Report
 
-**Generated:** 2025-07-16 18:25:30  
+**Generated:** 2025-07-16 21:01:23  
 **Source Directory:** `src`  
 **Original Document:** `embedded-rust-tutorial-master.md`
 
@@ -11,7 +11,7 @@
 | **Overall Status** | ❌ FAIL | 🔴 Needs Work |
 | **Tests Passed** | 2/4 | 50.0% |
 | **Critical Errors** | 52 | 🔴 Must Fix |
-| **Warnings** | 10 | 🟡 Review |
+| **Warnings** | 8 | 🟡 Review |
 
 ## 🧪 Test Results
 
@@ -48,7 +48,7 @@ Content preservation analysis:
 **Details:**
 ```
 Link integrity analysis:
-- Total internal links: 129
+- Total internal links: 133
 - Broken links: 0
 - Orphaned files: 0
 - Link validation rate: 100.0%
@@ -83,25 +83,25 @@ Code syntax highlighting analysis:
 
 **Status:** PASS  
 **Errors:** 0  
-**Warnings:** 10  
+**Warnings:** 8  
 
 **Details:**
 ```
 Cross-reference validation:
-- Total cross-references: 72
-- Chapters with cross-refs: 6
-- Missing expected patterns: 10
-- Circular references: 6
-- Reference density: 1.57 refs/file
+- Total cross-references: 76
+- Chapters with cross-refs: 7
+- Missing expected patterns: 8
+- Circular references: 8
+- Reference density: 1.65 refs/file
 ```
 
 **Warnings:**
 - Missing expected cross-reference: quick-reference -> embedded-patterns
 - Missing expected cross-reference: quick-reference -> cryptography
 - Missing expected cross-reference: environment-setup -> quick-reference
-- Missing expected cross-reference: embedded-patterns -> quick-reference
-- Missing expected cross-reference: embedded-patterns -> core-concepts
-- ... and 5 more warnings
+- Missing expected cross-reference: cryptography -> quick-reference
+- Missing expected cross-reference: cryptography -> embedded-patterns
+- ... and 3 more warnings
 
 ## 🎯 Recommendations
 

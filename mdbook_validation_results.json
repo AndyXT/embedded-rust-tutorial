@@ -2,7 +2,7 @@
   "total_tests": 4,
   "passed_tests": 2,
   "failed_tests": 2,
-  "warnings_count": 10,
+  "warnings_count": 8,
   "errors_count": 52,
   "overall_success": false,
   "test_results": [
@@ -35,7 +35,7 @@
     {
       "test_name": "Link Integrity",
       "passed": true,
-      "details": "Link integrity analysis:\n- Total internal links: 129\n- Broken links: 0\n- Orphaned files: 0\n- Link validation rate: 100.0%",
+      "details": "Link integrity analysis:\n- Total internal links: 133\n- Broken links: 0\n- Orphaned files: 0\n- Link validation rate: 100.0%",
       "errors": [],
       "warnings": []
     },
@@ -63,8 +63,8 @@
         "Syntax error in cryptography/side-channels.md line 553",
         "Syntax error in embedded-patterns/hardware-abstraction.md line 123",
         "Syntax error in embedded-patterns/hardware-abstraction.md line 338",
-        "Syntax error in embedded-patterns/no-std.md line 8",
-        "Syntax error in embedded-patterns/no-std.md line 233",
+        "Syntax error in embedded-patterns/no-std.md line 10",
+        "Syntax error in embedded-patterns/no-std.md line 235",
         "Syntax error in environment-setup/build-config.md line 4",
         "Syntax error in migration/debugging.md line 8",
         "Syntax error in migration/ffi-integration.md line 266",
@@ -84,14 +84,12 @@
     {
       "test_name": "Cross-Reference Validation",
       "passed": true,
-      "details": "Cross-reference validation:\n- Total cross-references: 72\n- Chapters with cross-refs: 6\n- Missing expected patterns: 10\n- Circular references: 6\n- Reference density: 1.57 refs/file",
+      "details": "Cross-reference validation:\n- Total cross-references: 76\n- Chapters with cross-refs: 7\n- Missing expected patterns: 8\n- Circular references: 8\n- Reference density: 1.65 refs/file",
       "errors": [],
       "warnings": [
         "Missing expected cross-reference: quick-reference -> embedded-patterns",
         "Missing expected cross-reference: quick-reference -> cryptography",
         "Missing expected cross-reference: environment-setup -> quick-reference",
-        "Missing expected cross-reference: embedded-patterns -> quick-reference",
-        "Missing expected cross-reference: embedded-patterns -> core-concepts",
         "Missing expected cross-reference: cryptography -> quick-reference",
         "Missing expected cross-reference: cryptography -> embedded-patterns",
         "Missing expected cross-reference: migration -> quick-reference",
