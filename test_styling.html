@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Styling Test</title>
+    <link rel="stylesheet" href="book/css/variables.css">
+    <link rel="stylesheet" href="book/css/general.css">
+    <link rel="stylesheet" href="book/theme/custom.css">
+</head>
+<body class="navy">
+    <div class="content">
+        <h1>Styling Test Page</h1>
+        
+        <h2>Table Test</h2>
+        <div class="table-wrapper">
+            <table class="comparison">
+                <caption>C vs Rust Comparison</caption>
+                <thead>
+                    <tr>
+                        <th>C Code</th>
+                        <th>Rust Code</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>int* ptr = malloc(sizeof(int));</code></td>
+                        <td><code>let ptr = Box::new(42);</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>free(ptr);</code></td>
+                        <td><code>// Automatic cleanup</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2>Code Block Test</h2>
+        <pre><code class="hljs rust">fn main() {
+    let x = 42;
+    println!("Hello, world! {}", x);
+}</code></pre>
+
+        <h2>Callout Test</h2>
+        <div class="callout warning">
+            <p>This is a warning callout box.</p>
+        </div>
+
+        <div class="callout info">
+            <p>This is an info callout box.</p>
+        </div>
+
+        <h2>Keyboard Shortcut Test</h2>
+        <p>Press <kbd>Ctrl+K</kbd> to search or <kbd>Ctrl+/</kbd> for help.</p>
+
+        <h2>Inline Code Test</h2>
+        <p>Use <code>Option&lt;T&gt;</code> for nullable values and <code>Result&lt;T, E&gt;</code> for error handling.</p>
+    </div>
+    
+    <script src="book/theme/custom.js"></script>
+</body>
+</html>

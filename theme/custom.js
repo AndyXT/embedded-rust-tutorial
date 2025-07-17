@@ -151,6 +151,13 @@
                             link.click();
                         }
                     }
+                } else if (e.key === 'Escape') {
+                    // Clear search and close results
+                    searchInput.value = '';
+                    if (searchResults) {
+                        searchResults.innerHTML = '';
+                    }
+                    searchInput.blur();
                 }
             });
 
@@ -162,7 +169,113 @@
                     }
                 }
             });
+
+            // Add search suggestions and technical content optimization
+            let searchTimeout;
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                const query = this.value.trim();
+                
+                if (query.length > 0) {
+                    searchTimeout = setTimeout(() => {
+                        enhanceSearchResults(query);
+                    }, 300); // Debounce search
+                }
+            });
+
+            // Add search shortcuts for technical terms
+            addSearchShortcuts(searchInput);
         }
+    }
+
+    // Enhance search results for technical content
+    function enhanceSearchResults(query) {
+        // Add technical term suggestions
+        const technicalTerms = {
+            'ownership': ['borrow', 'lifetime', 'move', 'reference'],
+            'memory': ['heap', 'stack', 'allocation', 'deallocation'],
+            'crypto': ['encryption', 'hash', 'key', 'cipher', 'constant-time'],
+            'embedded': ['no-std', 'interrupt', 'dma', 'hardware'],
+            'error': ['result', 'option', 'panic', 'unwrap'],
+            'async': ['future', 'await', 'tokio', 'executor']
+        };
+
+        // Check if query matches technical terms and suggest related terms
+        const lowerQuery = query.toLowerCase();
+        for (const [term, related] of Object.entries(technicalTerms)) {
+            if (lowerQuery.includes(term) || related.some(r => lowerQuery.includes(r))) {
+                // Could enhance search results here with related terms
+                break;
+            }
+        }
+    }
+
+    // Add keyboard shortcuts for common searches
+    function addSearchShortcuts(searchInput) {
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + K to focus search
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                searchInput.focus();
+                searchInput.select();
+            }
+            
+            // Ctrl/Cmd + / for search help
+            if ((e.ctrlKey || e.metaKey) && e.key === '/') {
+                e.preventDefault();
+                showSearchHelp();
+            }
+        });
+    }
+
+    // Show search help overlay
+    function showSearchHelp() {
+        const helpOverlay = document.createElement('div');
+        helpOverlay.className = 'search-help-overlay';
+        helpOverlay.innerHTML = `
+            <div class="search-help-content">
+                <h3>Search Tips</h3>
+                <ul>
+                    <li><kbd>Ctrl+K</kbd> - Focus search</li>
+                    <li><kbd>↑↓</kbd> - Navigate results</li>
+                    <li><kbd>Enter</kbd> - Open result</li>
+                    <li><kbd>Esc</kbd> - Clear search</li>
+                </ul>
+                <p>Try searching for: ownership, memory, crypto, embedded, error handling</p>
+                <button onclick="this.parentElement.parentElement.remove()">Close</button>
+            </div>
+        `;
+        
+        helpOverlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        `;
+        
+        helpOverlay.querySelector('.search-help-content').style.cssText = `
+            background: var(--bg);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--theme-popup-border);
+            max-width: 400px;
+            color: var(--fg);
+        `;
+        
+        document.body.appendChild(helpOverlay);
+        
+        // Close on click outside
+        helpOverlay.addEventListener('click', function(e) {
+            if (e.target === helpOverlay) {
+                helpOverlay.remove();
+            }
+        });
     }
 
     // Navigate search results with keyboard

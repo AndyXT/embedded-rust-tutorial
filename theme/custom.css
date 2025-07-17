@@ -6,6 +6,20 @@
     border-radius: 6px;
     border: 1px solid var(--theme-popup-border);
     margin: 1em 0;
+    background: var(--code-block-background, #f6f8fa);
+    padding: 16px;
+    overflow-x: auto;
+    font-family: 'Source Code Pro', 'Consolas', 'Monaco', monospace;
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+/* Dark theme code block styling */
+.navy .hljs,
+.coal .hljs,
+.ayu .hljs {
+    background: var(--code-block-background, #2b303b);
+    color: #c0c5ce;
 }
 
 /* Copy button styling */
@@ -39,13 +53,21 @@
 }
 
 /* Enhanced table styling for comparison tables */
+.table-wrapper {
+    overflow-x: auto;
+    margin: 1em 0;
+    border-radius: 6px;
+    border: 1px solid var(--theme-popup-border);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 table {
     border-collapse: collapse;
     width: 100%;
-    margin: 1em 0;
-    border-radius: 6px;
-    overflow: hidden;
-    border: 1px solid var(--theme-popup-border);
+    margin: 0;
+    min-width: 600px; /* Ensure tables don't get too cramped */
+    font-size: 14px;
+    line-height: 1.5;
 }
 
 table th,
@@ -54,28 +76,56 @@ table td {
     padding: 12px 16px;
     text-align: left;
     vertical-align: top;
+    word-wrap: break-word;
 }
 
 table th {
     background-color: var(--theme-hover);
     font-weight: 600;
     color: var(--fg);
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
-table tr:nth-child(even) {
+/* Alternating row colors for better readability */
+table tbody tr:nth-child(even) {
     background-color: var(--theme-hover);
 }
 
-table tr:hover {
+table tbody tr:hover {
     background-color: var(--theme-popup-bg);
+    transition: background-color 0.2s ease;
 }
 
 /* Code within tables */
 table code {
     background: var(--inline-code-color);
-    padding: 2px 4px;
+    padding: 2px 6px;
     border-radius: 3px;
-    font-size: 0.9em;
+    font-size: 0.85em;
+    font-family: 'Source Code Pro', 'Consolas', 'Monaco', monospace;
+    white-space: nowrap;
+}
+
+/* Special styling for comparison tables (C vs Rust) */
+table.comparison th:first-child {
+    background-color: #e74c3c;
+    color: white;
+}
+
+table.comparison th:last-child {
+    background-color: #27ae60;
+    color: white;
+}
+
+/* Table captions */
+table caption {
+    caption-side: top;
+    padding: 8px 0;
+    font-weight: 600;
+    color: var(--fg);
+    text-align: left;
 }
 
 /* Responsive design improvements */
@@ -90,29 +140,60 @@ table code {
     }
     
     /* Better table handling on mobile */
+    .table-wrapper {
+        margin: 1em -10px; /* Extend to screen edges on mobile */
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+    
     table {
-        font-size: 14px;
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
+        font-size: 13px;
+        min-width: 500px; /* Reduced for mobile */
     }
     
     table th,
     table td {
         padding: 8px 12px;
-        min-width: 120px;
+        min-width: 100px;
     }
     
     /* Code blocks on mobile */
     .hljs {
         font-size: 13px;
         overflow-x: auto;
+        margin: 1em -10px; /* Extend to screen edges */
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
     }
     
     /* Search improvements */
     #searchbar {
         width: 100%;
         margin: 10px 0;
+        font-size: 16px; /* Prevent zoom on iOS */
+    }
+    
+    /* Mobile-friendly sidebar */
+    .sidebar {
+        width: 280px;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+    
+    .sidebar.sidebar-visible {
+        transform: translateX(0);
+    }
+    
+    /* Touch-friendly navigation buttons */
+    .nav-wrapper .previous,
+    .nav-wrapper .next {
+        padding: 12px 16px;
+        min-height: 44px; /* iOS touch target size */
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }
 
@@ -147,38 +228,125 @@ table code {
 
 /* Print-friendly styling */
 @media print {
+    /* Hide interactive elements */
     .nav-chapters,
     .nav-wrapper,
     .mobile-nav-toggle,
     #searchbar-outer,
-    .copy-button {
+    .copy-button,
+    .print-button,
+    .breadcrumb {
         display: none !important;
     }
     
+    /* Optimize layout for print */
     .content {
         max-width: none;
         margin: 0;
         padding: 0;
+        font-size: 12pt;
+        line-height: 1.4;
     }
     
+    /* Page break optimization */
     .hljs {
         border: 1px solid #ccc;
         page-break-inside: avoid;
+        background: #f8f8f8 !important;
+        padding: 12pt;
+        margin: 6pt 0;
+    }
+    
+    .table-wrapper {
+        page-break-inside: avoid;
+        border: 1px solid #000;
+        margin: 6pt 0;
+        box-shadow: none;
     }
     
     table {
         page-break-inside: avoid;
         border: 1px solid #000;
+        font-size: 10pt;
     }
     
+    table th,
+    table td {
+        border: 1px solid #000;
+        padding: 4pt 6pt;
+    }
+    
+    table th {
+        background: #e0e0e0 !important;
+        color: #000 !important;
+    }
+    
+    /* Heading optimization */
     h1, h2, h3, h4, h5, h6 {
         page-break-after: avoid;
+        page-break-inside: avoid;
+        margin-top: 12pt;
+        margin-bottom: 6pt;
+    }
+    
+    h1 {
+        font-size: 18pt;
+        border-bottom: 2pt solid #000;
+        padding-bottom: 3pt;
+    }
+    
+    h2 {
+        font-size: 16pt;
+        border-bottom: 1pt solid #666;
+        padding-bottom: 2pt;
+    }
+    
+    h3 {
+        font-size: 14pt;
     }
     
     /* Ensure code blocks are readable in print */
     code, pre {
         color: #000 !important;
         background: #f5f5f5 !important;
+        border: 1pt solid #ccc !important;
+    }
+    
+    /* Inline code styling */
+    code {
+        padding: 1pt 2pt !important;
+        font-size: 10pt !important;
+    }
+    
+    /* Link styling for print */
+    a {
+        color: #000 !important;
+        text-decoration: underline !important;
+    }
+    
+    /* Add URL after external links */
+    a[href^="http"]:after {
+        content: " (" attr(href) ")";
+        font-size: 9pt;
+        color: #666;
+    }
+    
+    /* Callout boxes for print */
+    .callout {
+        border: 1pt solid #000;
+        background: #f0f0f0 !important;
+        padding: 6pt;
+        margin: 6pt 0;
+        page-break-inside: avoid;
+    }
+    
+    /* Page numbering */
+    @page {
+        margin: 1in;
+        @bottom-right {
+            content: "Page " counter(page);
+            font-size: 10pt;
+        }
     }
 }
 
@@ -296,4 +464,220 @@ table code {
 .breadcrumb .separator {
     margin: 0 8px;
     color: var(--fg);
+}
+
+/* Additional enhancements for technical content */
+
+/* Keyboard shortcut styling */
+kbd {
+    background: var(--theme-hover);
+    border: 1px solid var(--theme-popup-border);
+    border-radius: 3px;
+    padding: 2px 6px;
+    font-family: 'Source Code Pro', 'Consolas', 'Monaco', monospace;
+    font-size: 0.85em;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Enhanced inline code styling */
+:not(pre) > code {
+    background: var(--inline-code-color);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.9em;
+    font-family: 'Source Code Pro', 'Consolas', 'Monaco', monospace;
+    border: 1px solid var(--theme-popup-border);
+}
+
+/* Improved blockquote styling */
+blockquote {
+    border-left: 4px solid var(--links);
+    margin: 16px 0;
+    padding: 8px 16px;
+    background: var(--theme-hover);
+    border-radius: 0 6px 6px 0;
+    font-style: italic;
+}
+
+blockquote p:first-child {
+    margin-top: 0;
+}
+
+blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+/* Enhanced list styling */
+ul, ol {
+    padding-left: 24px;
+    line-height: 1.6;
+}
+
+li {
+    margin: 4px 0;
+}
+
+/* Nested list styling */
+ul ul, ol ol, ul ol, ol ul {
+    margin: 4px 0;
+}
+
+/* Definition lists for technical terms */
+dl {
+    margin: 16px 0;
+}
+
+dt {
+    font-weight: 600;
+    margin-top: 12px;
+    color: var(--fg);
+}
+
+dd {
+    margin: 4px 0 12px 24px;
+    line-height: 1.5;
+}
+
+/* Code comparison styling */
+.code-comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+}
+
+.code-comparison .code-block {
+    border: 1px solid var(--theme-popup-border);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.code-comparison .code-header {
+    background: var(--theme-hover);
+    padding: 8px 12px;
+    font-weight: 600;
+    font-size: 14px;
+    border-bottom: 1px solid var(--theme-popup-border);
+}
+
+.code-comparison .code-header.c-code {
+    background: #e74c3c;
+    color: white;
+}
+
+.code-comparison .code-header.rust-code {
+    background: #27ae60;
+    color: white;
+}
+
+/* Mobile responsive code comparison */
+@media screen and (max-width: 768px) {
+    .code-comparison {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+}
+
+/* Accessibility improvements */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Focus indicators with outline for accessibility */
+button:focus,
+input:focus,
+a:focus,
+.copy-button:focus,
+.print-button:focus {
+    outline: 2px solid var(--links) !important;
+    outline-offset: 2px;
+}
+
+/* Enhanced outline focus styles for better accessibility */
+*:focus {
+    outline: 2px solid var(--links);
+    outline-offset: 2px;
+}
+
+/* Skip link for accessibility */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: var(--bg);
+    color: var(--fg);
+    padding: 8px;
+    text-decoration: none;
+    border: 1px solid var(--theme-popup-border);
+    border-radius: 4px;
+    z-index: 1000;
+}
+
+.skip-link:focus {
+    top: 6px;
+}
+
+/* Loading states */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid var(--theme-popup-border);
+    border-top: 2px solid var(--links);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Print button styling */
+.print-button {
+    transition: all 0.2s ease;
+}
+
+.print-button:hover {
+    background: var(--theme-hover) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Search help overlay styling */
+.search-help-overlay kbd {
+    background: var(--theme-popup-bg);
+    color: var(--fg);
+    border: 1px solid var(--theme-popup-border);
+}
+
+.search-help-overlay button {
+    background: var(--links);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 12px;
+}
+
+.search-help-overlay button:hover {
+    opacity: 0.9;
 }
