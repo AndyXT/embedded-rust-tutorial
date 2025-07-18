@@ -9,3 +9,4 @@ This section focuses on implementing cryptographic algorithms and protocols in R
 - [5.3 Key Management and Zeroization](./key-management.md)
 - [5.4 Hardware Crypto Acceleration](./hardware-crypto.md)
 - [5.5 Side-Channel Mitigations](./side-channels.md)
+- [5.6 RustCrypto Examples for Cortex-R5](./rustcrypto-examples.md) - **NEW**: Complete examples using RustCrypto crates

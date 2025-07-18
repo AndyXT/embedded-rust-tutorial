@@ -68,13 +68,38 @@ int process_crypto_message(crypto_context_t* ctx, uint8_t* data, size_t len) {
 ```
 
 **Rust Approach - Type-Safe:**
+
+
+
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use heapless::Vec;
+
+use core::fmt;
+use core::result::Result;
+
 // Rust enum - each variant can carry different data
 #[derive(Debug)]
 enum CryptoState {
     Idle,
     KeyExchange { 
-        key_data: Vec<u8>, 
+        key_data: heapless::Vec<u8, 32>, 
         algorithm: KeyExchangeAlgorithm 
     },
     Encrypted { 
@@ -124,6 +149,12 @@ fn process_crypto_message(state: CryptoState, data: &[u8]) -> Result<CryptoState
         // Compiler error if we forget any state - impossible to miss cases!
     }
 }
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 </details>
@@ -131,6 +162,24 @@ fn process_crypto_message(state: CryptoState, data: &[u8]) -> Result<CryptoState
 **Crypto State Machine Example:**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+
+
+use core::mem;
+use heapless::Vec;
+use core::fmt;
+
+use core::result::Result;
+
 use zeroize::{Zeroize, ZeroizeOnDrop};
 
 #[derive(Debug)]
@@ -142,7 +191,7 @@ enum TlsHandshakeState {
         compression: CompressionMethod,
     },
     Certificate { 
-        cert_chain: Vec<Certificate>,
+        cert_chain: heapless::Vec<Certificate, 32>,
         server_key_exchange: Option<ServerKeyExchange>,
     },
     ClientKeyExchange { 
@@ -200,6 +249,19 @@ impl TlsHandshakeState {
 **Pattern Matching vs C Switch:**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt};
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 // Rust pattern matching - much more powerful than C switch
 fn handle_crypto_result(result: CryptoResult) -> Action {
     match result {
@@ -237,6 +299,12 @@ fn handle_crypto_result(result: CryptoResult) -> Action {
             Action::Abort
         },
     }
+}
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
 }
 ```
 
@@ -277,7 +345,26 @@ int process_data(crypto_suite_t* suite, uint8_t* data, size_t len) {
 ```
 
 **Rust Approach - Type-Safe:**
+
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use sha2::{Sha256, Digest};
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 // Trait defines interface - compiler enforces correctness
 trait CryptoHash {
     type Output: AsRef<[u8]>;
@@ -367,6 +454,29 @@ fn process_data<H: CryptoHash, C: BlockCipher>(
 **Crypto Algorithm Abstraction:**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use zeroize::{Zeroize, ZeroizeOnDrop};
+use core::mem;
+use heapless::Vec;
+
+use core::fmt;
+use core::result::Result;
+
 // Generic crypto operations using traits
 trait AuthenticatedEncryption {
     type Key: AsRef<[u8]> + Zeroize;
@@ -383,7 +493,7 @@ trait AuthenticatedEncryption {
         nonce: &Self::Nonce,
         plaintext: &[u8],
         aad: &[u8],
-    ) -> Result<(Vec<u8>, Self::Tag), CryptoError>;
+    ) -> Result<(heapless::Vec<u8, 32>, Self::Tag), CryptoError>;
     
     fn decrypt(
         &self,
@@ -392,7 +502,7 @@ trait AuthenticatedEncryption {
         ciphertext: &[u8],
         aad: &[u8],
         tag: &Self::Tag,
-    ) -> Result<Vec<u8>, CryptoError>;
+    ) -> Result<heapless::Vec<u8, 32>, CryptoError>;
 }
 
 // AES-GCM implementation
@@ -413,7 +523,7 @@ impl AuthenticatedEncryption for AesGcm {
         nonce: &Self::Nonce,
         plaintext: &[u8],
         aad: &[u8],
-    ) -> Result<(Vec<u8>, Self::Tag), CryptoError> {
+    ) -> Result<(heapless::Vec<u8, 32>, Self::Tag), CryptoError> {
         // Hardware-accelerated AES-GCM if available
         #[cfg(feature = "hw-crypto")]
         {
@@ -432,7 +542,7 @@ impl AuthenticatedEncryption for AesGcm {
         ciphertext: &[u8],
         aad: &[u8],
         tag: &Self::Tag,
-    ) -> Result<Vec<u8>, CryptoError> {
+    ) -> Result<heapless::Vec<u8, 32>, CryptoError> {
         #[cfg(feature = "hw-crypto")]
         {
             hw_aes_gcm_decrypt(key.as_bytes(), nonce, ciphertext, aad, tag)
@@ -462,7 +572,7 @@ impl AuthenticatedEncryption for ChaCha20Poly1305 {
         nonce: &Self::Nonce,
         plaintext: &[u8],
         aad: &[u8],
-    ) -> Result<(Vec<u8>, Self::Tag), CryptoError> {
+    ) -> Result<(heapless::Vec<u8, 32>, Self::Tag), CryptoError> {
         chacha20_poly1305_encrypt(key.as_bytes(), nonce, plaintext, aad)
     }
     
@@ -473,7 +583,7 @@ impl AuthenticatedEncryption for ChaCha20Poly1305 {
         ciphertext: &[u8],
         aad: &[u8],
         tag: &Self::Tag,
-    ) -> Result<Vec<u8>, CryptoError> {
+    ) -> Result<heapless::Vec<u8, 32>, CryptoError> {
         chacha20_poly1305_decrypt(key.as_bytes(), nonce, ciphertext, aad, tag)
     }
 }
@@ -484,7 +594,7 @@ fn secure_send<A: AuthenticatedEncryption>(
     key: &A::Key,
     message: &[u8],
     connection_id: u64,
-) -> Result<Vec<u8>, CryptoError> {
+) -> Result<heapless::Vec<u8, 32>, CryptoError> {
     // Generate unique nonce from connection ID and counter
     let nonce = generate_nonce::<A>(connection_id)?;
     
@@ -545,7 +655,30 @@ int crypto_operation() {
 ```
 
 **Rust Approach - Method Organization:**
+
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use heapless::Vec;
+use core::fmt;
+
+use core::result::Result;
+
 use zeroize::{Zeroize, ZeroizeOnDrop};
 
 #[derive(ZeroizeOnDrop)]
@@ -572,7 +705,7 @@ impl AesGcmContext {
     }
     
     // Method taking &self - shared access
-    pub fn encrypt(&self, plaintext: &[u8], aad: &[u8]) -> Result<(Vec<u8>, [u8; 16]), CryptoError> {
+    pub fn encrypt(&self, plaintext: &[u8], aad: &[u8]) -> Result<(heapless::Vec<u8, 32>, [u8; 16]), CryptoError> {
         if self.counter == u32::MAX {
             return Err(CryptoError::NonceExhausted);
         }
@@ -610,6 +743,28 @@ fn crypto_operation() -> Result<(), CryptoError> {
 **Crypto Context Management:**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use heapless::Vec;
+use core::fmt;
+
+use core::result::Result;
+
 use zeroize::{Zeroize, ZeroizeOnDrop};
 
 #[derive(ZeroizeOnDrop)]
@@ -638,7 +793,7 @@ impl CryptoSession {
     }
     
     // Method for sending - updates internal state
-    pub fn encrypt_message(&mut self, message: &[u8]) -> Result<Vec<u8>, CryptoError> {
+    pub fn encrypt_message(&mut self, message: &[u8]) -> Result<heapless::Vec<u8, 32>, CryptoError> {
         let nonce = self.generate_send_nonce()?;
         let ciphertext = self.cipher_suite.encrypt(&self.session_key, &nonce, message)?;
         
@@ -647,7 +802,7 @@ impl CryptoSession {
     }
     
     // Method for receiving - validates counter
-    pub fn decrypt_message(&mut self, ciphertext: &[u8]) -> Result<Vec<u8>, CryptoError> {
+    pub fn decrypt_message(&mut self, ciphertext: &[u8]) -> Result<heapless::Vec<u8, 32>, CryptoError> {
         let (nonce, payload) = extract_nonce_and_payload(ciphertext)?;
         let counter = extract_counter_from_nonce(&nonce)?;
         
@@ -715,6 +870,22 @@ fn secure_communication() -> Result<(), CryptoError> {
 Advanced enums enable sophisticated error handling that's impossible in C. This builds directly on the foundational error handling patterns covered in [Error Handling Without Exceptions](../core-concepts/error-handling.md):
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 #[derive(Debug, Clone)]
 pub enum CryptoError {
     // Simple error cases
@@ -864,3 +1035,4 @@ enum RecoveryAction {
 - → [FFI Integration with C Libraries](../migration/ffi-integration.md) - Use enums and traits to wrap C APIs safely
 
 ---
+```

@@ -11,16 +11,48 @@ Rust's memory model provides stronger guarantees than C while maintaining zero-c
 - **No null pointer dereferences** - Option<T> replaces null pointers
 
 ### Stack vs Heap in Embedded
+
+
+
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt};
+
+
+use core::fmt;
+use core::mem;
+
 // Stack allocation - preferred in embedded
 let key = [0u8; 32];  // Fixed size, known at compile time
 
 // Heap allocation - avoid in no_std embedded
 // let key = vec![0u8; 32];  // Dynamic allocation, not available in no_std
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 ### Memory Layout Control
+
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt};
+
+
+use core::fmt;
+use core::mem;
+
 #[repr(C)]
 struct CryptoHeader {
     magic: u32,
@@ -37,3 +69,4 @@ struct PackedCryptoData {
 ```
 
 **→ Related:** [Ownership and Memory Management](./ownership.md) - Core ownership concepts
+```

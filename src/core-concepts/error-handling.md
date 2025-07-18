@@ -7,7 +7,26 @@ Rust's explicit error handling with `Result<T, E>` and `Option<T>` prevents sile
 
 #### Comprehensive Crypto Error Types
 
+
+
+
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum CryptoError {
     // Key-related errors
@@ -56,13 +75,35 @@ type CryptoResult<T> = Result<T, CryptoError>;
 #### Error Propagation in Crypto Pipelines
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use heapless::Vec;
+
+use core::fmt;
+use core::result::Result;
+
 // Crypto operations with explicit error handling
 fn encrypt_aes_gcm(
     key: &[u8; 32], 
     nonce: &[u8; 12], 
     plaintext: &[u8],
     aad: &[u8]
-) -> CryptoResult<Vec<u8>> {
+) -> CryptoResult<heapless::Vec<u8, 32>> {
     // Validate inputs explicitly
     if key.iter().all(|&b| b == 0) {
         return Err(CryptoError::WeakKey);
@@ -80,7 +121,7 @@ fn encrypt_aes_gcm(
 }
 
 // Error propagation with ? operator
-fn secure_message_processing(message: &[u8]) -> CryptoResult<Vec<u8>> {
+fn secure_message_processing(message: &[u8]) -> CryptoResult<heapless::Vec<u8, 32>> {
     let session_key = derive_session_key()?;     // Propagates key derivation errors
     let nonce = generate_nonce()?;               // Propagates RNG errors
     let aad = compute_aad(&message)?;            // Propagates AAD computation errors
@@ -91,7 +132,7 @@ fn secure_message_processing(message: &[u8]) -> CryptoResult<Vec<u8>> {
 }
 
 // Comprehensive error handling
-fn handle_crypto_pipeline(messages: &[&[u8]]) -> CryptoResult<Vec<Vec<u8>>> {
+fn handle_crypto_pipeline(messages: &[&[u8]]) -> CryptoResult<heapless::Vec<Vec<u8, 32>>> {
     let mut results = Vec::new();
     
     for message in messages {
@@ -124,11 +165,38 @@ fn handle_crypto_pipeline(messages: &[&[u8]]) -> CryptoResult<Vec<Vec<u8>>> {
     
     Ok(results)
 }
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 #### Option Types for Safe Nullable Crypto State
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use heapless::Vec;
+
+use core::fmt;
+use core::result::Result;
+
 // Safe handling of optional crypto contexts
 struct CryptoManager {
     active_sessions: heapless::FnvIndexMap<u32, CryptoContext, 16>,
@@ -139,7 +207,7 @@ impl CryptoManager {
         self.active_sessions.get_mut(&session_id)
     }
     
-    fn process_message(&mut self, session_id: u32, message: &[u8]) -> CryptoResult<Vec<u8>> {
+    fn process_message(&mut self, session_id: u32, message: &[u8]) -> CryptoResult<heapless::Vec<u8, 32>> {
         match self.get_session(session_id) {
             Some(ctx) => {
                 // Session exists, safe to use
@@ -158,7 +226,7 @@ impl CryptoManager {
 }
 
 // Chaining Option operations
-fn find_and_use_key(key_id: u32) -> Option<Vec<u8>> {
+fn find_and_use_key(key_id: u32) -> Option<heapless::Vec<u8, 32>> {
     get_key_from_storage(key_id)?     // Returns None if key not found
         .validate()?                  // Returns None if key invalid
         .decrypt_with_master_key()    // Returns None if decryption fails
@@ -168,6 +236,27 @@ fn find_and_use_key(key_id: u32) -> Option<Vec<u8>> {
 #### Error Recovery Patterns for Embedded Crypto
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use heapless::Vec;
+
+use core::fmt;
+use core::result::Result;
+
 // Retry with exponential backoff for transient errors
 fn retry_with_backoff<F, T>(mut operation: F) -> CryptoResult<T>
 where
@@ -192,7 +281,7 @@ where
 }
 
 // Graceful degradation for hardware failures
-fn encrypt_with_fallback(data: &[u8], key: &[u8; 32]) -> CryptoResult<Vec<u8>> {
+fn encrypt_with_fallback(data: &[u8], key: &[u8; 32]) -> CryptoResult<heapless::Vec<u8, 32>> {
     // Try hardware acceleration first
     match hardware_encrypt(data, key) {
         Ok(result) => Ok(result),
@@ -202,5 +291,11 @@ fn encrypt_with_fallback(data: &[u8], key: &[u8; 32]) -> CryptoResult<Vec<u8>> {
         }
         Err(e) => Err(e), // Propagate other errors
     }
+}
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
 }
 ```

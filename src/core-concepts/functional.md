@@ -53,7 +53,26 @@ void process_crypto_block(uint8_t* data, size_t len, uint32_t multiplier) {
 ```
 
 **Rust Approach - Explicit Overflow Handling:**
+
+
+
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 // Rust arithmetic - explicit overflow control
 fn crypto_multiply(a: u32, b: u32) -> Result<u32, CryptoError> {
     a.checked_mul(b).ok_or(CryptoError::ArithmeticOverflow)
@@ -85,6 +104,12 @@ fn process_crypto_block(data: &mut [u8], multiplier: u32) -> Result<(), CryptoEr
     }
     Ok(())
 }
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 </details>
@@ -92,6 +117,24 @@ fn process_crypto_block(data: &mut [u8], multiplier: u32) -> Result<(), CryptoEr
 **Crypto-Safe Arithmetic Operations:**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use subtle::{Choice, ConstantTimeEq, ConditionallySelectable};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use subtle::{Choice, ConstantTimeEq};
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 use core::num::Wrapping;
 
 // Different arithmetic modes for different crypto needs
@@ -241,7 +284,28 @@ void process_crypto_data(uint8_t* data, size_t len, const uint8_t* key, size_t k
 ```
 
 **Rust Approach - Iterator Chains:**
+
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 // Rust iterators - bounds-safe, zero-cost abstractions
 fn xor_buffers(dst: &mut [u8], src1: &[u8], src2: &[u8]) -> Result<(), CryptoError> {
     if dst.len() != src1.len() || src1.len() != src2.len() {
@@ -292,6 +356,12 @@ fn process_crypto_data(
     data[..processed.len()].copy_from_slice(&processed);
     Ok(())
 }
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 </details>
@@ -299,7 +369,28 @@ fn process_crypto_data(
 **Advanced Iterator Patterns for Crypto:**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use zeroize::{Zeroize, ZeroizeOnDrop};
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
 use heapless::Vec;
+
 
 // Custom iterator for crypto block processing
 struct CryptoBlockIterator<'a> {
@@ -357,7 +448,7 @@ fn parallel_block_encrypt(
 }
 
 // Functional data transformation pipeline
-fn crypto_pipeline(input: &[u8]) -> Result<Vec<u8, 1024>, CryptoError> {
+fn crypto_pipeline(input: &[u8]) -> Result<heapless::Vec<u8, 1024, 32>, CryptoError> {
     input
         .iter()
         .copied()
@@ -371,7 +462,7 @@ fn crypto_pipeline(input: &[u8]) -> Result<Vec<u8, 1024>, CryptoError> {
         // Step 4: S-box substitution
         .map(|byte| AES_SBOX[byte as usize])
         // Step 5: Collect with bounds checking
-        .collect::<Result<Vec<u8, 1024>, _>>()
+        .collect::<Result<heapless::Vec<u8, 1024, 32>, _>>()
         .map_err(|_| CryptoError::BufferTooSmall)
 }
 
@@ -452,6 +543,12 @@ where
         self.iter.next().map(&mut self.f)
     }
 }
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 #### Closures for Algorithm Customization
@@ -492,7 +589,24 @@ int process_with_callback(uint8_t* data, size_t len, struct crypto_processor* pr
 ```
 
 **Rust Approach - Type-Safe Closures:**
+
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 // Rust closures - type safe, zero-cost abstractions
 fn process_with_closure<F, C>(
     data: &mut [u8], 
@@ -534,6 +648,12 @@ fn example_usage() -> Result<(), CryptoError> {
     
     Ok(())
 }
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 </details>
@@ -541,6 +661,22 @@ fn example_usage() -> Result<(), CryptoError> {
 **Advanced Closure Patterns for Crypto:**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use core::fmt;
+use core::result::Result;
+
+
 use zeroize::{Zeroize, ZeroizeOnDrop};
 
 // Secure closure context that auto-zeroizes
@@ -726,6 +862,25 @@ Rust's functional programming features work seamlessly in no_std embedded enviro
 
 ```rust
 #![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use heapless::Vec;
+
+use core::fmt;
+use core::result::Result;
 
 use heapless::{Vec, FnvIndexMap};
 use core::iter;
@@ -812,7 +967,7 @@ impl<T> CryptoResult<T> {
 }
 
 // Functional crypto pipeline with monadic composition
-fn functional_crypto_pipeline(input: &[u8]) -> CryptoResult<Vec<u8, 256>> {
+fn functional_crypto_pipeline(input: &[u8]) -> CryptoResult<heapless::Vec<u8, 256, 32>> {
     let initial_state = ImmutableCryptoState::<32>::new([0x42; 32]);
     
     // Functional composition of crypto operations
@@ -892,3 +1047,4 @@ fn create_lazy_key_derivation(master_key: [u8; 32], salt: [u8; 16]) -> LazyCrypt
 **Related Crypto Applications:**
 - → [Constant-Time Implementations](../cryptography/constant-time.md) - Apply functional patterns for timing-safe operations
 - → [Key Management and Zeroization](../cryptography/key-management.md) - Use iterators for secure data processing
+```

@@ -6,41 +6,63 @@ Comprehensive testing strategies for cryptographic code migration, including tes
 
 **NIST Test Vector Integration**
 
+
+
+
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+
+use core::mem;
+use heapless::Vec;
+
+use heapless::String;
+use core::fmt;
+use core::result::Result;
+
 #[cfg(test)]
 mod crypto_tests {
     use super::*;
     use serde::{Deserialize, Serialize};
-    use std::fs;
+    use core::fs;
     
     // NIST test vector structure
     #[derive(Debug, Deserialize)]
     struct NistTestVector {
-        key: String,
-        plaintext: String,
-        ciphertext: String,
+        key: heapless::String<64>,
+        plaintext: heapless::String<64>,
+        ciphertext: heapless::String<64>,
         #[serde(default)]
-        iv: Option<String>,
+        iv: Option<heapless::String<64>>,
         #[serde(default)]
-        tag: Option<String>,
+        tag: Option<heapless::String<64>>,
     }
     
     #[derive(Debug, Deserialize)]
     struct NistTestSuite {
-        algorithm: String,
+        algorithm: heapless::String<64>,
         key_size: u32,
-        test_vectors: Vec<NistTestVector>,
+        test_vectors: heapless::Vec<NistTestVector, 32>,
     }
     
     // Load test vectors from JSON files
-    fn load_nist_vectors(filename: &str) -> Result<NistTestSuite, Box<dyn std::error::Error>> {
+    fn load_nist_vectors(filename: &str) -> Result<NistTestSuite, Box<dyn core::error::Error>> {
         let content = fs::read_to_string(filename)?;
         let suite: NistTestSuite = serde_json::from_str(&content)?;
         Ok(suite)
     }
     
     // Helper function to convert hex strings to bytes
-    fn hex_to_bytes(hex: &str) -> Vec<u8> {
+    fn hex_to_bytes(hex: &str) -> heapless::Vec<u8, 32> {
         (0..hex.len())
             .step_by(2)
             .map(|i| u8::from_str_radix(&hex[i..i + 2], 16).unwrap())
@@ -60,7 +82,7 @@ mod crypto_tests {
         
         for suite_file in &test_suites {
             let suite = load_nist_vectors(suite_file).unwrap();
-            println!("Testing {} with {} vectors", suite.algorithm, suite.test_vectors.len());
+            defmt::info!("Testing {} with {} vectors", suite.algorithm, suite.test_vectors.len());
             
             for (i, vector) in suite.test_vectors.iter().enumerate() {
                 let key = hex_to_bytes(&vector.key);
@@ -85,7 +107,7 @@ mod crypto_tests {
         }
     }
     
-    fn test_aes_ecb(key: &[u8], plaintext: &[u8]) -> Vec<u8> {
+    fn test_aes_ecb(key: &[u8], plaintext: &[u8]) -> heapless::Vec<u8, 32> {
         let ctx = AesContext::new(key).unwrap();
         let mut ciphertext = Vec::new();
         
@@ -99,7 +121,7 @@ mod crypto_tests {
         ciphertext
     }
     
-    fn test_aes_cbc(key: &[u8], iv: &[u8], plaintext: &[u8]) -> Vec<u8> {
+    fn test_aes_cbc(key: &[u8], iv: &[u8], plaintext: &[u8]) -> heapless::Vec<u8, 32> {
         let mut ctx = AesContext::new(key).unwrap();
         let mut iv_copy = [0u8; 16];
         iv_copy.copy_from_slice(iv);
@@ -152,6 +174,12 @@ mod crypto_tests {
         }
     }
 }
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 #### Property-Based Testing for Crypto
@@ -159,6 +187,30 @@ mod crypto_tests {
 **Using QuickCheck for Crypto Properties**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+// Stub function for HMAC
+fn hmac_sha256(_key: &[u8; 32], _message: &[u8]) -> Result<[u8; 32], CryptoError> {
+    Ok([0u8; 32])
+}
+
+
+use core::mem;
+use heapless::Vec;
+
+use core::fmt;
+use core::result::Result;
+
 #[cfg(test)]
 mod property_tests {
     use super::*;
@@ -167,7 +219,7 @@ mod property_tests {
     
     // Property: Encryption followed by decryption should return original
     #[quickcheck]
-    fn prop_aes_encrypt_decrypt_roundtrip(key: Vec<u8>, plaintext: Vec<u8>) -> TestResult {
+    fn prop_aes_encrypt_decrypt_roundtrip(key: heapless::Vec<u8, 32>, plaintext: heapless::Vec<u8, 32>) -> TestResult {
         // Ensure valid key sizes
         if key.len() != 16 && key.len() != 24 && key.len() != 32 {
             return TestResult::discard();
@@ -209,7 +261,7 @@ mod property_tests {
     
     // Property: Same key and plaintext should always produce same ciphertext
     #[quickcheck]
-    fn prop_aes_deterministic(key: Vec<u8>, plaintext: Vec<u8>) -> TestResult {
+    fn prop_aes_deterministic(key: heapless::Vec<u8, 32>, plaintext: heapless::Vec<u8, 32>) -> TestResult {
         if key.len() != 32 || plaintext.len() != 16 {
             return TestResult::discard();
         }
@@ -226,7 +278,7 @@ mod property_tests {
     
     // Property: Different keys should produce different ciphertext (with high probability)
     #[quickcheck]
-    fn prop_aes_key_sensitivity(key1: Vec<u8>, key2: Vec<u8>, plaintext: Vec<u8>) -> TestResult {
+    fn prop_aes_key_sensitivity(key1: heapless::Vec<u8, 32>, key2: heapless::Vec<u8, 32>, plaintext: heapless::Vec<u8, 32>) -> TestResult {
         if key1.len() != 32 || key2.len() != 32 || plaintext.len() != 16 {
             return TestResult::discard();
         }
@@ -248,7 +300,7 @@ mod property_tests {
     
     // Property: HMAC should be deterministic
     #[quickcheck]
-    fn prop_hmac_deterministic(key: Vec<u8>, message: Vec<u8>) -> TestResult {
+    fn prop_hmac_deterministic(key: heapless::Vec<u8, 32>, message: heapless::Vec<u8, 32>) -> TestResult {
         if key.is_empty() || message.is_empty() {
             return TestResult::discard();
         }
@@ -261,7 +313,7 @@ mod property_tests {
     
     // Property: HMAC should be sensitive to key changes
     #[quickcheck]
-    fn prop_hmac_key_sensitivity(key1: Vec<u8>, key2: Vec<u8>, message: Vec<u8>) -> TestResult {
+    fn prop_hmac_key_sensitivity(key1: heapless::Vec<u8, 32>, key2: heapless::Vec<u8, 32>, message: heapless::Vec<u8, 32>) -> TestResult {
         if key1.is_empty() || key2.is_empty() || message.is_empty() || key1 == key2 {
             return TestResult::discard();
         }
@@ -272,6 +324,12 @@ mod property_tests {
         TestResult::from_bool(hmac1 != hmac2)
     }
 }
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 #### Automated Testing Framework
@@ -279,9 +337,30 @@ mod property_tests {
 **Continuous Integration Test Suite**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{mem, fmt};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+use subtle::{Choice, ConstantTimeEq};
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+
+use zeroize::{Zeroize, ZeroizeOnDrop};
+use core::mem;
+use heapless::String;
+
+use core::fmt;
+use core::result::Result;
+
 // tests/integration_tests.rs - Integration test suite
-use std::process::Command;
-use std::time::Instant;
+use core::process::Command;
+use core::time::Instant;
 
 #[test]
 fn test_cross_compilation_targets() {
@@ -292,7 +371,7 @@ fn test_cross_compilation_targets() {
     ];
     
     for target in &targets {
-        println!("Testing compilation for target: {}", target);
+        defmt::info!("Testing compilation for target: {}", target);
         
         let output = Command::new("cargo")
             .args(&["build", "--target", target, "--release"])
@@ -303,7 +382,7 @@ fn test_cross_compilation_targets() {
             output.status.success(),
             "Compilation failed for target {}: {}",
             target,
-            String::from_utf8_lossy(&output.stderr)
+            heapless::String<64>::from_utf8_lossy(&output.stderr)
         );
     }
 }
@@ -329,7 +408,7 @@ fn test_crypto_performance_benchmarks() {
     let duration = bench_start.elapsed();
     let ops_per_sec = iterations as f64 / duration.as_secs_f64();
     
-    println!("AES-256 performance: {:.0} ops/sec", ops_per_sec);
+    defmt::info!("AES-256 performance: {:.0} ops/sec", ops_per_sec);
     
     // Performance regression test - should be faster than baseline
     assert!(ops_per_sec > 50000.0, "AES performance regression detected");
@@ -338,10 +417,10 @@ fn test_crypto_performance_benchmarks() {
 #[test]
 fn test_memory_usage_constraints() {
     // Test that crypto contexts don't exceed memory budgets
-    let ctx_size = std::mem::size_of::<AesContext>();
+    let ctx_size = core::mem::size_of::<AesContext>();
     assert!(ctx_size <= 1024, "AesContext too large: {} bytes", ctx_size);
     
-    let session_size = std::mem::size_of::<CryptoSession>();
+    let session_size = core::mem::size_of::<CryptoSession>();
     assert!(session_size <= 2048, "CryptoSession too large: {} bytes", session_size);
 }
 
@@ -362,7 +441,6 @@ fn test_zeroization_behavior() {
 
 #[test]
 fn test_constant_time_operations() {
-    use subtle::ConstantTimeEq;
     
     // Test constant-time comparison
     let a = [0x42u8; 32];
@@ -373,6 +451,12 @@ fn test_constant_time_operations() {
     assert!(bool::from(a.ct_eq(&b)));
     assert!(!bool::from(a.ct_eq(&c)));
 }
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 #### Hardware-in-the-Loop Testing
@@ -380,6 +464,23 @@ fn test_constant_time_operations() {
 **Embedded Target Testing Framework**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+
+use cortex_r::asm;
+use core::fmt;
+use core::mem;
+
 // tests/hardware_tests.rs - Hardware-specific tests
 #![cfg(feature = "hardware-testing")]
 
@@ -462,6 +563,12 @@ fn test_power_analysis_resistance() {
         // This requires specialized hardware and analysis tools
     }
 }
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 #### Test Data Management
@@ -469,28 +576,48 @@ fn test_power_analysis_resistance() {
 **Test Vector Generation and Management**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+
+use core::mem;
+use heapless::Vec;
+
+use heapless::String;
+use core::fmt;
+use core::result::Result;
+
 // tests/test_data_generator.rs - Generate test data for validation
 use serde::{Deserialize, Serialize};
-use std::fs;
+use core::fs;
 use rand::{Rng, SeedableRng};
 use rand_chacha::ChaCha20Rng;
 
 #[derive(Serialize, Deserialize)]
 struct TestVector {
-    description: String,
-    key: String,
-    plaintext: String,
-    ciphertext: String,
-    iv: Option<String>,
-    tag: Option<String>,
+    description: heapless::String<64>,
+    key: heapless::String<64>,
+    plaintext: heapless::String<64>,
+    ciphertext: heapless::String<64>,
+    iv: Option<heapless::String<64>>,
+    tag: Option<heapless::String<64>>,
 }
 
 #[derive(Serialize, Deserialize)]
 struct TestSuite {
-    algorithm: String,
+    algorithm: heapless::String<64>,
     key_size: u32,
-    description: String,
-    vectors: Vec<TestVector>,
+    description: heapless::String<64>,
+    vectors: heapless::Vec<TestVector, 32>,
 }
 
 fn generate_aes_test_vectors() -> TestSuite {
@@ -554,7 +681,7 @@ fn generate_and_save_test_vectors() {
     fs::create_dir_all("tests/vectors").unwrap();
     fs::write("tests/vectors/aes256_ecb_generated.json", json).unwrap();
     
-    println!("Generated {} test vectors", suite.vectors.len());
+    defmt::info!("Generated {} test vectors", suite.vectors.len());
 }
 
 // Reference implementation for generating expected results
@@ -563,6 +690,12 @@ fn aes_encrypt_reference(key: &[u8; 32], plaintext: &[u8; 16]) -> [u8; 16] {
     // For example, OpenSSL or a certified implementation
     let ctx = AesContext::new(key).unwrap();
     ctx.encrypt_block(plaintext)
+}
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
 }
 ```
 

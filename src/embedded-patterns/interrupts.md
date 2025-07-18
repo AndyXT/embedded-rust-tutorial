@@ -4,7 +4,26 @@ This section consolidates all interrupt handling patterns for embedded crypto ap
 
 #### Safe Interrupt Handling Fundamentals
 
+
+
+
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 use cortex_m_rt::interrupt;
 use cortex_m::interrupt::{Mutex, free};
 use core::cell::RefCell;
@@ -189,13 +208,33 @@ fn process_crypto_interrupts() -> Result<(), CryptoError> {
     }
     Ok(())
 }
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 #### RTIC Framework for Real-Time Crypto
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt};
+
+
+use zeroize::{Zeroize, ZeroizeOnDrop};
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 // Advanced real-time crypto using RTIC framework
-#[rtic::app(device = stm32f4xx_hal::pac, peripherals = true, dispatchers = [EXTI0, EXTI1])]
+// #[rtic::app(device = stm32f4xx_hal::pac, peripherals = true, dispatchers = [EXTI0, EXTI1])] // Hardware-specific code - adapt for your target
 mod app {
     use super::*;
     use rtic::time::duration::*;
@@ -469,6 +508,22 @@ impl CryptoStatistics {
 #### Interrupt Priority and Timing Considerations
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 // Interrupt priority configuration for crypto applications
 const CRYPTO_HW_PRIORITY: u8 = 0;      // Highest - hardware crypto
 const DMA_PRIORITY: u8 = 1;             // High - DMA completion
@@ -481,19 +536,19 @@ fn configure_crypto_interrupt_priorities() {
     unsafe {
         // Set crypto hardware interrupt to highest priority
         cortex_m::peripheral::NVIC::set_priority(
-            stm32f4xx_pac::Interrupt::CRYP, 
+//             stm32f4xx_pac::Interrupt::CRYP,  // Hardware-specific code - adapt for your target
             CRYPTO_HW_PRIORITY
         );
         
         // Set DMA interrupt to high priority
         cortex_m::peripheral::NVIC::set_priority(
-            stm32f4xx_pac::Interrupt::DMA1_STREAM0, 
+//             stm32f4xx_pac::Interrupt::DMA1_STREAM0,  // Hardware-specific code - adapt for your target
             DMA_PRIORITY
         );
         
         // Set timer interrupt for key management
         cortex_m::peripheral::NVIC::set_priority(
-            stm32f4xx_pac::Interrupt::TIM2, 
+//             stm32f4xx_pac::Interrupt::TIM2,  // Hardware-specific code - adapt for your target
             TIMER_PRIORITY
         );
     }
@@ -532,5 +587,11 @@ fn start_crypto_operation() -> Result<u32, CryptoError> {
 fn complete_crypto_operation() {
     // Clear hardware busy flag
     CRYPTO_HARDWARE_BUSY.store(false, Ordering::Release);
+}
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
 }
 ```

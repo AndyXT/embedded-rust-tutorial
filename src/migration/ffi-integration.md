@@ -10,7 +10,28 @@ Interfacing with existing C cryptographic libraries during migration requires ca
 
 **Pattern 1: Resource Management with RAII**
 
+
+
+
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use zeroize::{Zeroize, ZeroizeOnDrop};
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 // Safe wrapper for OpenSSL or similar C crypto library
 use core::ffi::{c_int, c_void, c_char, c_uchar};
 use zeroize::ZeroizeOnDrop;
@@ -185,9 +206,31 @@ impl ZeroizeOnDrop for OpensslAes {}
 **Pattern 2: HMAC Integration with Error Handling**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use zeroize::{Zeroize, ZeroizeOnDrop};
+use core::mem;
+use heapless::Vec;
+
+use core::fmt;
+use core::result::Result;
+
 pub struct OpensslHmac {
     ctx: *mut c_void,
-    _key: Vec<u8>, // Variable-length key storage
+    _key: heapless::Vec<u8, 32>, // Variable-length key storage
 }
 
 impl OpensslHmac {
@@ -263,6 +306,24 @@ impl Drop for OpensslHmac {
 **Complete mbedTLS Integration Example**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use zeroize::{Zeroize, ZeroizeOnDrop};
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 // mbedTLS FFI bindings
 extern "C" {
     // AES functions
@@ -435,6 +496,24 @@ impl Drop for MbedTlsRng {
 **Xilinx CSU (Crypto Services Unit) Integration**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use zeroize::{Zeroize, ZeroizeOnDrop};
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 // Xilinx CSU FFI bindings for hardware crypto acceleration
 extern "C" {
     fn XCsuDma_Initialize(instance_ptr: *mut c_void, config_ptr: *const c_void) -> c_int;
@@ -601,9 +680,19 @@ mbedtls-sys = "2.28"
 **build.rs for Automatic Binding Generation**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt};
+
+use core::mem;
+use core::fmt;
+use core::result::Result;
 // build.rs - Automatic FFI binding generation
-use std::env;
-use std::path::PathBuf;
+use core::env;
+use core::path::PathBuf;
 
 fn main() {
     let target = env::var("TARGET").unwrap();
@@ -624,8 +713,8 @@ fn main() {
     // Link platform-specific libraries
     match target.as_str() {
         t if t.contains("armv7r") => {
-            println!("cargo:rustc-link-lib=static=xilinx_crypto");
-            println!("cargo:rustc-link-search=native=/opt/xilinx/lib");
+            defmt::info!("cargo:rustc-link-lib=static=xilinx_crypto");
+            defmt::info!("cargo:rustc-link-search=native=/opt/xilinx/lib");
         }
         _ => {}
     }
@@ -682,6 +771,28 @@ fn build_xilinx_bindings() {
 **Hybrid System Example**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use heapless::Vec;
+
+use core::fmt;
+use core::result::Result;
+
 // Complete example using multiple crypto backends
 pub struct HybridCryptoSystem {
     software_aes: Option<SoftwareAes>,
@@ -714,7 +825,7 @@ impl HybridCryptoSystem {
         Ok(system)
     }
     
-    pub fn encrypt_with_best_available(&mut self, key: &[u8; 32], plaintext: &[u8]) -> Result<Vec<u8>, CryptoError> {
+    pub fn encrypt_with_best_available(&mut self, key: &[u8; 32], plaintext: &[u8]) -> Result<heapless::Vec<u8, 32>, CryptoError> {
         let mut iv = [0u8; 16];
         self.rng.fill_bytes(&mut iv)?;
         

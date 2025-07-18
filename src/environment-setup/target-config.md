@@ -76,7 +76,39 @@ cc = "1.0"
 ```
 
 **Memory Layout (memory.x):**
-```rust
+
+
+// Helper functions for Cortex-R5 bare metal examples
+#[cfg(feature = "embedded")]
+mod cortex_r5_helpers {
+    use core::ptr;
+    
+    /// Simple cycle counter for timing (implementation depends on your specific Cortex-R5 setup)
+    pub fn get_cycle_count() -> u32 {
+        // This is a placeholder - implement based on your specific Cortex-R5 configuration
+        // You might use PMU (Performance Monitoring Unit) or a timer peripheral
+        0 // Placeholder
+    }
+    
+    /// Memory barrier for ensuring ordering in crypto operations
+    pub fn memory_barrier() {
+        unsafe {
+            core::arch::asm!("dmb sy", options(nostack, preserves_flags));
+        }
+    }
+    
+    /// Constant-time conditional move (basic implementation)
+    pub fn conditional_move(condition: bool, a: u8, b: u8) -> u8 {
+        let mask = if condition { 0xFF } else { 0x00 };
+        (a & mask) | (b & !mask)
+    }
+}
+
+#[cfg(feature = "embedded")]
+use cortex_r5_helpers::*;
+
+
+```text
 /* memory.x - Optimized for Xilinx R5 crypto operations */
 MEMORY
 {

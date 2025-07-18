@@ -10,7 +10,20 @@ Rust provides unique advantages for secure cryptographic implementations through
 
 Rust eliminates entire classes of vulnerabilities that plague C cryptographic implementations:
 
+
+
+
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+use core::{fmt};
+
+
+use core::fmt;
+use core::mem;
+
 // Buffer overflow prevention - automatic bounds checking
 fn safe_crypto_buffer_operations() {
     let mut plaintext = [0u8; 256];
@@ -46,6 +59,12 @@ fn no_double_free_crypto_contexts() {
     process_with_context(crypto_ctx); // Ownership transferred
     // crypto_ctx can't be used again - compile error prevents double-free
 }
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 ## Automatic Key Zeroization Patterns
@@ -53,6 +72,32 @@ fn no_double_free_crypto_contexts() {
 Rust's `Drop` trait provides automatic, guaranteed cleanup of sensitive material:
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+// Stub function for HMAC
+fn hmac_sha256(_key: &[u8; 32], _message: &[u8]) -> Result<[u8; 32], CryptoError> {
+    Ok([0u8; 32])
+}
+
+
+use core::mem;
+use heapless::Vec;
+use core::fmt;
+
+use core::result::Result;
+
 use zeroize::{Zeroize, ZeroizeOnDrop};
 
 // Automatic zeroization for all key material
@@ -79,7 +124,7 @@ impl SessionKeys {
         keys
     }
     
-    fn encrypt_and_mac(&self, plaintext: &[u8]) -> Result<Vec<u8>, CryptoError> {
+    fn encrypt_and_mac(&self, plaintext: &[u8]) -> Result<heapless::Vec<u8, 32>, CryptoError> {
         // Encrypt-then-MAC construction
         let ciphertext = aes_gcm_encrypt(&self.encryption_key, &self.iv, plaintext)?;
         let mac = hmac_sha256(&self.mac_key, &ciphertext)?;
@@ -146,6 +191,27 @@ fn secure_session_example() {
 Rust's type system can enforce protocol correctness at compile time, preventing state machine violations:
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use heapless::Vec;
+
+use core::fmt;
+use core::result::Result;
+
 use core::marker::PhantomData;
 
 // Protocol states as types
@@ -222,7 +288,7 @@ impl SecureChannel<SessionEstablished> {
         Ok(())
     }
     
-    fn receive_encrypted(&mut self) -> Result<Vec<u8>, CryptoError> {
+    fn receive_encrypted(&mut self) -> Result<heapless::Vec<u8, 32>, CryptoError> {
         let encrypted = self.socket.receive()?;
         let keys = self.session_keys.as_ref().unwrap();
         let decrypted = keys.decrypt_and_verify(&encrypted)?;
@@ -291,8 +357,30 @@ fn protocol_state_example() {
 Rust provides several unique security advantages over C for cryptographic implementations:
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use heapless::Vec;
+
+use core::fmt;
+use core::result::Result;
+
 // 1. No null pointer dereferences
-fn safe_key_handling(key: Option<&[u8; 32]>) -> Result<Vec<u8>, CryptoError> {
+fn safe_key_handling(key: Option<&[u8; 32]>) -> Result<heapless::Vec<u8, 32>, CryptoError> {
     // Compiler forces explicit handling of None case
     let key = key.ok_or(CryptoError::NoKey)?;
     
@@ -301,7 +389,7 @@ fn safe_key_handling(key: Option<&[u8; 32]>) -> Result<Vec<u8>, CryptoError> {
 }
 
 // 2. Integer overflow protection
-fn safe_buffer_calculations(data_len: usize, overhead: usize) -> Result<Vec<u8>, CryptoError> {
+fn safe_buffer_calculations(data_len: usize, overhead: usize) -> Result<heapless::Vec<u8, 32>, CryptoError> {
     // Checked arithmetic prevents integer overflow attacks
     let total_len = data_len.checked_add(overhead)
         .ok_or(CryptoError::IntegerOverflow)?;

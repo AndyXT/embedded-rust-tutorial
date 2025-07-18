@@ -11,8 +11,22 @@
 
 #### Secure Key Management Example
 
+
+
+
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt};
+
+
+use core::fmt;
+use core::mem;
 use zeroize::{Zeroize, ZeroizeOnDrop};
+
 
 #[derive(ZeroizeOnDrop)]
 struct SecureKey<const N: usize> {
@@ -33,4 +47,10 @@ impl<const N: usize> SecureKey<N> {
 let key = SecureKey::<32>::new(key_data);
 // Use key...
 // key is automatically zeroized here when it goes out of scope
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```

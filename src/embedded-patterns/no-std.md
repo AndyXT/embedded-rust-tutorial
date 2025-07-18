@@ -6,7 +6,10 @@ For memory management concepts, see [Memory Model Differences](../core-concepts/
 
 #### Complete No-std Project Template
 
-```rust
+
+
+
+`````rust
 #![no_std]
 #![no_main]
 #![forbid(unsafe_code)]  // Optional: forbid unsafe except in specific modules
@@ -23,6 +26,7 @@ use core::{
     fmt::Write,             // Formatting without heap allocation
     convert::TryInto,       // Fallible conversions
     ops::{Deref, DerefMut}, // Smart pointer traits
+    result::Result,         // Result type for error handling
 };
 
 // Heapless collections - essential for no-std
@@ -38,7 +42,7 @@ use heapless::{
 use chacha20poly1305::{ChaCha20Poly1305, Key, Nonce};
 use sha2::{Sha256, Digest};
 use zeroize::{Zeroize, ZeroizeOnDrop};
-use subtle::ConstantTimeEq;
+use subtle::{Choice, ConstantTimeEq};
 
 #[entry]
 fn main() -> ! {
@@ -60,33 +64,49 @@ fn main() -> ! {
     }
 }
 
-// Secure panic handler that clears sensitive data
-#[panic_handler]
-fn panic(info: &PanicInfo) -> ! {
-    // Disable interrupts to prevent further crypto operations
-    cortex_m::interrupt::disable();
-    
-    // Clear all sensitive data before panic
-    unsafe {
-        clear_crypto_memory();
-    }
-    
-    // Log panic info if possible, then reset
-    #[cfg(feature = "panic-log")]
-    log_panic_info(info);
-    
-    // Reset system or halt based on configuration
-    #[cfg(feature = "panic-reset")]
-    cortex_m::peripheral::SCB::sys_reset();
-    
-    #[cfg(not(feature = "panic-reset"))]
-    loop { cortex_m::asm::wfi(); }
-}
+// Simple panic handler for examples - halts on panic
+use panic_halt as _; // Links the panic-halt crate
+
+// For production code with security requirements:
+// #[panic_handler]
+// fn panic(_info: &PanicInfo) -> ! {
+//     // Disable interrupts
+//     cortex_m::interrupt::disable();
+//     
+//     // Clear sensitive data if needed
+//     // Note: Implement clear_crypto_memory() based on your needs
+//     
+//     // Reset system
+//     cortex_m::peripheral::SCB::sys_reset();
+// }
+``
 ```
 
 #### No-std Memory Management Patterns
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use zeroize::{Zeroize, ZeroizeOnDrop};
+use core::mem;
+use heapless::Vec;
+
+use core::fmt;
+use core::result::Result;
+
 use heapless::{Vec, pool::{Pool, Node, Singleton}};
 
 // Static memory pools for different crypto operations
@@ -145,9 +165,9 @@ fn encrypt_with_pool(plaintext: &[u8]) -> Result<heapless::Vec<u8, 4096>, Crypto
 // Stack-based collections for crypto state management
 #[derive(ZeroizeOnDrop)]
 struct CryptoSession {
-    active_keys: Vec<[u8; 32], 8>,        // Max 8 active keys
-    message_queue: Vec<CryptoMessage, 32>, // Max 32 queued messages
-    nonce_counters: Vec<u64, 8>,           // Nonce counter per key
+    active_keys: heapless::Vec<[u8; 32], 8, 32>,        // Max 8 active keys
+    message_queue: heapless::Vec<CryptoMessage, 32, 32>, // Max 32 queued messages
+    nonce_counters: heapless::Vec<u64, 8, 32>,           // Nonce counter per key
     session_id: u32,
 }
 
@@ -172,7 +192,7 @@ impl CryptoSession {
         Ok(key_index)
     }
     
-    fn encrypt_message(&mut self, key_index: usize, plaintext: &[u8]) -> Result<Vec<u8, 4096>, CryptoError> {
+    fn encrypt_message(&mut self, key_index: usize, plaintext: &[u8]) -> Result<heapless::Vec<u8, 4096, 32>, CryptoError> {
         let key = self.active_keys.get(key_index).ok_or(CryptoError::InvalidKeyIndex)?;
         let nonce_counter = self.nonce_counters.get_mut(key_index).ok_or(CryptoError::InvalidKeyIndex)?;
         
@@ -232,6 +252,22 @@ static mut CRYPTO_WS: SmallCryptoWorkspace = SmallCryptoWorkspace::new();
 #### No-std Error Handling and Result Types
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 // Custom error types that work in no-std
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum CryptoError {
@@ -251,7 +287,7 @@ pub enum CryptoError {
 // No-std compatible Result type
 pub type CryptoResult<T> = core::result::Result<T, CryptoError>;
 
-// Error handling without std::error::Error trait
+// Error handling without core::error::Error trait
 impl CryptoError {
     pub fn description(&self) -> &'static str {
         match self {

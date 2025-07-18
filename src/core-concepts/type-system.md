@@ -7,6 +7,17 @@ Rust's type system provides compile-time guarantees that prevent entire classes 
 Rust's type system enables powerful abstractions without runtime overhead:
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt};
+
+
+use core::fmt;
+use core::mem;
+
 // Generic function - no runtime cost
 fn encrypt_block<const N: usize>(data: &mut [u8; N], key: &[u8; 32]) {
     // Implementation is monomorphized at compile time
@@ -18,11 +29,33 @@ fn encrypt_block<const N: usize>(data: &mut [u8; N], key: &[u8; 32]) {
 // Usage - compiler generates specific versions
 encrypt_block(&mut [0u8; 16], &key);  // Generates version for N=16
 encrypt_block(&mut [0u8; 32], &key);  // Generates version for N=32
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 ## Const Generics for Crypto
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 // Type-safe buffer sizes
 struct CryptoBuffer<const SIZE: usize> {
     data: [u8; SIZE],
@@ -50,11 +83,34 @@ impl<const SIZE: usize> CryptoBuffer<SIZE> {
 // Different buffer sizes are different types
 type SmallBuffer = CryptoBuffer<64>;
 type LargeBuffer = CryptoBuffer<1024>;
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 ## Trait System for Algorithm Abstraction
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 trait Cipher {
     const KEY_SIZE: usize;
     const BLOCK_SIZE: usize;
@@ -102,3 +158,4 @@ fn process_data<C: Cipher>(cipher: &C, key: &[u8], data: &mut [u8]) -> Result<()
 **→ Related:**
 - [Type System Advantages for Security](./type-system-advantages-for-security.md) - Security-focused type patterns
 - [Advanced Type System Features](./advanced-types.md) - Advanced patterns and techniques
+```

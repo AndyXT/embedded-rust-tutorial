@@ -45,6 +45,7 @@
   - [5.3 Key Management and Zeroization](cryptography/key-management.md)
   - [5.4 Hardware Crypto Acceleration](cryptography/hardware-crypto.md)
   - [5.5 Side-Channel Mitigations](cryptography/side-channels.md)
+  - [5.6 RustCrypto Examples for Cortex-R5](cryptography/rustcrypto-examples.md)
 
 - [6. Migration and Integration](migration/README.md)
   - [6.1 Incremental Migration Strategies](migration/strategies.md)

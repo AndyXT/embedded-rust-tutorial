@@ -14,7 +14,21 @@
 
 **⚠️ Critical Example - Use After Free Prevention:**
 
+
+
+
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt};
+
+
+use core::fmt;
+use core::mem;
+
 // C code that compiles but has use-after-free bug:
 // uint8_t* create_key() {
 //     uint8_t key[32] = {0};
@@ -36,6 +50,12 @@ fn create_key() -> [u8; 32] {
 fn create_key_heap() -> Box<[u8; 32]> {
     Box::new([0u8; 32])  // Heap-allocated, properly owned
 }
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 #### ⚠️ Crypto-Specific Gotchas
@@ -53,7 +73,18 @@ fn create_key_heap() -> Box<[u8; 32]> {
 **⚠️ Critical Example - Automatic Key Zeroization:**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt};
+
+
+use core::fmt;
+use core::mem;
 // C code - easy to forget zeroization:
+
 // void process_message(uint8_t* key) {
 //     uint8_t session_key[32];
 //     derive_key(key, session_key);
@@ -73,11 +104,29 @@ fn process_message(master_key: &[u8; 32]) {
     encrypt_message(&session_key.0, message);
     // session_key automatically zeroized when dropped
 }
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 **⚠️ Critical Example - Constant-Time Operations:**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt};
+use subtle::{Choice, ConstantTimeEq};
+
+
+use core::fmt;
+use core::mem;
+
 // C code - vulnerable to timing attacks:
 // int verify_mac(uint8_t* expected, uint8_t* actual, size_t len) {
 //     for (size_t i = 0; i < len; i++) {
@@ -89,10 +138,15 @@ fn process_message(master_key: &[u8; 32]) {
 // }
 
 // Rust equivalent - constant-time comparison:
-use subtle::ConstantTimeEq;
 
 fn verify_mac(expected: &[u8], actual: &[u8]) -> bool {
     expected.ct_eq(actual).into()  // Always takes same time
+}
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
 }
 ```
 
@@ -111,6 +165,19 @@ fn verify_mac(expected: &[u8], actual: &[u8]) -> bool {
 **⚠️ Critical Example - Interrupt-Safe Global State:**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt};
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 // C code - race condition possible:
 // volatile uint32_t crypto_status = 0;
 // 
@@ -155,6 +222,19 @@ fn CRYPTO_IRQ() {
 **⚠️ Critical Example - Safe Hardware Register Access:**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt};
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 // C code - direct register access:
 // #define CRYPTO_BASE 0x40000000
 // #define CRYPTO_CTRL (*(volatile uint32_t*)(CRYPTO_BASE + 0x00))
@@ -184,6 +264,12 @@ fn start_encryption_raw() {
         core::ptr::write_volatile(CRYPTO_BASE.offset(1), key_data);
     }
 }
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 #### ⚠️ Type System and Functional Programming Gotchas
@@ -201,6 +287,22 @@ fn start_encryption_raw() {
 **⚠️ Critical Example - Enum Pattern Matching Safety:**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 // C code - easy to miss cases:
 // enum crypto_state { IDLE, ENCRYPTING, DECRYPTING, ERROR };
 // 
@@ -240,11 +342,30 @@ fn handle_state(state: CryptoState) {
         // Compiler error if any case is missing!
     }
 }
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 **⚠️ Critical Example - Iterator Safety and Performance:**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt};
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 // C code - manual bounds checking and potential errors:
 // void process_crypto_data(uint8_t* data, size_t len) {
 //     for (size_t i = 0; i < len; i++) {
@@ -267,11 +388,34 @@ fn safe_crypto_math(a: u32, b: u32) -> Option<u32> {
     a.checked_mul(b)  // Returns None on overflow
      .and_then(|result| result.checked_add(42))
 }
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 **⚠️ Critical Example - Trait-Based Polymorphism vs Function Pointers:**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 // C code - unsafe function pointers:
 // typedef int (*crypto_func)(uint8_t*, size_t);
 // 
@@ -313,7 +457,23 @@ fn use_crypto<T: CryptoEngine>(engine: &T, data: &mut [u8]) -> Result<(), Crypto
 **1. String Handling Differences:**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+
+
+use core::fmt;
+use core::mem;
+
 // C approach:
+
 // char buffer[256];
 // strcpy(buffer, "Hello");
 // strcat(buffer, " World");
@@ -325,14 +485,33 @@ let world = b" World";        // Byte string literal
 
 // For actual strings:
 use heapless::String;
-let mut message: String<256> = String::new();
+let mut message: heapless::String<64><256> = heapless::String<64>::new();
 message.push_str("Hello").unwrap();
 message.push_str(" World").unwrap();
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 **2. Array Initialization Differences:**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{mem, fmt};
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 // C approach:
 // uint8_t buffer[1024] = {0};  // Zero-initialized
 
@@ -346,11 +525,33 @@ let mut buffer: [u8; 1024] = unsafe {
     core::mem::MaybeUninit::uninit().assume_init() 
 };
 // Must initialize before use!
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 **3. Function Pointer Differences:**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 // C approach:
 // typedef int (*crypto_func_t)(uint8_t*, size_t);
 // crypto_func_t encrypt_fn = aes_encrypt;
@@ -363,4 +564,10 @@ let encrypt_fn: CryptoFn = aes_encrypt;
 let encrypt_fn = |data: &mut [u8]| -> Result<(), CryptoError> {
     aes_encrypt(data)
 };
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```

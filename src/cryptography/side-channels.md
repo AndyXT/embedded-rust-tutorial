@@ -16,6 +16,51 @@ Side-channel attacks can extract sensitive information by analyzing:
 Power analysis attacks monitor the power consumption of cryptographic devices to extract secret keys. Rust provides several techniques to mitigate these attacks:
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+// Helper functions for Cortex-R5 bare metal examples
+#[cfg(feature = "embedded")]
+mod cortex_r5_helpers {
+    use core::ptr;
+    
+    /// Simple cycle counter for timing (implementation depends on your specific Cortex-R5 setup)
+    pub fn get_cycle_count() -> u32 {
+        // This is a placeholder - implement based on your specific Cortex-R5 configuration
+        // You might use PMU (Performance Monitoring Unit) or a timer peripheral
+        0 // Placeholder
+    }
+    
+    /// Memory barrier for ensuring ordering in crypto operations
+    pub fn memory_barrier() {
+        unsafe {
+            core::arch::asm!("dmb sy", options(nostack, preserves_flags));
+        }
+    }
+    
+    /// Constant-time conditional move (basic implementation)
+    pub fn conditional_move(condition: bool, a: u8, b: u8) -> u8 {
+        let mask = if condition { 0xFF } else { 0x00 };
+        (a & mask) | (b & !mask)
+    }
+}
+
+#[cfg(feature = "embedded")]
+use cortex_r5_helpers::*;```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt};
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 use rand_core::RngCore;
 use core::hint::black_box;
 
@@ -115,6 +160,22 @@ fn secure_power_resistant_clear(data: &mut [u8], rng: &mut impl RngCore) {
 EM analysis attacks monitor electromagnetic emissions from cryptographic devices:
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 // EM-resistant operations using noise injection
 struct EmResistantCrypto {
     noise_generator: ChaCha20Rng,
@@ -233,6 +294,19 @@ fn em_hardware_protection() {
 Cache timing attacks exploit variations in memory access times to infer secret information:
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt};
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 use core::hint::black_box;
 
 // Cache-resistant table lookups
@@ -397,6 +471,22 @@ fn gf_mul(a: u8, b: u8) -> u8 {
 Fault injection attacks attempt to corrupt computations to extract secret information:
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 // Redundant computation for fault detection
 fn fault_resistant_aes_encrypt(
     key: &[u8; 32],
@@ -550,6 +640,22 @@ fn memory_protected_crypto_operation(
 ## Comprehensive Side-Channel Protection Framework
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 // Complete side-channel resistant crypto framework
 struct SideChannelResistantCrypto {
     em_protection: EmResistantCrypto,
@@ -657,13 +763,13 @@ fn comprehensive_crypto_example() -> Result<(), CryptoError> {
     // Perform protected encryption
     protected_crypto.protected_aes_encrypt(&master_key, &plaintext, &mut ciphertext)?;
     
-    println!("Protected encryption completed successfully");
+    defmt::info!("Protected encryption completed successfully");
     
     // Derive session key with protection
     let mut session_key = [0u8; 32];
     protected_crypto.protected_key_derivation(&master_key, b"session", &mut session_key)?;
     
-    println!("Protected key derivation completed successfully");
+    defmt::info!("Protected key derivation completed successfully");
     
     // Clear sensitive data
     session_key.zeroize();

@@ -1,1 +1,57 @@
-book
+# mdBook generated files
+book/
+book-test/
+
+# Rust build artifacts
+target/
+Cargo.lock
+*.rs.bk
+*.pdb
+
+# Python cache and temporary files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Temporary and test directories
+example_test_project/
+cortex-r5-examples/
+security_validator_demo/
+ci_metrics/
+docs/
+
+# Temporary scripts and files
+fix_*.py
+test_*.py
+*_test_*.py
+comprehensive_example_fixer.py
+manual_example_fixes.py
+create_hidden_line_examples.py
+
+# Test reports and artifacts
+*_report.md
+*_report.json
+*_results.json
+*_summary.md
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Build scripts artifacts
+thumbv7r-none-eabi.json

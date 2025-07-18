@@ -20,7 +20,32 @@ Rust's ownership system replaces C's manual memory management with compile-time 
 
 #### Ownership in Embedded Crypto Context
 
+
+
+
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use heapless::Vec;
+use core::fmt;
+
+use core::result::Result;
+
 use zeroize::{Zeroize, ZeroizeOnDrop};
 
 #[derive(ZeroizeOnDrop)]
@@ -39,9 +64,17 @@ impl CryptoContext {
         }
     }
     
-    fn encrypt(&mut self, plaintext: &[u8]) -> Result<Vec<u8>, CryptoError> {
-        // Exclusive mutable access prevents concurrent key usage
-        self.nonce_counter += 1;
+    fn encrypt(&mut self, plaintext: &[u8]) -> Result<heapless::Vec<u8, 32>, CryptoError> {
+        // Check plaintext size (16 bytes for auth tag overhead)
+        const MAX_PLAINTEXT_SIZE: usize = 32 - 16;
+        if plaintext.len() > MAX_PLAINTEXT_SIZE {
+            return Err(CryptoError::BufferTooSmall);
+        }
+        
+        // Prevent nonce overflow (important for security)
+        self.nonce_counter = self.nonce_counter
+            .checked_add(1)
+            .ok_or(CryptoError::InvalidNonce)?;
         
         // Use owned key material safely
         let nonce = self.nonce_counter.to_le_bytes();
@@ -68,12 +101,33 @@ fn secure_communication() -> Result<(), CryptoError> {
 #### Borrowing Rules for Crypto Operations
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use heapless::Vec;
+
+use core::fmt;
+use core::result::Result;
+
 // Immutable borrowing - safe concurrent reads
 fn verify_multiple_signatures(
     public_key: &[u8; 32],     // Immutable borrow
     messages: &[&[u8]],        // Multiple immutable borrows allowed
     signatures: &[[u8; 64]]
-) -> Vec<bool> {
+) -> heapless::Vec<bool, 32> {
     messages.iter()
         .zip(signatures.iter())
         .map(|(msg, sig)| verify_signature(public_key, msg, sig))
@@ -119,14 +173,39 @@ fn key_hierarchy_example() -> Result<(), CryptoError> {
     
     Ok(())
 }
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 #### Memory Management Patterns for Embedded
 
 ```rust
 #![no_std]
+#![no_main]
 
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
 use heapless::Vec;
+
 
 // Stack-based crypto operations (preferred in embedded)
 fn stack_crypto_operations() -> Result<[u8; 16], CryptoError> {
@@ -142,18 +221,36 @@ fn stack_crypto_operations() -> Result<[u8; 16], CryptoError> {
     // All memory automatically cleaned up
 }
 
-// Static allocation for global crypto state
-static mut GLOBAL_CRYPTO_CTX: Option<CryptoContext> = None;
+// Safe global crypto state using critical sections
+use critical_section::Mutex;
+use core::cell::RefCell;
+
+static GLOBAL_CRYPTO_CTX: Mutex<RefCell<Option<CryptoContext>>> = 
+    Mutex::new(RefCell::new(None));
 
 fn init_global_crypto(key: [u8; 32]) {
-    unsafe {
-        GLOBAL_CRYPTO_CTX = Some(CryptoContext::new(key));
-    }
+    critical_section::with(|cs| {
+        let mut ctx = GLOBAL_CRYPTO_CTX.borrow(cs).borrow_mut();
+        *ctx = Some(CryptoContext::new(key));
+    });
+}
+
+fn use_global_crypto() -> Result<(), CryptoError> {
+    critical_section::with(|cs| {
+        let mut ctx = GLOBAL_CRYPTO_CTX.borrow(cs).borrow_mut();
+        match ctx.as_mut() {
+            Some(crypto) => {
+                // Use crypto context safely
+                crypto.process_data()
+            }
+            None => Err(CryptoError::NotInitialized),
+        }
+    })
 }
 
 // Heapless collections for message queues
 fn message_queue_example() -> Result<(), CryptoError> {
-    let mut encrypted_messages: Vec<[u8; 32], 16> = Vec::new();
+    let mut encrypted_messages: heapless::Vec<[u8; 32], 16, 32> = Vec::new();
     
     for i in 0..10 {
         let plaintext = [i; 16];
@@ -168,5 +265,11 @@ fn message_queue_example() -> Result<(), CryptoError> {
     }
     
     Ok(())
+}
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
 }
 ```

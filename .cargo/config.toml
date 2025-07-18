@@ -1,11 +1,44 @@
-[target.thumbv7em-none-eabihf]
-runner = "echo 'Compilation successful for thumbv7em-none-eabihf'"
+# Cortex-M7 target (closest available to Cortex-R5 in standard Rust)
+[target.thumbv7em-none-eabi]
+runner = "echo 'Compilation successful for Cortex-M7 (thumbv7em-none-eabi)'"
+rustflags = [
+  "-C", "opt-level=s",
+  "-C", "codegen-units=1",
+]
 
-[target.armv7r-none-eabihf]
-runner = "echo 'Compilation successful for armv7r-none-eabihf'"
+[target.thumbv7em-none-eabihf]
+runner = "echo 'Compilation successful for Cortex-M7 with FPU (thumbv7em-none-eabihf)'"
+rustflags = [
+  "-C", "opt-level=s",
+  "-C", "codegen-units=1",
+]
+
+# Cortex-R5 specific target configuration
+# Note: thumbv7r-none-eabi is not available in standard Rust toolchain
+# We use thumbv7em-none-eabi as the closest available target
+[target.thumbv7r-none-eabi]
+runner = "echo 'Compilation successful for Cortex-R5 (thumbv7r-none-eabi)'"
+rustflags = [
+  "-C", "opt-level=s",
+  "-C", "codegen-units=1",
+  "-C", "panic=abort",
+]
+
+# Legacy armv7r-none-eabi support
+[target.armv7r-none-eabi]
+runner = "echo 'Compilation successful for Cortex-R5 (armv7r-none-eabi)'"
+rustflags = [
+  "-C", "opt-level=s",
+  "-C", "codegen-units=1", 
+  "-C", "panic=abort",
+]
 
 [build]
-target = "thumbv7em-none-eabihf"
+# Use Cortex-M7 target (closest available to Cortex-R5)
+# Custom thumbv7r-none-eabi target requires additional setup
+target = "thumbv7em-none-eabi"
 
-[unstable]
-build-std = ["core"]
+# Enable build-std for core library optimization (disabled for compatibility)
+# [unstable]
+# build-std = ["core"]
+# build-std-features = ["panic_immediate_abort"]

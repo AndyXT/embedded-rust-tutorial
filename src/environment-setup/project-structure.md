@@ -29,7 +29,6 @@ lto = true
 panic = "abort"
 ```
 
-```
 project/
 ├── Cargo.toml
 ├── .cargo/config.toml

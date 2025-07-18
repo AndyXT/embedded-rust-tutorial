@@ -4,22 +4,56 @@ This section consolidates all hardware abstraction patterns for embedded crypto 
 
 #### Peripheral Access Crate (PAC) Usage
 
+
+
+
 ```rust
-// Direct register access using PAC - consolidated from scattered examples
-use stm32f4xx_pac as pac;
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+// use stm32f4xx_pac as pac; // Hardware-specific code - adapt for your target
 use cortex_m::interrupt;
 
+#[derive(Debug)]
+pub enum CryptoError {
+    HardwareBusy,
+    HardwareTimeout,
+    InvalidInput,
+    ConfigurationError,
+}
+
+#[derive(Debug, Clone, Copy)]
+pub enum AesMode {
+    ECB,
+    CBC,
+    CTR,
+    GCM,
+}
+
 struct CryptoPeripheral {
-    cryp: pac::CRYP,
-    dma: Option<pac::DMA2>,
+//     cryp: pac::CRYP, // Hardware-specific code - adapt for your target
+//     dma: Option<pac::DMA2>, // Hardware-specific code - adapt for your target
 }
 
 impl CryptoPeripheral {
-    fn new(cryp: pac::CRYP, dma: Option<pac::DMA2>) -> Self {
+//     fn new(cryp: pac::CRYP, dma: Option<pac::DMA2>) -> Self { // Hardware-specific code - adapt for your target
         Self { cryp, dma }
     }
     
-    fn configure_aes(&mut self, key: &[u32; 8], mode: AesMode) {
+    fn configure_aes(&mut self, key: &[u32; 8], mode: AesMode) -> Result<(), CryptoError> {
         // Configure crypto peripheral for AES with different modes
         self.cryp.cr.write(|w| {
             match mode {
@@ -44,6 +78,7 @@ impl CryptoPeripheral {
         
         // Enable crypto peripheral
         self.cryp.cr.modify(|_, w| w.crypen().enabled());
+        Ok(())
     }
     
     fn encrypt_block(&mut self, input: &[u32; 4]) -> Result<[u32; 4], CryptoError> {
@@ -53,9 +88,8 @@ impl CryptoPeripheral {
         }
         
         // Write input data to data input registers
-        let input_regs = [&self.cryp.din, &self.cryp.din, &self.cryp.din, &self.cryp.din];
-        for (reg, &word) in input_regs.iter().zip(input.iter()) {
-            reg.write(|w| unsafe { w.bits(word) });
+        for &word in input.iter() {
+            self.cryp.din.write(|w| unsafe { w.bits(word) });
         }
         
         // Wait for processing complete with timeout
@@ -70,56 +104,40 @@ impl CryptoPeripheral {
         }
         
         // Read output data
-        Ok([
-            self.cryp.dout.read().bits(),
-            self.cryp.dout.read().bits(),
-            self.cryp.dout.read().bits(),
-            self.cryp.dout.read().bits(),
-        ])
-    }
-    
-    fn setup_dma_transfer(&mut self, src: &[u8], dst: &mut [u8]) -> Result<(), CryptoError> {
-        if let Some(ref mut dma) = self.dma {
-            // Configure DMA for crypto operations
-            dma.s0cr.write(|w| {
-                w.chsel().bits(2)  // Crypto channel
-                 .mburst().single()
-                 .pburst().single()
-                 .pl().high()
-                 .msize().bits32()
-                 .psize().bits32()
-                 .minc().incremented()
-                 .pinc().fixed()
-                 .dir().memory_to_peripheral()
-            });
-            
-            // Set addresses and count
-            dma.s0par.write(|w| unsafe { w.bits(self.cryp.din.as_ptr() as u32) });
-            dma.s0m0ar.write(|w| unsafe { w.bits(src.as_ptr() as u32) });
-            dma.s0ndtr.write(|w| w.ndt().bits(src.len() as u16 / 4));
-            
-            // Enable DMA stream
-            dma.s0cr.modify(|_, w| w.en().enabled());
-            
-            Ok(())
-        } else {
-            Err(CryptoError::DmaNotAvailable)
+        let mut output = [0u32; 4];
+        for i in 0..4 {
+            output[i] = self.cryp.dout.read().bits();
         }
+        
+        Ok(output)
     }
-}
-
-#[derive(Clone, Copy)]
-enum AesMode {
-    ECB,
-    CBC,
-    CTR,
-    GCM,
 }
 ```
 
 #### Hardware Abstraction Layer (HAL) Patterns
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use heapless::Vec;
+
+use core::fmt;
+use core::result::Result;
+
 // Generic crypto traits for hardware abstraction - consolidated interface
 trait BlockCipher {
     type Error;
@@ -143,11 +161,11 @@ trait AuthenticatedCipher {
     
     fn encrypt_and_authenticate(&mut self, 
                                plaintext: &[u8], 
-                               aad: &[u8]) -> Result<(Vec<u8>, Self::Tag), Self::Error>;
+                               aad: &[u8]) -> Result<(heapless::Vec<u8, 32>, Self::Tag), Self::Error>;
     fn decrypt_and_verify(&mut self, 
                          ciphertext: &[u8], 
                          aad: &[u8], 
-                         tag: &Self::Tag) -> Result<Vec<u8>, Self::Error>;
+                         tag: &Self::Tag) -> Result<heapless::Vec<u8, 32>, Self::Error>;
 }
 
 // Hardware implementation with comprehensive error handling
@@ -302,7 +320,7 @@ impl CryptoEngine {
 // Hardware detection and initialization functions
 fn detect_crypto_hardware() -> bool {
     // Platform-specific hardware detection
-    #[cfg(feature = "stm32f4")]
+//     #[cfg(feature = "stm32f4")] // Hardware-specific code - adapt for your target
     {
         // Check if CRYP peripheral is available
         true // Simplified for example
@@ -312,7 +330,7 @@ fn detect_crypto_hardware() -> bool {
         // Check for Xilinx crypto engines
         true
     }
-    #[cfg(not(any(feature = "stm32f4", feature = "xilinx_r5")))]
+//     #[cfg(not(any(feature = "stm32f4", feature = "xilinx_r5")))] // Hardware-specific code - adapt for your target
     {
         false
     }
@@ -320,12 +338,12 @@ fn detect_crypto_hardware() -> bool {
 
 fn initialize_crypto_peripheral() -> CryptoPeripheral {
     // Platform-specific peripheral initialization
-    #[cfg(feature = "stm32f4")]
+//     #[cfg(feature = "stm32f4")] // Hardware-specific code - adapt for your target
     {
-        let dp = pac::Peripherals::take().unwrap();
+//         let dp = pac::Peripherals::take().unwrap(); // Hardware-specific code - adapt for your target
         CryptoPeripheral::new(dp.CRYP, Some(dp.DMA2))
     }
-    #[cfg(not(feature = "stm32f4"))]
+//     #[cfg(not(feature = "stm32f4"))] // Hardware-specific code - adapt for your target
     {
         panic!("Hardware crypto not supported on this platform")
     }
@@ -335,74 +353,108 @@ fn initialize_crypto_peripheral() -> CryptoPeripheral {
 #### Cross-Platform Hardware Abstraction
 
 ```rust
-// Cross-platform crypto hardware abstraction
-pub trait CryptoHardware {
-    type Error;
-    
-    fn aes_encrypt(&mut self, key: &[u8; 32], block: &mut [u8; 16]) -> Result<(), Self::Error>;
-    fn aes_decrypt(&mut self, key: &[u8; 32], block: &mut [u8; 16]) -> Result<(), Self::Error>;
-    fn sha256(&mut self, data: &[u8]) -> Result<[u8; 32], Self::Error>;
-    fn random_bytes(&mut self, buffer: &mut [u8]) -> Result<(), Self::Error>;
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+// use stm32f4xx_pac as pac; // Hardware-specific code - adapt for your target
+use cortex_m::interrupt;
+
+#[derive(Debug)]
+pub enum CryptoError {
+    HardwareBusy,
+    HardwareTimeout,
+    InvalidInput,
+    ConfigurationError,
 }
 
-// STM32 implementation
-#[cfg(feature = "stm32")]
-pub struct Stm32CryptoHardware {
-    cryp: pac::CRYP,
-    hash: pac::HASH,
-    rng: pac::RNG,
+#[derive(Debug, Clone, Copy)]
+pub enum AesMode {
+    ECB,
+    CBC,
+    CTR,
+    GCM,
 }
 
-#[cfg(feature = "stm32")]
-impl CryptoHardware for Stm32CryptoHardware {
-    type Error = CryptoError;
-    
-    fn aes_encrypt(&mut self, key: &[u8; 32], block: &mut [u8; 16]) -> Result<(), Self::Error> {
-        // STM32-specific AES implementation
-        todo!("Implement STM32 AES")
-    }
-    
-    fn sha256(&mut self, data: &[u8]) -> Result<[u8; 32], Self::Error> {
-        // STM32 HASH peripheral implementation
-        todo!("Implement STM32 SHA256")
-    }
-    
-    fn random_bytes(&mut self, buffer: &mut [u8]) -> Result<(), Self::Error> {
-        // STM32 RNG implementation
-        todo!("Implement STM32 RNG")
-    }
-    
-    fn aes_decrypt(&mut self, key: &[u8; 32], block: &mut [u8; 16]) -> Result<(), Self::Error> {
-        todo!("Implement STM32 AES decrypt")
-    }
+struct CryptoPeripheral {
+//     cryp: pac::CRYP, // Hardware-specific code - adapt for your target
+//     dma: Option<pac::DMA2>, // Hardware-specific code - adapt for your target
 }
 
-// Xilinx implementation
-#[cfg(feature = "xilinx")]
-pub struct XilinxCryptoHardware {
-    aes_engine: XilinxAes,
-    sha_engine: XilinxSha,
-    trng: XilinxTrng,
-}
-
-#[cfg(feature = "xilinx")]
-impl CryptoHardware for XilinxCryptoHardware {
-    type Error = CryptoError;
-    
-    fn aes_encrypt(&mut self, key: &[u8; 32], block: &mut [u8; 16]) -> Result<(), Self::Error> {
-        self.aes_engine.encrypt(key, block)
+impl CryptoPeripheral {
+//     fn new(cryp: pac::CRYP, dma: Option<pac::DMA2>) -> Self { // Hardware-specific code - adapt for your target
+        Self { cryp, dma }
     }
     
-    fn sha256(&mut self, data: &[u8]) -> Result<[u8; 32], Self::Error> {
-        self.sha_engine.hash_sha256(data)
+    fn configure_aes(&mut self, key: &[u32; 8], mode: AesMode) -> Result<(), CryptoError> {
+        // Configure crypto peripheral for AES with different modes
+        self.cryp.cr.write(|w| {
+            match mode {
+                AesMode::ECB => w.algomode().aes_ecb(),
+                AesMode::CBC => w.algomode().aes_cbc(),
+                AesMode::CTR => w.algomode().aes_ctr(),
+                AesMode::GCM => w.algomode().aes_gcm(),
+            }
+            .datatype().bits32()
+            .keysize().bits256()
+        });
+        
+        // Load key into hardware registers (all 8 words for 256-bit key)
+        let key_regs = [
+            &self.cryp.k0lr, &self.cryp.k0rr, &self.cryp.k1lr, &self.cryp.k1rr,
+            &self.cryp.k2lr, &self.cryp.k2rr, &self.cryp.k3lr, &self.cryp.k3rr,
+        ];
+        
+        for (reg, &key_word) in key_regs.iter().zip(key.iter()) {
+            reg.write(|w| unsafe { w.bits(key_word) });
+        }
+        
+        // Enable crypto peripheral
+        self.cryp.cr.modify(|_, w| w.crypen().enabled());
+        Ok(())
     }
     
-    fn random_bytes(&mut self, buffer: &mut [u8]) -> Result<(), Self::Error> {
-        self.trng.fill_bytes(buffer)
-    }
-    
-    fn aes_decrypt(&mut self, key: &[u8; 32], block: &mut [u8; 16]) -> Result<(), Self::Error> {
-        self.aes_engine.decrypt(key, block)
+    fn encrypt_block(&mut self, input: &[u32; 4]) -> Result<[u32; 4], CryptoError> {
+        // Check if peripheral is ready
+        if self.cryp.sr.read().busy().bit_is_set() {
+            return Err(CryptoError::HardwareBusy);
+        }
+        
+        // Write input data to data input registers
+        for &word in input.iter() {
+            self.cryp.din.write(|w| unsafe { w.bits(word) });
+        }
+        
+        // Wait for processing complete with timeout
+        let mut timeout = 10000;
+        while self.cryp.sr.read().busy().bit_is_set() && timeout > 0 {
+            timeout -= 1;
+            cortex_m::asm::nop();
+        }
+        
+        if timeout == 0 {
+            return Err(CryptoError::HardwareTimeout);
+        }
+        
+        // Read output data
+        let mut output = [0u32; 4];
+        for i in 0..4 {
+            output[i] = self.cryp.dout.read().bits();
+        }
+        
+        Ok(output)
     }
 }
 ```

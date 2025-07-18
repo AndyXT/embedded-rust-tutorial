@@ -4,7 +4,30 @@ This section consolidates all static memory management patterns for deterministi
 
 #### Advanced Static Memory Pool Management
 
+
+
+
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{mem, fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 use heapless::pool::{Pool, Node, Singleton};
 use core::mem::MaybeUninit;
 
@@ -156,6 +179,19 @@ fn encrypt_with_optimal_memory(plaintext: &[u8]) -> Result<heapless::Vec<u8, 409
 #### Compile-Time Memory Layout with Security Features
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+
+
+use core::mem;
+use core::fmt;
+use core::result::Result;
+
+
 use zeroize::{Zeroize, ZeroizeOnDrop};
 
 // Advanced compile-time memory layout with security considerations
@@ -392,6 +428,22 @@ const MAX_SECURITY_VIOLATIONS: u32 = 5;
 #### Memory Layout Optimization for Crypto Performance
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 // Memory layout optimized for crypto operations and cache performance
 #[repr(C, align(32))] // Align to cache line boundary
 struct OptimizedCryptoLayout {

@@ -4,7 +4,29 @@ This section consolidates all DMA and hardware integration patterns for high-per
 
 #### Advanced DMA-Safe Memory Management
 
+
+
+
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+use sha2::{Sha256, Digest};
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 use cortex_m::singleton;
 use core::sync::atomic::{AtomicBool, Ordering};
 

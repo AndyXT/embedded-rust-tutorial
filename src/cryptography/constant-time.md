@@ -9,7 +9,22 @@ Constant-time implementations are crucial for preventing timing attacks in crypt
 
 Side-channel attacks exploit information leaked through execution time, power consumption, or electromagnetic emissions. In embedded systems, timing attacks are particularly dangerous:
 
+
+
+
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt};
+use subtle::{Choice, ConstantTimeEq};
+
+
+use core::fmt;
+use core::mem;
+
 // VULNERABLE: Early return leaks timing information
 fn vulnerable_mac_verify(expected: &[u8], received: &[u8]) -> bool {
     if expected.len() != received.len() {
@@ -25,7 +40,6 @@ fn vulnerable_mac_verify(expected: &[u8], received: &[u8]) -> bool {
 }
 
 // SECURE: Constant-time comparison
-use subtle::ConstantTimeEq;
 
 fn secure_mac_verify(expected: &[u8], received: &[u8]) -> bool {
     if expected.len() != received.len() {
@@ -35,6 +49,12 @@ fn secure_mac_verify(expected: &[u8], received: &[u8]) -> bool {
     // Always takes same time regardless of input differences
     expected.ct_eq(received).into()
 }
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 #### Using the `subtle` Crate for Constant-Time Operations
@@ -42,7 +62,29 @@ fn secure_mac_verify(expected: &[u8], received: &[u8]) -> bool {
 The `subtle` crate provides cryptographically secure constant-time operations:
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
 use subtle::{Choice, ConstantTimeEq, ConditionallySelectable, ConstantTimeGreater, ConstantTimeLess};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+// Stub function for HMAC
+fn hmac_sha256(_key: &[u8; 32], _message: &[u8]) -> Result<[u8; 32], CryptoError> {
+    Ok([0u8; 32])
+}
+
+
+use subtle::{Choice, ConstantTimeEq};
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 
 // Constant-time MAC verification with comprehensive example
 fn verify_hmac_constant_time(
@@ -80,11 +122,19 @@ fn conditional_key_selection(
     result
 }
 
+// Example AES S-box (first 16 bytes for brevity)
+const AES_SBOX: [u8; 256] = [
+    0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5,
+    0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76,
+    // ... remaining 240 bytes would be here in production
+    0; 240  // Placeholder for example
+];
+
 // Constant-time table lookup - critical for S-box implementations
-fn constant_time_sbox_lookup(sbox: &[u8; 256], index: u8) -> u8 {
+fn constant_time_sbox_lookup(index: u8) -> u8 {
     let mut result = 0u8;
     
-    for (i, &value) in sbox.iter().enumerate() {
+    for (i, &value) in AES_SBOX.iter().enumerate() {
         let choice = Choice::from((i as u8 == index) as u8);
         result = u8::conditional_select(&result, &value, choice);
     }
@@ -92,15 +142,14 @@ fn constant_time_sbox_lookup(sbox: &[u8; 256], index: u8) -> u8 {
     result
 }
 
+// Example matrix for MixColumns operation
+const MIX_COLUMNS_MATRIX: [[u8; 16]; 16] = [[0; 16]; 16];
+
 // Constant-time multi-dimensional table lookup
-fn constant_time_matrix_lookup(
-    matrix: &[[u8; 16]; 16], 
-    row: u8, 
-    col: u8
-) -> u8 {
+fn constant_time_matrix_lookup(row: u8, col: u8) -> u8 {
     let mut result = 0u8;
     
-    for (r, row_data) in matrix.iter().enumerate() {
+    for (r, row_data) in MIX_COLUMNS_MATRIX.iter().enumerate() {
         let row_choice = Choice::from((r as u8 == row) as u8);
         
         for (c, &value) in row_data.iter().enumerate() {
@@ -113,11 +162,29 @@ fn constant_time_matrix_lookup(
     
     result
 }
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 #### Advanced Constant-Time Patterns
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt};
+use subtle::{Choice};
+
+
+use core::fmt;
+use core::mem;
+
 // Constant-time modular arithmetic for ECC operations
 struct ConstantTimeScalar([u64; 4]); // 256-bit scalar
 
@@ -238,6 +305,17 @@ fn constant_time_binary_search(
 For cases where the `subtle` crate isn't available or you need custom operations:
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt};
+
+
+use core::fmt;
+use core::mem;
+
 // Manual constant-time byte operations
 fn constant_time_memcmp_manual(a: &[u8], b: &[u8]) -> bool {
     if a.len() != b.len() {
@@ -279,11 +357,34 @@ fn constant_time_conditional_increment(value: &mut u32, condition: bool) {
     let increment = condition as u32;
     *value = value.wrapping_add(increment);
 }
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 #### Embedded-Specific Constant-Time Considerations
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 // Disable compiler optimizations that might break constant-time properties
 use core::hint::black_box;
 
@@ -367,5 +468,11 @@ where
     
     // Low variance indicates constant-time behavior
     assert!(variance < 100, "High timing variance detected: {}", variance);
+}
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
 }
 ```

@@ -4,7 +4,28 @@ Rust's type system encodes security invariants at compile time, preventing entir
 
 #### Type-Safe Protocol State Machines
 
+
+
+
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+
+
+use core::mem;
+use heapless::Vec;
+
+use core::fmt;
+use core::result::Result;
+
 use core::marker::PhantomData;
 
 // Protocol states as types
@@ -75,7 +96,7 @@ impl TlsConnection<SessionEstablished> {
         Ok(())
     }
     
-    fn receive_encrypted(&mut self) -> CryptoResult<Vec<u8>> {
+    fn receive_encrypted(&mut self) -> CryptoResult<heapless::Vec<u8, 32>> {
         let encrypted = self.socket.receive(&mut self.buffer)?;
         decrypt_application_data(&encrypted)
     }
@@ -116,6 +137,29 @@ fn secure_communication_example() -> CryptoResult<()> {
 #### Const Generics for Compile-Time Crypto Parameters
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use zeroize::{Zeroize, ZeroizeOnDrop};
+use core::mem;
+use heapless::Vec;
+
+use core::fmt;
+use core::result::Result;
+
 // Type-safe key sizes with const generics
 #[derive(ZeroizeOnDrop)]
 struct CryptoKey<const N: usize> {
@@ -147,13 +191,13 @@ type Aes256Key = CryptoKey<32>;
 type ChaCha20Key = CryptoKey<32>;
 
 // Compile-time prevention of key size mismatches
-fn encrypt_with_aes256(key: &Aes256Key, plaintext: &[u8]) -> CryptoResult<Vec<u8>> {
+fn encrypt_with_aes256(key: &Aes256Key, plaintext: &[u8]) -> CryptoResult<heapless::Vec<u8, 32>> {
     // key is guaranteed to be exactly 32 bytes at compile time
     let cipher = Aes256::new(key.as_bytes());
     cipher.encrypt(plaintext)
 }
 
-fn encrypt_with_chacha20(key: &ChaCha20Key, nonce: &[u8; 12], plaintext: &[u8]) -> CryptoResult<Vec<u8>> {
+fn encrypt_with_chacha20(key: &ChaCha20Key, nonce: &[u8; 12], plaintext: &[u8]) -> CryptoResult<heapless::Vec<u8, 32>> {
     // key is guaranteed to be exactly 32 bytes at compile time
     let cipher = ChaCha20::new(key.as_bytes(), nonce);
     cipher.encrypt(plaintext)
@@ -201,11 +245,36 @@ fn crypto_operations_example() -> CryptoResult<()> {
     
     Ok(())
 }
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 #### Newtype Pattern for Domain-Specific Security
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+
+
+use zeroize::{Zeroize, ZeroizeOnDrop};
+use core::mem;
+use heapless::Vec;
+
+use core::fmt;
+use core::result::Result;
+
 // Distinguish between different types of cryptographic data
 #[derive(Clone, Copy)]
 struct PlaintextData<'a>(&'a [u8]);
@@ -246,7 +315,7 @@ fn aead_encrypt(
     nonce: &[u8; 12],
     plaintext: PlaintextData,
     aad: AuthenticatedData,
-) -> CryptoResult<Vec<u8>> {
+) -> CryptoResult<heapless::Vec<u8, 32>> {
     // Function signature prevents mixing up parameters
     let cipher = ChaCha20Poly1305::new(key.0);
     cipher.encrypt(nonce, plaintext.as_bytes(), aad.as_bytes())
@@ -257,7 +326,7 @@ fn aead_decrypt(
     nonce: &[u8; 12],
     ciphertext: CiphertextData,
     aad: AuthenticatedData,
-) -> CryptoResult<Vec<u8>> {
+) -> CryptoResult<heapless::Vec<u8, 32>> {
     let cipher = ChaCha20Poly1305::new(key.0);
     cipher.decrypt(nonce, ciphertext.as_bytes(), aad.as_bytes())
 }
@@ -283,6 +352,13 @@ fn secure_message_example() -> CryptoResult<()> {
     
     Ok(())
 }
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 **→ Next:** [Advanced Type System Features](../core-concepts/advanced-types.md) - Enums, traits, and methods for crypto development
+```

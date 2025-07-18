@@ -25,6 +25,7 @@ Migrating large cryptographic codebases requires careful planning and incrementa
 
 3. **Migration Order Planning**
    ```
+
    Phase 1: Leaf Modules (crypto primitives)
    Phase 2: Utility Functions (key derivation, random number generation)
    Phase 3: Protocol Implementations (TLS, IPSec, etc.)
@@ -36,7 +37,27 @@ Migrating large cryptographic codebases requires careful planning and incrementa
 
 **Starting with Crypto Primitives (Lowest Risk)**
 
+
+
+
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use core::fmt;
+use core::result::Result;
+
+
 // Step 2a: Create Rust implementation of AES
 // Original C: aes.c, aes.h
 // New Rust: crypto/aes.rs
@@ -153,6 +174,31 @@ if (aes_ctx) {
 **Migrating Higher-Level Protocols While Keeping Proven Crypto**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+use sha2::{Sha256, Digest};
+
+// Stub function for HMAC
+fn hmac_sha256(_key: &[u8; 32], _message: &[u8]) -> Result<[u8; 32], CryptoError> {
+    Ok([0u8; 32])
+}
+
+
+use zeroize::{Zeroize, ZeroizeOnDrop};
+use core::mem;
+use heapless::Vec;
+
+use core::fmt;
+use core::result::Result;
+
 // Step 3a: Define external C crypto functions still in use
 extern "C" {
     fn c_aes_gcm_encrypt(
@@ -202,7 +248,7 @@ impl HybridTlsConnection {
         })
     }
     
-    pub fn encrypt_record(&mut self, record_type: u8, data: &[u8]) -> Result<Vec<u8>, TlsError> {
+    pub fn encrypt_record(&mut self, record_type: u8, data: &[u8]) -> Result<heapless::Vec<u8, 32>, TlsError> {
         // Step 3c: Use Rust for protocol logic, C for crypto operations
         let sequence_bytes = self.sequence_number.to_be_bytes();
         let mut iv = [0u8; 12];
@@ -241,7 +287,7 @@ impl HybridTlsConnection {
         Ok(record)
     }
     
-    pub fn decrypt_record(&mut self, record: &[u8]) -> Result<Vec<u8>, TlsError> {
+    pub fn decrypt_record(&mut self, record: &[u8]) -> Result<heapless::Vec<u8, 32>, TlsError> {
         if record.len() < 21 { // Minimum record size
             return Err(TlsError::InvalidState);
         }
@@ -259,7 +305,6 @@ impl HybridTlsConnection {
 
 // Step 3d: Session key derivation in pure Rust (lower risk)
 fn derive_session_keys(master_secret: &[u8; 48]) -> Result<SessionKeys, TlsError> {
-    use sha2::{Sha256, Digest};
     
     let mut hasher = Sha256::new();
     hasher.update(b"key expansion");
@@ -291,6 +336,24 @@ enum TlsState {
 **Migrating Application Logic to Use New Rust Interfaces**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+
+
+use core::mem;
+use heapless::Vec;
+
+use core::fmt;
+use core::result::Result;
+
 // Step 4a: Create high-level application interface
 pub struct SecureCommunicationManager {
     connections: heapless::FnvIndexMap<u32, HybridTlsConnection, 16>,
@@ -316,14 +379,14 @@ impl SecureCommunicationManager {
         Ok(connection_id)
     }
     
-    pub fn send_data(&mut self, connection_id: u32, data: &[u8]) -> Result<Vec<u8>, TlsError> {
+    pub fn send_data(&mut self, connection_id: u32, data: &[u8]) -> Result<heapless::Vec<u8, 32>, TlsError> {
         let connection = self.connections.get_mut(&connection_id)
             .ok_or(TlsError::InvalidState)?;
         
         connection.encrypt_record(0x17, data) // Application data
     }
     
-    pub fn receive_data(&mut self, connection_id: u32, record: &[u8]) -> Result<Vec<u8>, TlsError> {
+    pub fn receive_data(&mut self, connection_id: u32, record: &[u8]) -> Result<heapless::Vec<u8, 32>, TlsError> {
         let connection = self.connections.get_mut(&connection_id)
             .ok_or(TlsError::InvalidState)?;
         
@@ -395,6 +458,20 @@ int app_send_message(uint8_t* data, size_t len) {
 **Final Step: Migrating Hardware-Specific Code**
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt};
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 // Step 5a: Create Rust HAL for crypto hardware
 pub struct CryptoHardware {
     base_addr: *mut u32,
@@ -484,3 +561,4 @@ impl AesContext {
    - Can revert to previous implementation if needed
    - Rollback procedure tested and documented
    - Data compatibility maintained
+```

@@ -9,7 +9,31 @@ Proper key management is critical for cryptographic security, especially in embe
 
 Rust's `Drop` trait ensures that sensitive data is automatically cleared when it goes out of scope, preventing key material from lingering in memory:
 
+
+
+
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use heapless::{Vec, String, consts::*};
+type Vec32<T> = Vec<T, U32>;
+type Vec256<T> = Vec<T, U256>;
+type String256 = String<U256>;
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use heapless::Vec;
+use core::fmt;
+
+use core::result::Result;
+
 use zeroize::{Zeroize, ZeroizeOnDrop};
 
 // Secure key wrapper with automatic cleanup
@@ -50,7 +74,7 @@ impl<const N: usize> SecureKey<N> {
 }
 
 // Usage example - automatic cleanup guaranteed
-fn process_encrypted_message(encrypted_data: &[u8]) -> Result<Vec<u8>, CryptoError> {
+fn process_encrypted_message(encrypted_data: &[u8]) -> Result<heapless::Vec<u8, 32>, CryptoError> {
     // Key automatically zeroized when function exits
     let session_key = SecureKey::<32>::new(derive_session_key()?, 1);
     
@@ -65,11 +89,35 @@ fn process_encrypted_message(encrypted_data: &[u8]) -> Result<Vec<u8>, CryptoErr
     Ok(plaintext)
     // session_key automatically zeroized here, even if error occurred
 }
+
+#[cortex_r_rt::entry]
+fn main() -> ! {
+    // Example code execution
+    loop {}
+}
 ```
 
 #### Hierarchical Key Derivation with Automatic Cleanup
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use sha2::{Sha256, Digest};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use zeroize::{Zeroize, ZeroizeOnDrop};
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 use hkdf::Hkdf;
 use sha2::Sha256;
 use heapless::FnvIndexMap;
@@ -177,6 +225,24 @@ fn secure_session_example() -> Result<(), CryptoError> {
 #### Secure Random Number Generation with Hardware Integration
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use sha2::{Sha256, Digest};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use cortex_r::asm;
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 use rand_core::{RngCore, CryptoRng, Error as RngError};
 
 // Hardware RNG wrapper with error handling and health checks
@@ -335,6 +401,23 @@ fn generate_mixed_entropy_key(hw_rng: &mut HardwareRng) -> Result<SecureKey<32>,
 #### Key Lifecycle Management
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use zeroize::{Zeroize, ZeroizeOnDrop};
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 use core::time::Duration;
 
 #[derive(ZeroizeOnDrop)]

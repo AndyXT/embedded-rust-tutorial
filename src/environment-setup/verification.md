@@ -25,10 +25,18 @@ cargo build --target thumbv7em-none-eabihf --release
 
 #### Minimal Verification Application
 
+
+
+
 ```rust
-// src/main.rs - Setup verification test
 #![no_std]
 #![no_main]
+
+use core::{fmt};
+
+use core::fmt;
+use core::mem;
+// src/main.rs - Setup verification test
 
 use panic_halt as _;
 use cortex_m_rt::entry;
@@ -56,3 +64,4 @@ fn main() -> ! {
 **✅ Setup Complete** - Your environment is ready for embedded Rust crypto development.
 
 **→ Next:** [Core Language Concepts](../core-concepts/README.md) - Essential Rust concepts for crypto development
+```

@@ -6,7 +6,33 @@ Leveraging hardware crypto acceleration while maintaining portability and securi
 
 Creating a generic trait allows for seamless switching between hardware and software implementations:
 
+
+
+
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use sha2::{Sha256, Digest};
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+// Stub function for HMAC
+fn hmac_sha256(_key: &[u8; 32], _message: &[u8]) -> Result<[u8; 32], CryptoError> {
+    Ok([0u8; 32])
+}
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 // Generic trait for crypto acceleration
 trait CryptoAccelerator {
     type Error;
@@ -117,7 +143,6 @@ impl CryptoAccelerator for SoftwareCrypto {
     }
     
     fn aes_decrypt(&mut self, key: &[u8; 32], ciphertext: &[u8], plaintext: &mut [u8]) -> Result<(), Self::Error> {
-        use aes::Aes256;
         use aes::cipher::{BlockDecrypt, KeyInit};
         
         let cipher = Aes256::new_from_slice(key).map_err(|_| CryptoError::InvalidKey)?;
@@ -137,7 +162,6 @@ impl CryptoAccelerator for SoftwareCrypto {
     }
     
     fn sha256(&mut self, data: &[u8], hash: &mut [u8; 32]) -> Result<(), Self::Error> {
-        use sha2::{Sha256, Digest};
         let mut hasher = Sha256::new();
         hasher.update(data);
         hash.copy_from_slice(&hasher.finalize());
@@ -214,6 +238,25 @@ impl CryptoEngine {
 ### Xilinx Ultrascale+ Crypto Engine
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
+
+// Stub function for HMAC
+fn hmac_sha256(_key: &[u8; 32], _message: &[u8]) -> Result<[u8; 32], CryptoError> {
+    Ok([0u8; 32])
+}
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 // Xilinx-specific hardware register definitions
 const XILINX_CRYPTO_BASE: usize = 0xFFCA0000;
 const AES_KEY_OFFSET: usize = 0x10;
@@ -509,6 +552,19 @@ impl XilinxHashEngine {
 ## Performance Optimization and Benchmarking
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 // Performance measurement utilities
 struct CryptoPerformance {
     hw_aes_cycles: u32,
@@ -560,16 +616,16 @@ impl CryptoPerformance {
     
     fn print_results(&self) {
         if self.hw_aes_cycles > 0 {
-            println!("Hardware AES (1KB): {} cycles", self.hw_aes_cycles);
+            defmt::info!("Hardware AES (1KB): {} cycles", self.hw_aes_cycles);
         }
         if self.sw_aes_cycles > 0 {
-            println!("Software AES (1KB): {} cycles", self.sw_aes_cycles);
+            defmt::info!("Software AES (1KB): {} cycles", self.sw_aes_cycles);
         }
         if self.hw_sha256_cycles > 0 {
-            println!("Hardware SHA-256 (1KB): {} cycles", self.hw_sha256_cycles);
+            defmt::info!("Hardware SHA-256 (1KB): {} cycles", self.hw_sha256_cycles);
         }
         if self.sw_sha256_cycles > 0 {
-            println!("Software SHA-256 (1KB): {} cycles", self.sw_sha256_cycles);
+            defmt::info!("Software SHA-256 (1KB): {} cycles", self.sw_sha256_cycles);
         }
     }
 }
@@ -578,7 +634,7 @@ impl CryptoPerformance {
 fn crypto_performance_example() -> Result<(), Box<dyn core::error::Error>> {
     let mut crypto_engine = CryptoEngine::new()?;
     
-    println!("Crypto engine initialized: {}", 
+    defmt::info!("Crypto engine initialized: {}", 
         if crypto_engine.is_hardware_accelerated() { "Hardware" } else { "Software" });
     
     // Run performance benchmark
@@ -591,7 +647,7 @@ fn crypto_performance_example() -> Result<(), Box<dyn core::error::Error>> {
     let mut encrypted = vec![0u8; message.len()];
     
     crypto_engine.encrypt_aes(&key, message, &mut encrypted)?;
-    println!("Encryption completed successfully");
+    defmt::info!("Encryption completed successfully");
     
     Ok(())
 }
@@ -600,6 +656,22 @@ fn crypto_performance_example() -> Result<(), Box<dyn core::error::Error>> {
 ## Error Handling and Fallback Strategies
 
 ```rust
+#![no_std]
+#![no_main]
+
+use panic_halt as _;
+
+use core::{fmt, result::Result};
+
+#[derive(Debug)]
+pub struct CryptoError(&'static str);
+
+
+use core::mem;
+use core::fmt;
+
+use core::result::Result;
+
 #[derive(Debug)]
 enum HardwareError {
     NotAvailable,

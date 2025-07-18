@@ -17,7 +17,7 @@ git-repository-url = "https://github.com/your-repo/embedded-rust-tutorial"
 edit-url-template = "https://github.com/your-repo/embedded-rust-tutorial/edit/main/{path}"
 smart-punctuation = true
 additional-css = ["theme/custom.css"]
-additional-js = ["theme/custom.js"]
+additional-js = ["theme/custom.js", "theme/cortex-r5-playground.js"]
 cname = "embedded-rust-tutorial.github.io"
 site-url = "/embedded-rust-tutorial/"
 
@@ -45,8 +45,8 @@ level = 0
 copyable = true
 copy-js = true
 line-numbers = true
-editable = true
-runnable = true
+editable = false
+runnable = false
 
 [preprocessor.rust-examples]
 command = "mdbook-rust-examples"

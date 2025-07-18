@@ -2,6 +2,16 @@
 
 *A streamlined guide for experienced embedded cryptography C programmers transitioning to Rust*
 
+> **⚠️ Important: Code Examples and Compilation**
+> 
+> All code examples in this book are written for **ARM Cortex-R5** with `no_std` (no standard library) and no heap allocation. The web-based Rust Playground cannot compile these examples. To run the examples:
+> 
+> 1. **Copy the code** using the copy button
+> 2. **Set up a local Cortex-R5 project** (see [Environment Setup](environment-setup/README.md))
+> 3. **Build with**: `cargo build --target armv7r-none-eabi --release`
+> 
+> Each example is complete and will compile when proper dependencies are added to `Cargo.toml`.
+
 As an experienced embedded cryptography engineer, you understand the critical importance of correctness and security in cryptographic implementations. A single buffer overflow, timing leak, or use-after-free can compromise an entire system. Traditional C development requires constant vigilance against these threats while managing the complexities of embedded systems.
 
 Rust addresses these challenges while maintaining the performance and control essential for cryptographic operations. This tutorial is specifically designed for experienced C programmers who need to become productive in Rust quickly, without wading through basic programming concepts.
