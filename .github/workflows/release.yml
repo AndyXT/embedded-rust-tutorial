@@ -1,0 +1,43 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup mdBook
+      uses: peaceiris/actions-mdbook@v1
+      with:
+        mdbook-version: 'latest'
+    
+    - name: Build book
+      run: |
+        echo "📚 Building mdBook for release..."
+        mdbook build
+        
+        # Create release archive
+        tar -czf mdbook-embedded-rust-tutorial.tar.gz book/
+        zip -r mdbook-embedded-rust-tutorial.zip book/
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          mdbook-embedded-rust-tutorial.tar.gz
+          mdbook-embedded-rust-tutorial.zip
+        generate_release_notes: true
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
