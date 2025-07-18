@@ -89,7 +89,7 @@ jobs:
         fi
     
     - name: Upload book artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: mdbook-output
         path: book/
