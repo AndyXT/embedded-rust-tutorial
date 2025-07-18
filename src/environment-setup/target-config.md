@@ -1,247 +1,274 @@
 # 2.2 Target Configuration
 
-<details>
-<summary><strong>▶️ Hardware-Specific Configurations</strong> - Target-specific setup instructions</summary>
-
 Choose your target configuration based on your hardware. Each includes optimized settings for crypto workloads.
 
-#### 2.2.1 Xilinx Ultrascale+ (Cortex-R5) {#xilinx-ultrascale-cortex-r5}
+#### 2.2.1 ARM Cortex-R5 (Xilinx Ultrascale+/Versal) {#arm-cortex-r5}
 
 **⚡ Quick Start (5 minutes):**
 ```bash
 # Install Rust + R5 target
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-rustup target add armv7r-none-eabihf
+rustup target add armv7r-none-eabi
 
-# Essential tools for R5 ELF generation
+# Essential tools for bare-metal development
 cargo install cargo-binutils
 rustup component add llvm-tools-preview
 
-# Install debugging tools (OpenOCD + GDB required for R5)
+# Install debugging tools
 # Ubuntu/Debian:
 sudo apt install openocd gdb-multiarch
-# Or download ARM GDB: arm-none-eabi-gdb
+# macOS:
+brew install openocd arm-none-eabi-gdb
+# Windows: Download from ARM website
 ```
 
-**Why OpenOCD + GDB instead of probe-rs for R5:**
-- probe-rs has limited Cortex-R5 support (especially for Xilinx parts)
-- OpenOCD provides mature R5 debugging with semihosting
-- GDB integration works reliably with Xilinx toolchain
-- Hardware breakpoints and real-time debugging work properly
+**Important Target Notes:**
+- Use `armv7r-none-eabi` (not `armv7r-none-eabihf`) for better compatibility
+- The hard-float variant (`eabihf`) has limited support in some tools
+- probe-rs doesn't support Cortex-R5 yet - use OpenOCD + GDB
+- Xilinx tools (XSCT) also work well for debugging
 
 **Project Configuration:**
 ```toml
-# .cargo/config.toml - ZynqMP/Versal configuration
-[target.armv7r-none-eabihf]
+# .cargo/config.toml
+[target.armv7r-none-eabi]
 runner = "arm-none-eabi-gdb -x gdb_init.txt"
 rustflags = [
   "-C", "link-arg=-Tlink.x",
   "-C", "target-cpu=cortex-r5",
-  "-C", "target-feature=+vfp3",
-  "-C", "link-arg=--nmagic",
-  "-C", "link-arg=-Tdefmt.x",  # Optional: for defmt logging
+  "-C", "target-feature=+dsp",  # DSP extensions
+  "-C", "link-arg=--nmagic",    # No page alignment
 ]
 
 [build]
-target = "armv7r-none-eabihf"
+target = "armv7r-none-eabi"
 
-# Build settings for proper ELF generation
 [profile.dev]
 debug = true
-opt-level = 1
+opt-level = "s"
+overflow-checks = true
 
 [profile.release]
-debug = true      # Keep debug info for GDB
-opt-level = "s"   # Optimize for size
+debug = false
+opt-level = "s"
 lto = true
+codegen-units = 1
+panic = "abort"
 ```
 
 **Essential Dependencies for R5:**
 ```toml
-# Cargo.toml - R5-specific dependencies
+# Cargo.toml
 [dependencies]
-cortex-m = "0.7"           # Core ARM support
-cortex-m-rt = "0.7"        # Runtime and startup
-panic-halt = "0.2"         # Panic handler
-linked_list_allocator = "0.10"  # Optional: heap allocator
+cortex-r-rt = "0.1"        # Cortex-R runtime
+panic-halt = "0.2"         # Simple panic handler
+# Note: cortex-m crates don't work with Cortex-R!
 
-# For ELF file generation and debugging
-[dependencies.cortex-r]
-version = "0.1"
-features = ["inline-asm"]
+# For no-std development
+[dependencies]
+heapless = { version = "0.8", default-features = false }
+nb = "1.1"
+embedded-hal = "1.0"
 
-# Build dependencies for linker script processing
-[build-dependencies]
-cc = "1.0"
+# Crypto libraries (no-std compatible)
+sha2 = { version = "0.10", default-features = false }
+aes = { version = "0.8", default-features = false }
+
 ```
 
 **Memory Layout (memory.x):**
-
-
-// Helper functions for Cortex-R5 bare metal examples
-#[cfg(feature = "embedded")]
-mod cortex_r5_helpers {
-    use core::ptr;
-    
-    /// Simple cycle counter for timing (implementation depends on your specific Cortex-R5 setup)
-    pub fn get_cycle_count() -> u32 {
-        // This is a placeholder - implement based on your specific Cortex-R5 configuration
-        // You might use PMU (Performance Monitoring Unit) or a timer peripheral
-        0 // Placeholder
-    }
-    
-    /// Memory barrier for ensuring ordering in crypto operations
-    pub fn memory_barrier() {
-        unsafe {
-            core::arch::asm!("dmb sy", options(nostack, preserves_flags));
-        }
-    }
-    
-    /// Constant-time conditional move (basic implementation)
-    pub fn conditional_move(condition: bool, a: u8, b: u8) -> u8 {
-        let mask = if condition { 0xFF } else { 0x00 };
-        (a & mask) | (b & !mask)
-    }
-}
-
-#[cfg(feature = "embedded")]
-use cortex_r5_helpers::*;
-
-
 ```text
-/* memory.x - Optimized for Xilinx R5 crypto operations */
+/* memory.x - Typical Cortex-R5 memory layout */
 MEMORY
 {
-  /* Tightly Coupled Memory - fastest access */
-  ATCM : ORIGIN = 0x00000000, LENGTH = 64K   /* Instructions, critical crypto code */
-  BTCM : ORIGIN = 0x00020000, LENGTH = 64K   /* Stack, local variables */
+  /* Tightly Coupled Memory (TCM) - fastest access */
+  ATCM : ORIGIN = 0x00000000, LENGTH = 64K   /* Code TCM */
+  BTCM : ORIGIN = 0x00020000, LENGTH = 64K   /* Data TCM */
   
-  /* On-Chip Memory - shared between cores */
-  OCM  : ORIGIN = 0xFFFC0000, LENGTH = 256K  /* Crypto workspace, buffers */
+  /* On-Chip Memory (OCM) */
+  OCM  : ORIGIN = 0xFFFC0000, LENGTH = 256K  /* Shared memory */
   
-  /* DDR - large data structures */
-  DDR  : ORIGIN = 0x00100000, LENGTH = 2G    /* Large crypto operations */
+  /* DDR Memory (adjust addresses for your platform) */
+  DDR  : ORIGIN = 0x00100000, LENGTH = 1M    /* Main memory */
 }
 
-/* Stack in fast BTCM */
+/* Stack configuration */
 _stack_start = ORIGIN(BTCM) + LENGTH(BTCM);
 
-/* Crypto workspace in OCM for inter-core sharing */
-_crypto_workspace = ORIGIN(OCM);
-_crypto_workspace_size = LENGTH(OCM);
+/* Heap configuration (if using allocator) */
+_heap_size = 0;  /* No heap for no_std */
 
-/* Place crypto-critical code in ATCM */
 SECTIONS
 {
-  .crypto_code : {
-    *(.crypto_critical)
+  /* Vector table at start of ATCM */
+  .vector_table ORIGIN(ATCM) : {
+    KEEP(*(.vector_table));
   } > ATCM
+  
+  /* Code in ATCM for best performance */
+  .text : {
+    *(.text .text.*);
+  } > ATCM
+  
+  /* Read-only data */
+  .rodata : {
+    *(.rodata .rodata.*);
+  } > ATCM
+  
+  /* Initialized data (copied from ATCM to BTCM) */
+  .data : {
+    *(.data .data.*);
+  } > BTCM AT > ATCM
+  
+  /* Uninitialized data */
+  .bss : {
+    *(.bss .bss.*);
+  } > BTCM
 }
 ```
 
 **OpenOCD Configuration (openocd.cfg):**
 ```tcl
-# OpenOCD config for Xilinx ZynqMP Cortex-R5
-# Note: probe-rs doesn't support R5 well, use OpenOCD + GDB
+# OpenOCD config for Cortex-R5 debugging
+# Adjust for your specific hardware
 
-source [find interface/ftdi/digilent-hs1.cfg]  # Or your JTAG adapter
+# Interface configuration (common options)
+# For Digilent JTAG:
+source [find interface/ftdi/digilent-hs1.cfg]
+# For J-Link:
+# source [find interface/jlink.cfg]
+# For ST-Link:
+# source [find interface/stlink.cfg]
+
+# Target configuration
+# For Xilinx Zynq UltraScale+:
 source [find target/xilinx_zynqmp.cfg]
+# For TI Sitara:
+# source [find target/am437x.cfg]
 
-# Configure for R5 core debugging
-set _CHIPNAME zynqmp
-set _TARGETNAME $_CHIPNAME.r5
+# Common R5 settings
+adapter speed 4000
+transport select jtag
 
-# R5 specific settings
-$_TARGETNAME configure -rtos auto
-$_TARGETNAME configure -coreid 0
-
-# Enable semihosting for printf debugging
-$_TARGETNAME configure -semihosting-enable
-
-# Memory map for crypto regions
-$_TARGETNAME configure -work-area-phys 0xFFFC0000 -work-area-size 0x40000
-
+# Initialize
 init
-reset init
+targets
+# Select R5 core (adjust number as needed)
+targets 4
+halt
 ```
 
-**GDB Setup (gdb_init.txt):**
+**GDB Setup (.gdbinit or gdb_commands.txt):**
 ```gdb
-# GDB initialization for Xilinx R5 debugging
+# GDB initialization for Cortex-R5
 target extended-remote localhost:3333
 
-# Load symbols and set up memory regions
+# Reset and halt
 monitor reset halt
-monitor zynqmp pmufw /path/to/pmufw.elf
-monitor zynqmp fsbl /path/to/fsbl.elf
 
-# Set up memory regions for crypto debugging
-monitor mww 0xFF5E0200 0x0100    # Enable R5 debug
-monitor mww 0xFF9A0000 0x80000218 # Configure R5 clocks
-
-# Load the ELF file
+# Load program
 load
 
-# Set breakpoint at main
+# Set breakpoints
 break main
+break HardFault
+break rust_begin_unwind
 
-# Enable semihosting for debug output
-monitor arm semihosting enable
-
-# Start execution
+# Continue execution
 continue
 ```
 
 **Build and Debug Workflow:**
 ```bash
-# 1. Build ELF file for R5
-cargo build --target armv7r-none-eabihf --release
+# 1. Build for Cortex-R5
+cargo build --target armv7r-none-eabi --release
 
-# 2. Generate additional debug formats
-cargo objcopy --target armv7r-none-eabihf --release -- -O binary target/armv7r-none-eabihf/release/app.bin
-cargo objdump --target armv7r-none-eabihf --release -- -d > disassembly.txt
+# 2. Convert to binary if needed
+cargo objcopy --release -- -O binary app.bin
 
-# 3. Start OpenOCD (in separate terminal)
+# 3. Start OpenOCD (terminal 1)
 openocd -f openocd.cfg
 
-# 4. Debug with GDB
-arm-none-eabi-gdb target/armv7r-none-eabihf/release/your-app -x gdb_init.txt
+# 4. Debug with GDB (terminal 2)
+arm-none-eabi-gdb target/armv7r-none-eabi/release/your-app
+(gdb) target remote localhost:3333
+(gdb) load
+(gdb) continue
 
-# 5. Alternative: Use Xilinx tools
-# xsct -interactive
-# connect
-# targets -set -filter {name =~ "*R5*#0"}
-# dow target/armv7r-none-eabihf/release/your-app
-# con
+# 5. View disassembly
+cargo objdump --release -- -d > disasm.txt
 ```
 
-**Debugging Tips for R5:**
-- **Use OpenOCD + GDB instead of probe-rs** - probe-rs has limited R5 support
-- **Enable semihosting** for printf-style debugging without UART
-- **Use JTAG adapters** like Digilent HS1/HS2 or Platform Cable USB II
-- **Memory regions matter** - place crypto code in ATCM for best performance
-- **Cache coherency** - use appropriate memory barriers for crypto operations
+**Common Issues and Solutions:**
+
+| Issue | Solution |
+|-------|----------|
+| "can't find crate for `std`" | Ensure `#![no_std]` in main.rs |
+| "error: requires `start` lang_item" | Add `#![no_main]` and use cortex-r-rt |
+| "undefined reference to `memset`" | Add compiler-builtins or implement manually |
+| Linking errors | Check memory.x addresses match your hardware |
+| Hard fault on boot | Verify stack pointer and vector table |
+
+**Performance Tips for Crypto:**
+- Place hot code in ATCM (Instruction TCM) for zero-wait execution
+- Use BTCM for stack and crypto working buffers
+- Align crypto buffers to cache line boundaries (32/64 bytes)
+- Use `core::hint::black_box()` to prevent optimization of sensitive ops
+- Enable hardware crypto accelerators if available
 
 #### 2.2.2 ARM Cortex-M Series {#arm-cortex-m-series}
 
+**Common Cortex-M Targets:**
+```bash
+# Cortex-M0/M0+
+rustup target add thumbv6m-none-eabi
+
+# Cortex-M3
+rustup target add thumbv7m-none-eabi
+
+# Cortex-M4/M7 (with FPU)
+rustup target add thumbv7em-none-eabihf
+
+# Cortex-M33/M35P (with FPU and DSP)
+rustup target add thumbv8m.main-none-eabihf
+```
+
+**Example Configuration (STM32F4):**
 ```toml
-# .cargo/config.toml - STM32F4 example
+# .cargo/config.toml
 [target.thumbv7em-none-eabihf]
 runner = "probe-rs run --chip STM32F411RETx"
 rustflags = [
   "-C", "link-arg=-Tlink.x",
-  "-C", "target-cpu=cortex-m4",
-  "-C", "target-feature=+fp-armv8d16",
 ]
 
 [build]
 target = "thumbv7em-none-eabihf"
 ```
 
-#### 2.2.3 Other Embedded Targets {#other-embedded-targets}
+**Key Differences from Cortex-R5:**
+- Full probe-rs support for easy debugging
+- Extensive HAL ecosystem (stm32f4xx-hal, nrf-hal, etc.)
+- RTIC framework for real-time applications
+- Different interrupt handling (NVIC vs VIC)
+
+#### 2.2.3 RISC-V and Other Targets {#other-embedded-targets}
 
 ```bash
-# Additional targets for specialized applications
-rustup target add riscv32imac-unknown-none-elf  # RISC-V with crypto extensions
-rustup target add thumbv6m-none-eabi             # Cortex-M0+ (resource constrained)
+# RISC-V embedded targets
+rustup target add riscv32imac-unknown-none-elf   # 32-bit RISC-V
+rustup target add riscv32imc-unknown-none-elf    # Without atomics
+rustup target add riscv64gc-unknown-none-elf     # 64-bit RISC-V
+
+# ESP32 (Xtensa)
+# Requires esp-rs toolchain
+cargo install espup
+espup install
 ```
+
+**Cross-Platform no_std Code:**
+When writing portable embedded code:
+- Use `cfg` attributes for target-specific code
+- Rely on embedded-hal traits for hardware abstraction
+- Keep architecture-specific code in separate modules
+- Test on multiple targets in CI
