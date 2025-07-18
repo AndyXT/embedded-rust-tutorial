@@ -1,50 +1,33 @@
-# Makefile for mdBook development
-# Provides convenient shortcuts for common tasks
+# Simple Makefile for mdBook
 
-.PHONY: help build serve test validate clean install dev
+.PHONY: all build serve clean dev test install help
 
 # Default target
-help:
-	@echo "Available targets:"
-	@echo "  build     - Build the mdBook"
-	@echo "  serve     - Build and serve locally with auto-reload"
-	@echo "  test      - Build and run validation tests"
-	@echo "  validate  - Run comprehensive validation"
-	@echo "  clean     - Clean build artifacts"
-	@echo "  install   - Install mdBook if not present"
-	@echo "  dev       - Quick development server startup"
-	@echo ""
-	@echo "Examples:"
-	@echo "  make build"
-	@echo "  make serve"
-	@echo "  make test"
+all: build
 
 # Build the book
 build:
-	@echo "🔧 Building mdBook..."
-	mdbook build
+	@echo "📚 Building mdBook..."
+	@mdbook build
 
-# Serve locally with auto-reload
+# Serve the book locally with auto-reload
 serve:
-	@echo "🌐 Starting development server..."
-	mdbook serve --open
-
-# Build and test
-test: build
-	@echo "🧪 Running tests..."
-	@./scripts/build.sh --test
-
-# Run comprehensive validation
-validate:
-	@echo "🔍 Running validation..."
-	@./scripts/validate.sh
+	@echo "🚀 Starting mdBook server..."
+	@mdbook serve --open
 
 # Clean build artifacts
 clean:
 	@echo "🧹 Cleaning build artifacts..."
-	rm -rf book/
-	rm -rf book-test/
-	rm -f validate_content_temp
+	@mdbook clean
+	@rm -rf book/
+
+# Development mode - serve with auto-reload
+dev: serve
+
+# Run validation tests
+test:
+	@echo "🧪 Running validation..."
+	@./scripts/ci_local_test.sh
 
 # Install mdBook if not present
 install:
@@ -55,6 +38,13 @@ install:
 		echo "✅ mdBook already installed"; \
 	fi
 
-# Quick development startup
-dev:
-	@./scripts/dev.sh
+# Show help
+help:
+	@echo "Available commands:"
+	@echo "  make build   - Build the book"
+	@echo "  make serve   - Serve locally with auto-reload"
+	@echo "  make clean   - Clean build artifacts"
+	@echo "  make dev     - Start development server"
+	@echo "  make test    - Run validation tests"
+	@echo "  make install - Install mdBook if needed"
+	@echo "  make help    - Show this help message"

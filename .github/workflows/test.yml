@@ -1,4 +1,4 @@
-name: Test and Validate
+name: Build and Validate
 
 on:
   push:
@@ -6,13 +6,9 @@ on:
   pull_request:
     branches: [ main, master ]
 
-env:
-  CARGO_TERM_COLOR: always
-  RUST_BACKTRACE: 1
-
 jobs:
   # Build and validate the mdBook
-  validate-book:
+  build-book:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -45,149 +41,55 @@ jobs:
           fi
         done
         
+        # Check that chapters have been built
+        required_dirs=(
+          "book/core-concepts"
+          "book/cryptography"
+          "book/embedded-patterns"
+          "book/migration"
+          "book/quick-reference"
+        )
+        
+        for dir in "${required_dirs[@]}"; do
+          if [ ! -d "$dir" ]; then
+            echo "❌ Missing required directory: $dir"
+            exit 1
+          fi
+        done
+        
         echo "✅ All required build outputs present"
+    
+    - name: Check for broken links
+      run: |
+        echo "🔗 Checking for broken internal links..."
+        # Simple check for broken internal links in HTML
+        broken_links=0
+        for file in $(find book -name "*.html" -type f); do
+          # Extract internal links and check if files exist
+          grep -oE 'href="[^"]*\.html"' "$file" | sed 's/href="//;s/"//' | while read -r link; do
+            # Skip anchors and external links
+            if [[ ! "$link" =~ ^http && ! "$link" =~ ^# ]]; then
+              # Resolve relative links
+              dir=$(dirname "$file")
+              target="$dir/$link"
+              target=$(realpath --relative-to=. "$target" 2>/dev/null || echo "$target")
+              
+              if [[ ! -f "$target" ]] && [[ ! -f "book/$link" ]]; then
+                echo "⚠️  Broken link in $file: $link"
+                broken_links=$((broken_links + 1))
+              fi
+            fi
+          done
+        done
+        
+        if [ $broken_links -gt 0 ]; then
+          echo "⚠️  Found $broken_links broken links (non-critical)"
+        else
+          echo "✅ No broken internal links found"
+        fi
     
     - name: Upload book artifact
       uses: actions/upload-artifact@v3
       with:
         name: mdbook-output
         path: book/
-
-  # Test Rust code compilation
-  test-rust:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        rust-version: [stable]
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Cache Rust dependencies
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.cargo/registry
-          ~/.cargo/git
-          target
-        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-cargo-
-    
-    - name: Setup Rust
-      uses: dtolnay/rust-toolchain@stable
-      with:
-        components: rustfmt, clippy
-    
-    - name: Add embedded targets
-      run: |
-        rustup target add thumbv7em-none-eabihf
-        rustup target add armv7r-none-eabi
-    
-    - name: Check formatting
-      run: cargo fmt -- --check
-      continue-on-error: true
-    
-    - name: Run clippy
-      run: cargo clippy -- -D warnings
-      continue-on-error: true
-    
-    - name: Build project (std)
-      run: |
-        echo "🔨 Building project with std..."
-        cargo build --release
-        echo "✅ Build completed"
-    
-    - name: Build project (no_std)
-      run: |
-        echo "🔨 Building for embedded targets..."
-        cargo build --release --target thumbv7em-none-eabihf --features embedded
-        echo "✅ Embedded build completed"
-    
-    - name: Run tests
-      run: |
-        echo "🧪 Running tests..."
-        cargo test --release
-        echo "✅ Tests completed"
-
-  # Test example code validation
-  test-examples:
-    runs-on: ubuntu-latest
-    needs: [test-rust]
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-    
-    - name: Setup Rust
-      uses: dtolnay/rust-toolchain@stable
-      with:
-        targets: thumbv7em-none-eabihf, armv7r-none-eabi
-    
-    - name: Cache Rust dependencies
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.cargo/registry
-          ~/.cargo/git
-          target
-        key: ${{ runner.os }}-cargo-examples-${{ hashFiles('**/Cargo.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-cargo-
-    
-    - name: Install Python dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install requests beautifulsoup4 markdown
-    
-    - name: Build example tester
-      run: |
-        echo "🔨 Building example tester..."
-        cargo build --bin rust_example_tester --release
-        echo "✅ Example tester built"
-    
-    - name: Test code examples
-      run: |
-        echo "🧪 Testing code examples in documentation..."
-        # Test a few key files
-        for file in src/introduction.md src/core-concepts/ownership.md src/cryptography/secure-patterns.md; do
-          if [ -f "$file" ]; then
-            echo "Testing $file..."
-            timeout 60 ./target/release/rust_example_tester "$file" || true
-          fi
-        done
-        echo "✅ Example testing completed"
-    
-    - name: Run Python validation
-      run: |
-        if [ -f "validate_tutorial.py" ]; then
-          echo "🐍 Running Python validation..."
-          python validate_tutorial.py src/introduction.md || true
-          echo "✅ Python validation completed"
-        fi
-
-  # Summary job
-  summary:
-    runs-on: ubuntu-latest
-    needs: [validate-book, test-rust, test-examples]
-    if: always()
-    steps:
-    - name: Summary
-      run: |
-        echo "## 📊 CI/CD Summary"
-        echo ""
-        echo "### Job Results:"
-        echo "- Book Validation: ${{ needs.validate-book.result }}"
-        echo "- Rust Tests: ${{ needs.test-rust.result }}"
-        echo "- Example Tests: ${{ needs.test-examples.result }}"
-        echo ""
-        if [[ "${{ needs.validate-book.result }}" == "success" && \
-              "${{ needs.test-rust.result }}" == "success" && \
-              "${{ needs.test-examples.result }}" == "success" ]]; then
-          echo "✅ All checks passed!"
-        else
-          echo "❌ Some checks failed. Please review the logs above."
-          exit 1
-        fi

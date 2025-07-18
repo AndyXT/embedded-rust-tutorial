@@ -1,8 +1,5 @@
 # 1.1 C-to-Rust Syntax Mapping
 
-<details>
-<summary><strong>▶️ Basic Declarations and Types</strong> - Essential syntax translations</summary>
-
 #### Basic Declarations and Types
 
 | C Pattern | Rust Equivalent | Notes |
@@ -22,11 +19,6 @@
 | `char* str = "hello";` | `let str = "hello";` | String literals are `&str` |
 
 #### Functions and Control Flow
-
-</details>
-
-<details>
-<summary><strong>▶️ Functions and Control Flow</strong> - Function syntax and control structures</summary>
 
 | C Pattern | Rust Equivalent | Notes |
 |-----------|----------------|-------|

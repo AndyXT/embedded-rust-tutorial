@@ -1,120 +1,92 @@
 # Embedded Rust Tutorial for Cryptography Engineers
 
-This repository contains a comprehensive tutorial for experienced embedded cryptography C programmers transitioning to Rust.
+A comprehensive mdBook tutorial for experienced embedded cryptography C programmers transitioning to Rust. This book focuses on ARM Cortex-R5 development with no_std and no heap allocation.
 
-## 📖 Main Document
+## 📚 Quick Start
 
-**[`embedded-rust-tutorial-master.md`](embedded-rust-tutorial-master.md)** - The complete tutorial document
+1. Install mdBook:
+   ```bash
+   cargo install mdbook
+   # or download from https://github.com/rust-lang/mdBook/releases
+   ```
 
-- **Status**: ✅ Production Ready (Grade: A+)
-- **Target Audience**: Experienced embedded cryptography C programmers
-- **Content**: 69 Rust code examples, 61 crypto-focused examples, 31 embedded-specific examples
-- **Coverage**: ARM Cortex-M, ARM Cortex-R5, thumbv7em-none-eabihf, armv7r-none-eabihf targets
-- **Structure**: Quick Reference → Environment Setup → Core Concepts → Embedded Patterns → Crypto Implementation → Migration
+2. Clone and serve:
+   ```bash
+   git clone <this-repo>
+   cd rusty
+   mdbook serve
+   ```
 
-## 🔧 Validation Tools
+3. Open http://localhost:3000 in your browser
 
-### Core Validation Scripts
-- **`content_validation_system.py`** - Comprehensive document validation system
-- **`validate_tutorial.py`** - Code example compilation testing
-- **`code_example_fixer.py`** - Automated code fixing capabilities
-- **`redundancy_detector.py`** - Content redundancy analysis
+## 🔨 Building
 
-### Reports
-- **`final_validation_report.md`** - Complete validation results (A+ grade)
-- **`final_validation_results.json`** - Machine-readable validation data
-- **`code_test_report.md`** - Code example compilation results
-- **`content_structure_mapping.md`** - Document structure analysis
-- **`VALIDATION_README.md`** - Validation system documentation
-
-## 📊 Validation Results
-
-The tutorial has been comprehensively validated and achieved:
-
-- **Overall Grade**: A+ (Excellent)
-- **Production Ready**: ✅ YES
-- **Requirements Coverage**: 20/20 (100%)
-- **Code Examples**: 77 total (69 Rust, 61 crypto-focused)
-- **Document Flow**: Perfect (1.00/1.0)
-- **Cross-References**: 62 navigation links
-- **Target Coverage**: 4 embedded targets supported
-
-## 🌐 Online Book
-
-The tutorial is also available as an interactive online book built with mdBook:
-
-### Quick Start
-```bash
-# Start development server
-make dev
-# or
-./scripts/dev.sh
-```
-
-### Build Commands
 ```bash
 # Build the book
-make build
+mdbook build
 
-# Serve locally with auto-reload
-make serve
+# Serve locally with auto-reload  
+mdbook serve --open
 
-# Run validation tests
-make test
+# Clean build
+mdbook clean
 
-# Comprehensive validation
-make validate
+# Run local validation
+./scripts/ci_local_test.sh
 ```
 
-### Deployment
-The book automatically deploys to GitHub Pages via GitHub Actions on pushes to main branch.
+## 📁 Structure
 
-See **[BUILD.md](BUILD.md)** for complete build and deployment documentation.
-
-## 🚀 Usage
-
-### For Learning
-1. Start with the **Quick Reference** section for immediate productivity
-2. Follow the **linear progression** for systematic learning
-3. Use **cross-references** to navigate between related concepts
-
-### For Reference
-- Use browser search (Ctrl+F) to find specific patterns
-- Jump to sections using the comprehensive table of contents
-- Each section is self-contained with complete examples
-
-### For Validation
-```bash
-# Run comprehensive validation
-python content_validation_system.py embedded-rust-tutorial-master.md
-
-# Test code examples
-python validate_tutorial.py embedded-rust-tutorial-master.md
-
-# Check for redundancy
-python redundancy_detector.py embedded-rust-tutorial-master.md
+```
+rusty/
+├── book.toml          # mdBook configuration
+├── src/               # Markdown source files
+│   ├── SUMMARY.md     # Table of contents
+│   ├── introduction.md
+│   ├── core-concepts/
+│   ├── cryptography/
+│   ├── embedded-patterns/
+│   ├── environment-setup/
+│   ├── migration/
+│   └── quick-reference/
+├── theme/             # Custom theme files
+└── book/              # Generated HTML (git ignored)
 ```
 
-## 📋 Document Features
+## 🚀 Deployment
 
-- **Assumes C expertise** - No basic programming explanations
-- **Crypto-focused examples** - All examples relevant to cryptographic engineering
-- **Quick reference first** - Immediate productivity through lookup tables
-- **Embedded-specific** - Covers no-std, hardware integration, real-time constraints
-- **Streamlined organization** - Eliminates redundancy, focuses on practical differences
+The book automatically deploys to GitHub Pages when changes are pushed to the main branch via GitHub Actions.
 
-## 🎯 Key Benefits
+## 📖 Topics Covered
 
-- Memory safety without performance overhead
-- Automatic key material zeroization
-- Type-safe protocol state machines
-- Compile-time prevention of common crypto vulnerabilities
-- Clear boundaries between safe and unsafe code
+- **Core Concepts**: Ownership, borrowing, error handling, type system
+- **Embedded Patterns**: no_std development, static memory, interrupts
+- **Cryptography**: Constant-time operations, secure patterns, side-channel mitigations
+- **Migration Strategies**: Moving from C to Rust incrementally
+- **Quick Reference**: C-to-Rust syntax mapping and common patterns
 
-## 📝 Maintenance
+## 🎯 Target Audience
 
-The document has been validated against all requirements and is ready for production use. The validation tools can be re-run after any changes to ensure continued quality.
+- Experienced embedded C programmers
+- Cryptography engineers
+- Security-focused developers
+- ARM Cortex-R5/M developers
 
----
+## 📋 Key Features
 
-*This tutorial was developed through a systematic spec-driven process with comprehensive validation and testing.*
+- **No basic programming explanations** - Assumes C expertise
+- **Crypto-focused examples** - Real-world cryptographic patterns
+- **Quick reference tables** - Immediate C-to-Rust translations
+- **Embedded-specific** - no_std, no heap, hardware integration
+- **Production-ready examples** - Copy-paste ready code
+
+## 🤝 Contributing
+
+Contributions are welcome! Please ensure:
+- Examples are complete and compile for Cortex-R5 targets
+- Code follows no_std and no heap constraints
+- Documentation is clear and concise
+
+## 📄 License
+
+MIT

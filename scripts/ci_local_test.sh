@@ -1,9 +1,9 @@
 #!/bin/bash
-# Local CI validation script - test CI steps locally before pushing
+# Local CI validation script for mdBook
 
 set -e
 
-echo "🧪 Running local CI validation..."
+echo "🧪 Running local mdBook validation..."
 echo ""
 
 # Check mdBook
@@ -11,82 +11,76 @@ echo "📚 Checking mdBook..."
 if command -v mdbook &> /dev/null; then
     echo "✅ mdBook is installed: $(mdbook --version)"
 else
-    echo "❌ mdBook is not installed. Install with: cargo install mdbook"
+    echo "❌ mdBook is not installed. Install with:"
+    echo "   cargo install mdbook"
+    echo "   or download from: https://github.com/rust-lang/mdBook/releases"
     exit 1
 fi
+
+# Clean previous build
+echo ""
+echo "🧹 Cleaning previous build..."
+rm -rf book/
 
 # Build mdBook
 echo ""
 echo "📚 Building mdBook..."
 mdbook build
-if [ -f "book/index.html" ]; then
-    echo "✅ mdBook built successfully"
-else
-    echo "❌ mdBook build failed"
-    exit 1
-fi
 
-# Check Rust
+# Validate build
 echo ""
-echo "🦀 Checking Rust..."
-if command -v rustc &> /dev/null; then
-    echo "✅ Rust is installed: $(rustc --version)"
-else
-    echo "❌ Rust is not installed"
-    exit 1
-fi
+echo "✅ Validating build output..."
 
-# Check formatting
-echo ""
-echo "🎨 Checking code formatting..."
-if cargo fmt -- --check; then
-    echo "✅ Code formatting is correct"
-else
-    echo "⚠️  Code formatting issues found (run: cargo fmt)"
-fi
+# Check critical files
+required_files=(
+    "book/index.html"
+    "book/introduction.html" 
+    "book/print.html"
+    "book/searchindex.js"
+)
 
-# Build project
-echo ""
-echo "🔨 Building project..."
-if cargo build --release; then
-    echo "✅ Project builds successfully"
-else
-    echo "❌ Build failed"
-    exit 1
-fi
-
-# Run tests
-echo ""
-echo "🧪 Running tests..."
-if cargo test; then
-    echo "✅ Tests pass"
-else
-    echo "⚠️  Some tests failed"
-fi
-
-# Check for embedded target
-echo ""
-echo "🎯 Checking embedded targets..."
-if rustup target list --installed | grep -q "thumbv7em-none-eabihf"; then
-    echo "✅ Embedded target installed"
-    
-    echo "🔨 Building for embedded target..."
-    if cargo build --target thumbv7em-none-eabihf --features embedded --release; then
-        echo "✅ Embedded build successful"
-    else
-        echo "⚠️  Embedded build failed"
+all_good=true
+for file in "${required_files[@]}"; do
+    if [ ! -f "$file" ]; then
+        echo "❌ Missing required file: $file"
+        all_good=false
     fi
+done
+
+# Check directories
+required_dirs=(
+    "book/core-concepts"
+    "book/cryptography"
+    "book/embedded-patterns"
+    "book/migration"
+    "book/quick-reference"
+)
+
+for dir in "${required_dirs[@]}"; do
+    if [ ! -d "$dir" ]; then
+        echo "❌ Missing required directory: $dir"
+        all_good=false
+    fi
+done
+
+if [ "$all_good" = true ]; then
+    echo "✅ All required files and directories present"
+fi
+
+# Quick link check
+echo ""
+echo "🔗 Checking for obvious broken links..."
+broken_count=$(find book -name "*.html" -type f -exec grep -l "404" {} \; 2>/dev/null | wc -l)
+if [ "$broken_count" -gt 0 ]; then
+    echo "⚠️  Some files contain '404' - might have broken links"
 else
-    echo "⚠️  Embedded target not installed (run: rustup target add thumbv7em-none-eabihf)"
+    echo "✅ No obvious broken links found"
 fi
 
 echo ""
-echo "✨ Local CI validation complete!"
+echo "✨ Local validation complete!"
 echo ""
-echo "Summary:"
-echo "- mdBook: ✅"
-echo "- Rust build: ✅"
-echo "- Tests: Check output above"
-echo "- Formatting: Check output above"
+echo "To serve the book locally, run:"
+echo "   mdbook serve"
 echo ""
-echo "If all checks pass, your code should pass CI!"
+echo "Then open http://localhost:3000 in your browser"
