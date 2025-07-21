@@ -19,7 +19,7 @@ This section covers:
 
 </details>
 
-#### Advanced Enums and Pattern Matching
+## Advanced Enums and Pattern Matching
 
 Rust enums are far more powerful than C enums. They can carry data, enabling type-safe state machines and error handling that's impossible in C.
 
@@ -76,23 +76,15 @@ int process_crypto_message(crypto_context_t* ctx, uint8_t* data, size_t len) {
 #![no_main]
 
 use panic_halt as _;
-
-use core::{fmt, result::Result};
+use cortex_r_rt::entry;
+use core::mem;
 use heapless::{Vec, String, consts::*};
+
 type Vec32<T> = Vec<T, U32>;
 type Vec256<T> = Vec<T, U256>;
-type String256 = String<U256>;
-use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
 
 #[derive(Debug)]
-pub struct CryptoError(&'static str);
-
-
-use core::mem;
-use heapless::Vec;
-
-use core::fmt;
-use core::result::Result;
+struct CryptoError(&'static str);
 
 // Rust enum - each variant can carry different data
 #[derive(Debug)]
@@ -166,21 +158,13 @@ fn main() -> ! {
 #![no_main]
 
 use panic_halt as _;
-
-use core::{fmt, result::Result};
+use cortex_r_rt::entry;
+use core::mem;
 use heapless::{Vec, String, consts::*};
+use zeroize::{Zeroize, ZeroizeOnDrop};
+
 type Vec32<T> = Vec<T, U32>;
 type Vec256<T> = Vec<T, U256>;
-type String256 = String<U256>;
-
-
-use core::mem;
-use heapless::Vec;
-use core::fmt;
-
-use core::result::Result;
-
-use zeroize::{Zeroize, ZeroizeOnDrop};
 
 #[derive(Debug)]
 enum TlsHandshakeState {
@@ -308,7 +292,7 @@ fn main() -> ! {
 }
 ```
 
-#### Traits - Safe Function Pointer Alternatives
+## Traits - Safe Function Pointer Alternatives
 
 Traits provide a safe, zero-cost alternative to C function pointers, enabling polymorphism without runtime overhead.
 
@@ -616,7 +600,7 @@ fn secure_send<A: AuthenticatedEncryption>(
 }
 ```
 
-#### Methods and Associated Functions
+## Methods and Associated Functions
 
 Rust's method system provides better organization than C's function naming conventions, with clear ownership semantics.
 
@@ -865,7 +849,7 @@ fn secure_communication() -> Result<(), CryptoError> {
 }
 ```
 
-#### Crypto-Specific Error Handling with Enums
+## Crypto-Specific Error Handling with Enums
 
 Advanced enums enable sophisticated error handling that's impossible in C. This builds directly on the foundational error handling patterns covered in [Error Handling Without Exceptions](../core-concepts/error-handling.md):
 

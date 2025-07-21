@@ -2,34 +2,21 @@
 
 This section consolidates all static memory management patterns for deterministic embedded crypto applications, providing comprehensive coverage of memory pool management, compile-time allocation, and secure memory handling.
 
-#### Advanced Static Memory Pool Management
+## Advanced Static Memory Pool Management
 
-
-
+Embedded systems require deterministic memory allocation. This example shows how to use static memory pools for crypto operations.
 
 ```rust
 #![no_std]
 #![no_main]
 
 use panic_halt as _;
-
-use core::{mem, fmt, result::Result};
-use heapless::{Vec, String, consts::*};
-type Vec32<T> = Vec<T, U32>;
-type Vec256<T> = Vec<T, U256>;
-type String256 = String<U256>;
-
-#[derive(Debug)]
-pub struct CryptoError(&'static str);
-
-
-use core::mem;
-use core::fmt;
-
-use core::result::Result;
-
-use heapless::pool::{Pool, Node, Singleton};
+use cortex_r_rt::entry;
+use heapless::pool::{Pool, Node};
+use heapless::Vec;
+use heapless::consts::*;
 use core::mem::MaybeUninit;
+use zeroize::Zeroize;
 
 // Comprehensive static memory pools for different crypto operations
 static mut TINY_BLOCKS: [Node<[u8; 64]>; 32] = [Node::new(); 32];      // For keys, nonces
@@ -176,22 +163,66 @@ fn encrypt_with_optimal_memory(plaintext: &[u8]) -> Result<heapless::Vec<u8, 409
 }
 ```
 
-#### Compile-Time Memory Layout with Security Features
+// Stub implementations for crypto operations
+fn encrypt_in_place(data: &mut [u8]) -> Result<usize, CryptoError> {
+    // Simple XOR encryption for demonstration
+    for byte in data.iter_mut() {
+        *byte ^= 0xAA;
+    }
+    Ok(data.len())
+}
+
+#[derive(Debug)]
+struct CryptoContext {
+    key: [u8; 32],
+}
+
+impl CryptoContext {
+    const fn new() -> Self {
+        Self { key: [0u8; 32] }
+    }
+}
+
+struct GlobalCryptoState {
+    initialized: bool,
+}
+
+impl GlobalCryptoState {
+    fn new() -> Self {
+        Self { initialized: true }
+    }
+}
+
+#[entry]
+fn main() -> ! {
+    // Initialize memory pools
+    let _ = init_static_memory_pools();
+    
+    // Example encryption
+    let plaintext = b"Hello, static memory!";
+    match encrypt_with_optimal_memory(plaintext) {
+        Ok(ciphertext) => {
+            // Use encrypted data
+        }
+        Err(_) => {
+            // Handle error
+        }
+    }
+    
+    loop {}
+}
+```
+
+## Compile-Time Memory Layout with Security Features
+
+This pattern shows how to create a secure workspace with compile-time memory allocation.
 
 ```rust
 #![no_std]
 #![no_main]
 
 use panic_halt as _;
-
-use core::{fmt, result::Result};
-
-
-use core::mem;
-use core::fmt;
-use core::result::Result;
-
-
+use cortex_r_rt::entry;
 use zeroize::{Zeroize, ZeroizeOnDrop};
 
 // Advanced compile-time memory layout with security considerations
@@ -425,24 +456,73 @@ const KEY_ROTATION_INTERVAL: u64 = 3600; // 1 hour in seconds
 const MAX_SECURITY_VIOLATIONS: u32 = 5;
 ```
 
-#### Memory Layout Optimization for Crypto Performance
+// Stub functions for crypto operations
+fn aes_key_expansion(key: &[u8; 32], schedule: &mut [u32; 60]) {
+    // Simple stub - in real implementation would expand AES key
+    for (i, chunk) in key.chunks_exact(4).enumerate() {
+        schedule[i] = u32::from_le_bytes([chunk[0], chunk[1], chunk[2], chunk[3]]);
+    }
+}
+
+fn aes_gcm_encrypt(
+    _key: &[u8; 32],
+    _nonce: &[u8; 12],
+    _plaintext: &[u8],
+    output: &mut [u8],
+) -> Result<usize, WorkspaceError> {
+    // Stub implementation
+    Ok(output.len())
+}
+
+fn increment_nonce(nonce: &mut [u8; 12]) {
+    // Simple increment for demonstration
+    for byte in nonce.iter_mut().rev() {
+        if *byte == 255 {
+            *byte = 0;
+        } else {
+            *byte += 1;
+            break;
+        }
+    }
+}
+
+fn get_current_time() -> u64 {
+    // Stub - would read from RTC or timer
+    0
+}
+
+#[entry]
+fn main() -> ! {
+    // Example usage of secure workspace
+    with_crypto_workspace(|workspace| {
+        // Allocate a session
+        if let Ok(session_id) = workspace.allocate_session() {
+            let key = [0x42u8; 32];
+            let _ = workspace.setup_session_key(session_id, &key);
+            
+            // Encrypt some data
+            let data = b"Secret message";
+            let _ = workspace.encrypt_session_data(session_id, data);
+        }
+    });
+    
+    loop {}
+}
+```
+
+## Memory Layout Optimization for Crypto Performance
+
+Cache-aligned memory layouts improve crypto performance by reducing cache misses.
 
 ```rust
 #![no_std]
 #![no_main]
 
 use panic_halt as _;
-
-use core::{fmt, result::Result};
+use cortex_r_rt::entry;
 
 #[derive(Debug)]
-pub struct CryptoError(&'static str);
-
-
-use core::mem;
-use core::fmt;
-
-use core::result::Result;
+struct CryptoError(&'static str);
 
 // Memory layout optimized for crypto operations and cache performance
 #[repr(C, align(32))] // Align to cache line boundary
@@ -533,4 +613,44 @@ impl SessionMetadata {
 
 // Static allocation with optimal memory layout
 static mut OPTIMIZED_CRYPTO: OptimizedCryptoLayout = OptimizedCryptoLayout::new();
+
+// Stub function for AES encryption
+fn aes_encrypt_block_optimized(
+    input: &mut [u8; 16],
+    output: &mut [u8; 16],
+    _key_schedule: &[u32; 60],
+) -> Result<(), CryptoError> {
+    // Simple XOR for demonstration
+    for i in 0..16 {
+        output[i] = input[i] ^ 0xAA;
+    }
+    Ok(())
+}
+
+// Safe wrapper for accessing optimized crypto layout
+fn with_optimized_crypto<F, R>(f: F) -> R
+where
+    F: FnOnce(&mut OptimizedCryptoLayout) -> R,
+{
+    // Use critical section for thread safety
+    critical_section::with(|_| unsafe { f(&mut OPTIMIZED_CRYPTO) })
+}
+
+#[entry]
+fn main() -> ! {
+    // Example usage
+    with_optimized_crypto(|crypto| {
+        let plaintext = [0x42u8; 16];
+        match crypto.fast_encrypt_block(&plaintext) {
+            Ok(ciphertext) => {
+                // Use encrypted block
+            }
+            Err(_) => {
+                // Handle error
+            }
+        }
+    });
+    
+    loop {}
+}
 ```

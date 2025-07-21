@@ -7,7 +7,7 @@ Migrating large cryptographic codebases requires careful planning and incrementa
 - → [Functional Programming and Data Processing](../core-concepts/functional.md) - Replace C loops with safer iterators
 - → [Error Handling Without Exceptions](../core-concepts/error-handling.md) - Migrate from error codes to Result types
 
-#### Step 1: Assessment and Planning
+## Step 1: Assessment and Planning
 
 **Migration Assessment Checklist:**
 
@@ -33,7 +33,7 @@ Migrating large cryptographic codebases requires careful planning and incrementa
    Phase 5: Hardware Abstraction Layer
    ```
 
-#### Step 2: Module-by-Module Migration
+## Step 2: Module-by-Module Migration
 
 **Starting with Crypto Primitives (Lowest Risk)**
 
@@ -169,7 +169,7 @@ if (aes_ctx) {
 */
 ```
 
-#### Step 3: Protocol-Level Migration
+## Step 3: Protocol-Level Migration
 
 **Migrating Higher-Level Protocols While Keeping Proven Crypto**
 
@@ -331,7 +331,7 @@ enum TlsState {
 }
 ```
 
-#### Step 4: Application Integration Migration
+## Step 4: Application Integration Migration
 
 **Migrating Application Logic to Use New Rust Interfaces**
 
@@ -453,7 +453,7 @@ int app_send_message(uint8_t* data, size_t len) {
 */
 ```
 
-#### Step 5: Hardware Abstraction Layer Migration
+## Step 5: Hardware Abstraction Layer Migration
 
 **Final Step: Migrating Hardware-Specific Code**
 
@@ -538,7 +538,7 @@ impl AesContext {
 }
 ```
 
-#### Migration Validation Checklist
+## Migration Validation Checklist
 
 **After Each Migration Step:**
 

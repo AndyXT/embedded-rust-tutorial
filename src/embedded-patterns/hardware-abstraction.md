@@ -2,30 +2,20 @@
 
 This section consolidates all hardware abstraction patterns for embedded crypto development, providing portable and maintainable approaches to hardware integration.
 
-#### Peripheral Access Crate (PAC) Usage
+## Peripheral Access Crate (PAC) Usage
 
-
-
+PACs provide low-level register access to hardware peripherals. This example shows how to abstract hardware crypto accelerators.
 
 ```rust
 #![no_std]
 #![no_main]
 
 use panic_halt as _;
+use cortex_r_rt::entry;
 
-use core::{fmt, result::Result};
-use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
-
-#[derive(Debug)]
-pub struct CryptoError(&'static str);
-
-
-use core::mem;
-use core::fmt;
-
-use core::result::Result;
-// use stm32f4xx_pac as pac; // Hardware-specific code - adapt for your target
-use cortex_m::interrupt;
+// Note: In a real implementation, you would use your specific PAC
+// use stm32f4xx_pac as pac; // For STM32F4
+// use xilinx_zynq_pac as pac; // For Xilinx Zynq
 
 #[derive(Debug)]
 pub enum CryptoError {
@@ -114,7 +104,7 @@ impl CryptoPeripheral {
 }
 ```
 
-#### Hardware Abstraction Layer (HAL) Patterns
+## Hardware Abstraction Layer (HAL) Patterns
 
 ```rust
 #![no_std]
@@ -350,7 +340,7 @@ fn initialize_crypto_peripheral() -> CryptoPeripheral {
 }
 ```
 
-#### Cross-Platform Hardware Abstraction
+## Cross-Platform Hardware Abstraction
 
 ```rust
 #![no_std]

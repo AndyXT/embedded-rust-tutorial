@@ -2,7 +2,7 @@
 
 Rust's type system encodes security invariants at compile time, preventing entire classes of cryptographic vulnerabilities that are common in C implementations.
 
-#### Type-Safe Protocol State Machines
+## Type-Safe Protocol State Machines
 
 
 
@@ -134,7 +134,7 @@ fn secure_communication_example() -> CryptoResult<()> {
 }
 ```
 
-#### Const Generics for Compile-Time Crypto Parameters
+## Const Generics for Compile-Time Crypto Parameters
 
 ```rust
 #![no_std]
@@ -253,7 +253,7 @@ fn main() -> ! {
 }
 ```
 
-#### Newtype Pattern for Domain-Specific Security
+## Newtype Pattern for Domain-Specific Security
 
 ```rust
 #![no_std]

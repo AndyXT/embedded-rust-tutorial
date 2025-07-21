@@ -3,7 +3,7 @@
 <details>
 <summary><strong>▶️ Ownership Rules Summary</strong> - The three fundamental rules</summary>
 
-#### The Three Rules of Ownership
+### The Three Rules of Ownership
 1. **Each value has exactly one owner** - No shared ownership without explicit mechanisms
 2. **When the owner goes out of scope, the value is dropped** - Automatic cleanup with Drop trait
 3. **Only one mutable reference OR multiple immutable references** - Prevents data races and use-after-free
@@ -18,7 +18,7 @@
 
 Rust's ownership system replaces C's manual memory management with compile-time rules that prevent entire classes of crypto vulnerabilities. This is the single most important concept for C programmers to master.
 
-#### Ownership in Embedded Crypto Context
+## Ownership in Embedded Crypto Context
 
 
 
@@ -28,25 +28,47 @@ Rust's ownership system replaces C's manual memory management with compile-time 
 #![no_main]
 
 use panic_halt as _;
-
-use core::{fmt, result::Result};
+use cortex_r_rt::entry;
+use core::mem;
 use heapless::{Vec, String, consts::*};
+use zeroize::{Zeroize, ZeroizeOnDrop};
+
 type Vec32<T> = Vec<T, U32>;
-type Vec256<T> = Vec<T, U256>;
-type String256 = String<U256>;
-use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
 
 #[derive(Debug)]
-pub struct CryptoError(&'static str);
+struct CryptoError(&'static str);
 
+// Define missing types
+struct AesState {
+    initialized: bool,
+}
 
-use core::mem;
-use heapless::Vec;
-use core::fmt;
+impl AesState {
+    fn new() -> Self {
+        Self { initialized: true }
+    }
+}
 
-use core::result::Result;
+// Stub functions for the example
+fn aes_gcm_encrypt(_key: &[u8; 32], _nonce: &[u8], _plaintext: &[u8]) -> Result<Vec<u8, U32>, CryptoError> {
+    let mut result = Vec::new();
+    result.extend_from_slice(b"encrypted").map_err(|_| CryptoError("Buffer full"))?;
+    Ok(result)
+}
 
-use zeroize::{Zeroize, ZeroizeOnDrop};
+fn generate_session_key() -> Result<[u8; 32], CryptoError> {
+    Ok([0u8; 32])
+}
+
+fn transmit_messages(_messages: &[Vec<u8, U32>]) -> Result<(), CryptoError> {
+    Ok(())
+}
+
+// Define the error cases
+impl CryptoError {
+    const BufferTooSmall: Self = CryptoError("Buffer too small");
+    const InvalidNonce: Self = CryptoError("Invalid nonce");
+}
 
 #[derive(ZeroizeOnDrop)]
 struct CryptoContext {
@@ -96,31 +118,57 @@ fn secure_communication() -> Result<(), CryptoError> {
     // crypto_ctx dropped here, session_key automatically zeroized
     Ok(())
 }
+
+#[entry]
+fn main() -> ! {
+    // Example usage
+    let _ = secure_communication();
+    loop {}
+}
 ```
 
-#### Borrowing Rules for Crypto Operations
+## Borrowing Rules for Crypto Operations
 
 ```rust
 #![no_std]
 #![no_main]
 
 use panic_halt as _;
+use cortex_r_rt::entry;
+use heapless::{Vec, consts::*};
 
-use core::{fmt, result::Result};
-use heapless::{Vec, String, consts::*};
 type Vec32<T> = Vec<T, U32>;
-type Vec256<T> = Vec<T, U256>;
-type String256 = String<U256>;
 
 #[derive(Debug)]
-pub struct CryptoError(&'static str);
+struct CryptoError(&'static str);
 
+// Define missing types and functions
+struct CryptoContext {
+    nonce_counter: u64,
+    cipher_state: CipherState,
+}
 
-use core::mem;
-use heapless::Vec;
+struct CipherState;
+impl CipherState {
+    fn update_key_schedule(&mut self, _key: &[u8; 32]) {}
+}
 
-use core::fmt;
-use core::result::Result;
+struct CryptoParams {
+    starting_nonce: u64,
+    key: [u8; 32],
+}
+
+fn verify_signature(_public_key: &[u8; 32], _msg: &[u8], _sig: &[u8; 64]) -> bool {
+    true // Stub implementation
+}
+
+fn hkdf_expand(_master_key: &[u8; 32], _salt: &[u8; 16], _info: &[u8]) -> [u8; 32] {
+    [0u8; 32] // Stub implementation
+}
+
+fn perform_crypto_operations(_enc_key: &[u8; 32], _mac_key: &[u8; 32]) -> Result<(), CryptoError> {
+    Ok(())
+}
 
 // Immutable borrowing - safe concurrent reads
 fn verify_multiple_signatures(
@@ -181,31 +229,49 @@ fn main() -> ! {
 }
 ```
 
-#### Memory Management Patterns for Embedded
+## Memory Management Patterns for Embedded
 
 ```rust
 #![no_std]
 #![no_main]
 
 use panic_halt as _;
+use cortex_r_rt::entry;
+use critical_section::Mutex;
+use core::cell::RefCell;
+use heapless::{Vec, consts::*};
 
-use core::{fmt, result::Result};
-use heapless::{Vec, String, consts::*};
-type Vec32<T> = Vec<T, U32>;
 type Vec256<T> = Vec<T, U256>;
-type String256 = String<U256>;
-use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
 
 #[derive(Debug)]
-pub struct CryptoError(&'static str);
+struct CryptoError(&'static str);
 
+// Define missing types
+struct AesState {
+    initialized: bool,
+}
 
-use core::mem;
-use core::fmt;
+impl AesState {
+    fn new() -> Self {
+        Self { initialized: true }
+    }
+    
+    fn set_key(&mut self, _key: &[u8; 32]) {}
+    
+    fn encrypt_block(&mut self, _block: &mut [u8; 16]) -> Result<(), CryptoError> {
+        Ok(())
+    }
+}
 
-use core::result::Result;
-use heapless::Vec;
+struct CryptoContext {
+    key: [u8; 32],
+}
 
+impl CryptoContext {
+    fn new(key: [u8; 32]) -> Self {
+        Self { key }
+    }
+}
 
 // Stack-based crypto operations (preferred in embedded)
 fn stack_crypto_operations() -> Result<[u8; 16], CryptoError> {
@@ -222,8 +288,6 @@ fn stack_crypto_operations() -> Result<[u8; 16], CryptoError> {
 }
 
 // Safe global crypto state using critical sections
-use critical_section::Mutex;
-use core::cell::RefCell;
 
 static GLOBAL_CRYPTO_CTX: Mutex<RefCell<Option<CryptoContext>>> = 
     Mutex::new(RefCell::new(None));
@@ -248,9 +312,25 @@ fn use_global_crypto() -> Result<(), CryptoError> {
     })
 }
 
+// Define missing functions
+fn encrypt_message(plaintext: &[u8; 16]) -> Result<[u8; 32], CryptoError> {
+    let mut result = [0u8; 32];
+    result[..16].copy_from_slice(plaintext);
+    Ok(result)
+}
+
+fn transmit_encrypted_message(_message: &[u8; 32]) -> Result<(), CryptoError> {
+    Ok(())
+}
+
+// Define error variant
+impl CryptoError {
+    const QueueFull: Self = CryptoError("Queue full");
+}
+
 // Heapless collections for message queues
 fn message_queue_example() -> Result<(), CryptoError> {
-    let mut encrypted_messages: heapless::Vec<[u8; 32], 16, 32> = Vec::new();
+    let mut encrypted_messages: Vec<[u8; 32], U256> = Vec::new();
     
     for i in 0..10 {
         let plaintext = [i; 16];

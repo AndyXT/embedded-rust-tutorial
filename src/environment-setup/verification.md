@@ -1,6 +1,6 @@
 # 2.5 Verification and Testing
 
-#### Step-by-Step Setup Verification
+## Step-by-Step Setup Verification
 
 ```bash
 # 1. Verify installation
@@ -23,7 +23,7 @@ echo 'sha2 = { version = "0.10", default-features = false }' >> Cargo.toml
 cargo build --target thumbv7em-none-eabihf --release
 ```
 
-#### Minimal Verification Application
+## Minimal Verification Application
 
 
 

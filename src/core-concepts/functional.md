@@ -20,7 +20,7 @@ This section covers:
 
 </details>
 
-#### Mathematical Operations with Safety
+## Mathematical Operations with Safety
 
 Rust provides explicit control over mathematical operations, preventing the silent overflow bugs that plague C crypto implementations.
 
@@ -246,7 +246,7 @@ pub fn mod_exp(base: u64, exp: u64, modulus: u64) -> Result<u64, CryptoError> {
 }
 ```
 
-#### Iterator Patterns for Zero-Cost Data Processing
+## Iterator Patterns for Zero-Cost Data Processing
 
 Rust's iterator system provides zero-cost abstractions that compile to the same assembly as hand-written loops, making them perfect for embedded crypto operations.
 
@@ -551,7 +551,7 @@ fn main() -> ! {
 }
 ```
 
-#### Closures for Algorithm Customization
+## Closures for Algorithm Customization
 
 Closures provide a safe alternative to C function pointers, enabling flexible algorithm customization while maintaining zero-cost abstractions.
 
@@ -856,7 +856,7 @@ where
 }
 ```
 
-#### Functional Programming in No-std Environments
+## Functional Programming in No-std Environments
 
 Rust's functional programming features work seamlessly in no_std embedded environments, providing powerful abstractions without heap allocation.
 

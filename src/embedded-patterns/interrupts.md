@@ -2,32 +2,22 @@
 
 This section consolidates all interrupt handling patterns for embedded crypto applications, covering both basic interrupt handlers and advanced real-time frameworks.
 
-#### Safe Interrupt Handling Fundamentals
+## Safe Interrupt Handling Fundamentals
 
-
-
+Interrupt handlers in embedded systems must be carefully designed to avoid data races and ensure real-time performance.
 
 ```rust
 #![no_std]
 #![no_main]
 
 use panic_halt as _;
-
-use core::{fmt, result::Result};
-
-#[derive(Debug)]
-pub struct CryptoError(&'static str);
-
-
-use core::mem;
-use core::fmt;
-
-use core::result::Result;
-
-use cortex_m_rt::interrupt;
-use cortex_m::interrupt::{Mutex, free};
+use cortex_r_rt::{entry, interrupt};
+use critical_section::Mutex;
 use core::cell::RefCell;
 use heapless::spsc::{Queue, Producer, Consumer};
+
+#[derive(Debug)]
+struct CryptoError(&'static str);
 
 // Shared state between main code and interrupts - consolidated pattern
 type SharedCryptoState = Mutex<RefCell<Option<CryptoContext>>>;
@@ -216,7 +206,7 @@ fn main() -> ! {
 }
 ```
 
-#### RTIC Framework for Real-Time Crypto
+## RTIC Framework for Real-Time Crypto
 
 ```rust
 #![no_std]
@@ -505,7 +495,7 @@ impl CryptoStatistics {
 }
 ```
 
-#### Interrupt Priority and Timing Considerations
+## Interrupt Priority and Timing Considerations
 
 ```rust
 #![no_std]

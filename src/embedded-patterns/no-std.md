@@ -4,7 +4,7 @@ No-std programming is fundamental to embedded Rust. This section consolidates al
 
 For memory management concepts, see [Memory Model Differences](../core-concepts/memory-model.md). For error handling patterns, refer to [Error Handling Patterns](../quick-reference/error-handling.md).
 
-#### Complete No-std Project Template
+## Complete No-std Project Template
 
 
 
@@ -82,7 +82,7 @@ use panic_halt as _; // Links the panic-halt crate
 ``
 ```
 
-#### No-std Memory Management Patterns
+## No-std Memory Management Patterns
 
 ```rust
 #![no_std]
@@ -249,7 +249,7 @@ type LargeCryptoWorkspace = CryptoWorkspace<4096, 8>;  // 16KB buffers, 8 keys
 static mut CRYPTO_WS: SmallCryptoWorkspace = SmallCryptoWorkspace::new();
 ```
 
-#### No-std Error Handling and Result Types
+## No-std Error Handling and Result Types
 
 ```rust
 #![no_std]

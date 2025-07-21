@@ -2,7 +2,7 @@
 
 Essential debugging techniques and tools for embedded Rust crypto development.
 
-#### RTT Debugging for Crypto
+## RTT Debugging for Crypto
 
 
 

@@ -2,33 +2,19 @@
 
 This section consolidates all DMA and hardware integration patterns for high-performance crypto operations, providing comprehensive coverage of DMA-safe memory management, hardware crypto acceleration, and performance optimization.
 
-#### Advanced DMA-Safe Memory Management
+## Advanced DMA-Safe Memory Management
 
-
-
+DMA operations require special memory handling to ensure data coherency and prevent race conditions.
 
 ```rust
 #![no_std]
 #![no_main]
 
 use panic_halt as _;
-
-use core::{fmt, result::Result};
-use heapless::{Vec, String, consts::*};
-type Vec32<T> = Vec<T, U32>;
-type Vec256<T> = Vec<T, U256>;
-type String256 = String<U256>;
-use sha2::{Sha256, Digest};
-use aes::{Aes256, cipher::{KeyInit, BlockEncrypt, BlockDecrypt}};
-
-
-use core::mem;
-use core::fmt;
-
-use core::result::Result;
-
-use cortex_m::singleton;
+use cortex_r_rt::entry;
 use core::sync::atomic::{AtomicBool, Ordering};
+use heapless::Vec;
+use heapless::consts::*;
 
 // DMA-safe buffer allocation with multiple buffer support
 static DMA_BUFFER_IN_USE: [AtomicBool; 4] = [
